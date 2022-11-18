@@ -5,6 +5,7 @@ const { ObjectId } = require("mongodb");
 const { dbConnection, closeConnection } = require("../config/mongoConnection");
 
 
+// function for creating a user validations are left
 const createUser = async (
     firstName,
     lastName,
@@ -13,7 +14,7 @@ const createUser = async (
     city,
     state,
     phoneNumber,
-    password
+    password,
 ) =>{
     let usersCollection = await users();
     
@@ -26,7 +27,6 @@ const createUser = async (
         state:state,
         phoneNumber:phoneNumber,
         password:password,
-        feedback : [],
         admin: false,
     };
     const insertInfo = await usersCollection.insertOne(newUser);
@@ -34,6 +34,7 @@ const createUser = async (
 
 }
 
+// function to remove user validation left
 const removeUser = async (userId) => {
     const db = await dbConnection();
     try {
@@ -54,5 +55,44 @@ const removeUser = async (userId) => {
       throw `Could not delete  with id of ${userId}`;
     }
     return `${user.firstName} ${user.lastName} has been sucessfully deleted!`;
+  };
+
+  const updateUser = async (
+    firstName,
+    lastName,
+    gender,
+    email,
+    city,
+    state,
+    phoneNumber,
+    password,
+  ) => {
+    const db = await dbConnection()
+    const userCollection = await users();
+    
+    const updateduser = {
+        firstName: firstName,
+        lastName: lastName,
+        gender: gender,
+        email: email,
+        city: city,
+        state: state,
+        phoneNumber: phoneNumber,
+        password: password,
+    };
+  
+    let tmpUser = await getUserById(userId);
+  
+    
+  
+    const updatedInfo = await userCollection.updateOne(
+      { _id: ObjectId(userId) },
+      { $set: updatedUser }
+    );
+    if (updatedInfo.modifiedCount === 0) {
+      throw "could not update movie successfully";
+    }
+    // await closeConnection();
+    // return await getMovieById(movieId);
   };
 
