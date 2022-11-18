@@ -24,6 +24,7 @@ const createUser = async (
         email: email,
         city: city,
         state:state,
+        type: type, //   we will figure it out after raw front end
         phoneNumber:phoneNumber,
         password:password,
         feedback : [],
