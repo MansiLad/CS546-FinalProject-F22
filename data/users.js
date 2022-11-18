@@ -41,11 +41,11 @@ const removeUser = async (userId) => {
     throw e;
   }
 
-  const movieCollection = await movies();
+  const userCollection = await users();
 
-  const user = await getMovieById(userId);
+  const user = await getUserById(userId);
 
-  const deletionInfo = await movieCollection.deleteOne({
+  const deletionInfo = await userCollection.deleteOne({
     _id: ObjectId(userId),
   });
 
