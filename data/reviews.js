@@ -121,6 +121,25 @@ const removeReview = async (reviewId) => {
   };
 
 
+  const getReview = async (reviewId) => {
+    if(!reviewId){
+      throw 'No id';
+    }
+    if(typeof reviewId !== 'string') throw 'Not string datatype';
+    if(reviewId.trim().length==0) throw 'lenght should not be zero'
+    //objid = ObjectId(reviewId);
+    if (!ObjectId.isValid(reviewId)){
+      throw 'Not a valid object id'
+    }
+    const property_Collection = await properties();
+    const review = await property_Collection.findOne({'reviews._id' : ObjectId(reviewId)},{projection:{_id:0,"reviews.$":1}});
+    if(!review) throw "No reviews found with this particular id."
+    const [r] = review.reviews;
+    return JSON.parse(JSON.stringify(r));
+  
+  };
+
+
 
 
 
