@@ -83,9 +83,44 @@ const avaerage_ratings_movie = (reviews) => {
     }
     let avg = sum/deno
     return Number(avg.toFixed(1));
+};
+
+const removeReview = async (reviewId) => {
+
+    if(!reviewId){
+      throw 'No id';
+    }
+    if(typeof reviewId !== 'string') throw 'Not string datatype';
+    if(reviewId.trim().length==0) throw 'lenght should not be zero'
+    //objid = ObjectId(reviewId);
+    if (!ObjectId.isValid(reviewId)){
+      throw 'Not a valid object id'
+    }
+    const property_Collection = await properties();
+    const property_review = await property_Collection.findOne({"reviews._id": ObjectId(reviewId)});
+    if (!property_review) throw "No movie review";
+    //re
+    const non_reviews = property_review.reviews.filter((curr_rev)=>{
+      return curr_rev._id.toString() !== reviewId;
+    })
+    let new_updated_rate = 0;
+    if(non_reviews.length>0){
+      new_updated_rate = avaerage_ratings_movie(non_reviews);
+    }
+  const updated_info = property_Collection.updateOne(
+    {_id:property_review._id},
+    {
+      $pull: {reviews:{_id:ObjectId(reviewId)}},//pulling first and then add set
+      $set: {overallRating: new_updated_rate}
+    }
+  )
+  if (updated_info.modifiedCount === 0) throw "Could not remove review"
+  
+  return `${reviewId} is succesfully deleted`;
+  
   };
 
-  
+
 
 
 
