@@ -103,3 +103,10 @@ const getUserById = async (userId) => {
   // await closeConnection();
   return user;
 };
+
+module.exports = {
+  getUserById,
+  createUser,
+  updateUser,
+  removeUser,
+};
