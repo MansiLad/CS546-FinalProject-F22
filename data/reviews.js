@@ -139,7 +139,11 @@ const removeReview = async (reviewId) => {
   
   };
 
-
+  module.exports = {
+    createReview,
+    getReview,
+    removeReview
+  };
 
 
 
