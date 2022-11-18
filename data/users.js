@@ -27,6 +27,7 @@ const createUser = async (
         phoneNumber:phoneNumber,
         password:password,
         feedback : [],
+        admin: false,
     };
     const insertInfo = await usersCollection.insertOne(newUser);
     if (insertInfo.insertedCount === 0) throw "Could not register user";
