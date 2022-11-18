@@ -1,2 +1,2 @@
 // sab apne functions idhr likho..
-// nai
+// nai mai idhar nahi karugaa
