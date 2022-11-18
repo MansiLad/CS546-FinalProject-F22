@@ -86,7 +86,7 @@ const updateUser = async (
     { $set: updatedUser }
   );
   if (updatedInfo.modifiedCount === 0) {
-    throw "could not update movie successfully";
+    throw "could not update user successfully";
   }
   // await closeConnection();
   // return await getMovieById(movieId);
@@ -98,7 +98,7 @@ const getUserById = async (userId) => {
   const userCollection = await users();
   const user = await userCollection.findOne({ _id: ObjectId(userId) });
 
-  if (user == null) throw "No movie with that id";
+  if (user == null) throw "No user with that id";
   user._id = ObjectId(user._id).toString();
   // await closeConnection();
   return user;
