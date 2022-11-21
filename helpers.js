@@ -28,3 +28,5 @@ const checkId = (id) => {
     throw 'Error: The parameter is not a valid value  as it only contains digits';
   return strVal;
 };
+
+
