@@ -15,10 +15,10 @@ const createListing = async (
   deposit,
   rent,
   description,
-  ammenities
+  ammenities,
 ) => {
   let propertiesCollection = await properties();
-
+  let date = new Date().toLocaleDateString();
   let newListing = {
     apartmentNumber: apartmentNumber,
     street: street,
@@ -32,6 +32,7 @@ const createListing = async (
     description: description,
     ammenities: ammenities,
     reviews: [],
+    datePosted: date,
   };
   const insertInfo = await usersCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
@@ -103,6 +104,7 @@ const updateListing = async (
 
   const db = await dbConnection();
   const propertyCollection = await properties();
+  let date = new Date().toLocaleDateString();
   const updatedListing = {
     apartmentNumber: apartmentNumber,
     street: street,
@@ -115,6 +117,7 @@ const updateListing = async (
     rent: rent,
     description: description,
     ammenities: ammenities,
+    datePosted: date,
   };
 
   let tmpListing = await getPropertyById(propertyId);
