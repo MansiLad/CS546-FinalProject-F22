@@ -17,3 +17,26 @@ const checkId = (id) => {
     throw { Status: "400", Message: "invalid object ID" };
   return id;
 };
+
+ const checkString = (strVal) => {
+  if (!strVal) throw 'Error: You must supply a string!';
+  if (typeof strVal !== 'string') throw 'Error: The parameter must be a string!';
+
+  strVal = strVal.trim();
+  if (strVal.length === 0)
+    throw 'Error: The parameter cannot be an empty string or string with just spaces';
+
+  if (!isNaN(strVal))
+    throw 'Error: The parameter is not a valid value  as it only contains digits';
+  
+
+  if(!(/^[a-zA-Z\s]*$/.test(strVal))){
+    throw "The parameter is notvalid string."
+  }
+  
+  return strVal;
+};
+
+
+
+
