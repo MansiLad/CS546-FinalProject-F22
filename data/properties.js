@@ -64,5 +64,23 @@ const getpropertybtID = async (propertyID) => {
     //return moviesF;
   };
 
-
+  const removeListing = async (propertyID) => {
+    let id = propertyID;
+      if (!id || id.length === 0) throw 'You must provide an id to search for';
+      if (typeof id !== 'string') throw 'Id must be a string';
+      if (id.trim().length === 0)
+        throw 'id cannot be an empty string or just spaces';
+      id = id.trim();
+      if (!ObjectId.isValid(id)) throw 'invalid object ID';
+      const property_Collection = await properties();
+      let get_property = await getPropertyById(id);
+      const deletionInfo = await property_Collection.deleteOne({_id: ObjectId(id)});
+      //let movie_name = get_movie.title;
+  
+      if (deletionInfo.deletedCount === 0) {
+        throw `Could not delete dog with id of ${id}`;
+      }
+      return 'Property is succesfully deleted!' ;
+  
+  };
 
