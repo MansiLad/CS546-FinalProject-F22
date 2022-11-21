@@ -2,7 +2,7 @@ const propertiesRoutes = require('./properties');
 // const reviewsRoutes = require('./reviews');
 
 const constructorMethod = (app) => {
-  app.use('/properties', moviesRoutes);
+  app.use('/', propertiesRoutes);
   // app.use('/reviews', reviewsRoutes);
 
   app.use('*', (req, res) => {

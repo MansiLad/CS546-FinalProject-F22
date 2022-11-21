@@ -10,7 +10,9 @@ router.route("/").get(async (req, res) => {
   res.sendFile(path.resolve("static/property_homepage.html"));
 });
 
-router.route("/").get(async (req, res) => {
+router.route("/propUpload").post(async (req, res) => {
   //code here for GET
-  res.sendFile(path.resolve("static/property_homepage.html"));
+  console.log(req.body.filename);
 });
+
+module.exports = router;
