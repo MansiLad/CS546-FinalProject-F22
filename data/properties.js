@@ -37,3 +37,16 @@ const createListing = async (
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
 };
 
+const getAllListings = async () => {
+
+    const property_Collection = await properties();
+    const properties = await property_Collection.find({}).toArray();
+    arr = [];
+    if(!properties){
+      return arr;
+    }
+    return JSON.parse(JSON.stringify(properties));
+  };
+
+  
+
