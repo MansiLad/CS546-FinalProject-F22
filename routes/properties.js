@@ -9,3 +9,8 @@ router.route("/").get(async (req, res) => {
   //code here for GET
   res.sendFile(path.resolve("static/property_homepage.html"));
 });
+
+router.route("/").get(async (req, res) => {
+  //code here for GET
+  res.sendFile(path.resolve("static/property_homepage.html"));
+});
