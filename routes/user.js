@@ -4,13 +4,40 @@ const path = require("path")
 const data = require("../data/people")
 
 
-router.route("/").get(async (req, res) => {
-  //code here for GET
-  res.sendFile(path.resolve("static/homepage.html"))
-});
+router
+  .route('/')
+  .get(async (req, res) =>{
+    res.sendFile(path.resolve("static/homepage.html"))
+  })
 
 
-router.route("/userregistration")
+router
+  .route('/userLogin')
+  .post(async (req, res) => {
+
+  })
+
+router
+  .route('/userRegistration')
+  .get(async (req, res) => {
+
+  })
+  .post(async (req, res) => {
+
+  })
+
+router
+  .route('/propertyRegistration')
+  .get(async (req, res) => {
+
+  })
+  .post(async (req, res) => {
+
+  })
+
+
+
+
 
 /* 
 router.post('/', async (req, res) => {
