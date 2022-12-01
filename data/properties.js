@@ -84,3 +84,9 @@ const getpropertybtID = async (propertyID) => {
   
   };
 
+  module.exports = {
+    createListing,
+    getAllListings,
+    getpropertybtID,
+    removeListing
+  }
