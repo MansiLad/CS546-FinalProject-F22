@@ -33,7 +33,7 @@ const createListing = async (
     ammenities: ammenities,
     reviews: [],
   };
-  const insertInfo = await usersCollection.insertOne(newListing);
+  const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
 };
 
@@ -48,7 +48,7 @@ const getAllListings = async () => {
     return JSON.parse(JSON.stringify(properties));
 };
 
-const getpropertybtID = async (propertyID) => {
+const getpropertybyID = async (propertyID) => {
     let id = propertyID;
     if(!id || id.length == 0){
       throw "Not valid id"
@@ -73,12 +73,12 @@ const getpropertybtID = async (propertyID) => {
       id = id.trim();
       if (!ObjectId.isValid(id)) throw 'invalid object ID';
       const property_Collection = await properties();
-      let get_property = await getPropertyById(id);
+      let get_property = await getpropertybyID(id);
       const deletionInfo = await property_Collection.deleteOne({_id: ObjectId(id)});
       //let movie_name = get_movie.title;
   
       if (deletionInfo.deletedCount === 0) {
-        throw `Could not delete dog with id of ${id}`;
+        throw `Could not delete property with address ${get_property.address}`;
       }
       return 'Property is succesfully deleted!' ;
   
@@ -87,6 +87,6 @@ const getpropertybtID = async (propertyID) => {
   module.exports = {
     createListing,
     getAllListings,
-    getpropertybtID,
+    getpropertybyID,
     removeListing
   }
