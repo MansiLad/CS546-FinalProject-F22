@@ -27,6 +27,7 @@ const createUser = async (
     phoneNumber: phoneNumber,
     password: password,
     admin: false,
+    favourites: [], //added favourites
   };
   const insertInfo = await usersCollection.insertOne(newUser);
   if (insertInfo.insertedCount === 0) throw "Could not register user";
@@ -41,11 +42,11 @@ const removeUser = async (userId) => {
     throw e;
   }
 
-  const movieCollection = await movies();
+  const userCollection = await users();
 
-  const user = await getMovieById(userId);
+  const user = await getUserById(userId);
 
-  const deletionInfo = await movieCollection.deleteOne({
+  const deletionInfo = await userCollection.deleteOne({
     _id: ObjectId(userId),
   });
 
@@ -86,7 +87,7 @@ const updateUser = async (
     { $set: updatedUser }
   );
   if (updatedInfo.modifiedCount === 0) {
-    throw "could not update movie successfully";
+    throw "could not update user successfully";
   }
   // await closeConnection();
   // return await getMovieById(movieId);
@@ -98,7 +99,7 @@ const getUserById = async (userId) => {
   const userCollection = await users();
   const user = await userCollection.findOne({ _id: ObjectId(userId) });
 
-  if (user == null) throw "No movie with that id";
+  if (user == null) throw "No user with that id";
   user._id = ObjectId(user._id).toString();
   // await closeConnection();
   return user;
