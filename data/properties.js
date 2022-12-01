@@ -3,7 +3,7 @@ const mongoCollections = require("../config/mongoCollections");
 const properties = mongoCollections.properties;
 const property_data = require("./properties");
 
-// function to add listing validations left 
+// function to add listing validations left
 const createListing = async (
   apartmentNumber,
   street,
@@ -18,7 +18,7 @@ const createListing = async (
   ammenities,
 ) => {
   let propertiesCollection = await properties();
-
+  let date = new Date().toLocaleDateString();
   let newListing = {
     apartmentNumber: apartmentNumber,
     street: street,
@@ -32,23 +32,23 @@ const createListing = async (
     description: description,
     ammenities: ammenities,
     reviews: [],
+    datePosted: date,
   };
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
 };
 
 const getAllListings = async () => {
-
-    const property_Collection = await properties();
-    const properties = await property_Collection.find({}).toArray();
-    arr = [];
-    if(!properties){
-      return arr;
-    }
-    return JSON.parse(JSON.stringify(properties));
+  const property_Collection = await properties();
+  const properties = await property_Collection.find({}).toArray();
+  arr = [];
+  if (!properties) {
+    return arr;
+  }
+  return JSON.parse(JSON.stringify(properties));
 };
 
-const getpropertybyID = async (propertyID) => {
+const getpropertybtID = async (propertyID) => {
     let id = propertyID;
     if(!id || id.length == 0){
       throw "Not valid id"
@@ -73,20 +73,14 @@ const getpropertybyID = async (propertyID) => {
       id = id.trim();
       if (!ObjectId.isValid(id)) throw 'invalid object ID';
       const property_Collection = await properties();
-      let get_property = await getpropertybyID(id);
+      let get_property = await getPropertyById(id);
       const deletionInfo = await property_Collection.deleteOne({_id: ObjectId(id)});
       //let movie_name = get_movie.title;
   
       if (deletionInfo.deletedCount === 0) {
-        throw `Could not delete property with address ${get_property.address}`;
+        throw `Could not delete dog with id of ${id}`;
       }
       return 'Property is succesfully deleted!' ;
   
   };
 
-  module.exports = {
-    createListing,
-    getAllListings,
-    getpropertybyID,
-    removeListing
-  }

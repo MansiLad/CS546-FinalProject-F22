@@ -3,6 +3,7 @@ const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
 const { ObjectId } = require("mongodb");
 const { dbConnection, closeConnection } = require("../config/mongoConnection");
+const bcrypt = require('bcryptjs');
 
 // function for creating a user validations are left
 const createUser = async (
@@ -17,6 +18,11 @@ const createUser = async (
 ) => {
   let usersCollection = await users();
 
+  const saltRounds = 16;
+  const encryptpassword = await bcrypt.hash(password, saltRounds)
+
+  let flag = {insertedUser: true}
+
   let newUser = {
     firstName: firstName,
     lastName: lastName,
@@ -25,11 +31,22 @@ const createUser = async (
     city: city,
     state: state,
     phoneNumber: phoneNumber,
-    password: password,
+    password: encryptpassword,
     admin: false,
+    favourites: [], //added favourites
   };
+
+  const checkusername = await usersCollection.findOne({email: email})
+
+  if(checkusername !== null)  throw 'Username Exist! Enter a new one'
+
   const insertInfo = await usersCollection.insertOne(newUser);
-  if (insertInfo.insertedCount === 0) throw "Could not register user";
+
+  if(insertInfo.insertedCount === 0) {
+    throw "Could not register user!"
+  } else {
+    return flag
+  }
 };
 
 // function to remove user validation left
