@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excelsior Nooks</title>
-</head>
-<body>
-    <header>
-        <h1>We Welcome Everyone!!</h1>
-    </header>
-    <form action="/propUpload" method="post">
+<title>Register Property</title>
+<main>
+    <h1>{{title}}</h1>
+    <form action="/propertyRegistration" method="POST">
         <label for="address">Apartment Number: </label>
         <input type="text" id="address" name="adress" placeholder="Enter Apartment Number"> <br>
         <label for="Street">Street: </label>
@@ -36,7 +27,5 @@
         <input type="file" id="myFile" name="filename" placeholder="Upload images of the property"> <br>
         <input type="submit" value="Submit">
         <button type="submit">Submit</button>
-
     </form>
-</body>
-</html>
+</main>
