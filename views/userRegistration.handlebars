@@ -1,0 +1,43 @@
+<title>{{title}}</title>
+<p>
+    Registration form 
+</p>
+    <form id="regform" method="POST" action="/userRegistration">
+        <h1>Registration Form</h1>
+        <br>
+        <label for="firstName"> First Name </label>
+                <input type="text" class="form-control" id="firstName" name="firstName"> 
+                <br>
+                <br>
+        <label for="lastName"> Last Name </label>
+                <input type="text" class="form-control" id="lastName" name="lastName"> 
+                <br>
+                <br>
+        <label for="gender"> Gender </label>
+                <label for="male" class="radio-inline"><input type="radio" name="gender" value="m" id="male">Male</label>
+                <label for="female" class="radio-inline"><input type="radio" name="gender" value="f" id="female">Female</label>
+                <label for="other" class="radio-inline"><input type="radio" name="gender" value="o" id="other">Others</label>
+                <br>
+                <br>
+        <label for="email"> Email </label>
+                <input type="email" class="form-control" id="email" name="email"> 
+                <br>
+                <br>
+        <label for="city"> City </label>
+                <input type="text" class="form-control" id="city" name="city"> 
+                <br>
+                <br>
+        <label for="state"> State </label>
+                <input type="text" class="form-control" id="state" name="state"> 
+                <br>
+                <br>
+        <label for="phoneNumber"> Phone Number </label>
+                <input type="number" class="form-control" id="phoneNumber" name="phoneNumber"> 
+                <br>
+                <br>
+        <label for="password"> Password </label>
+                <input type="password" class="form-control" id="password" name="password"> 
+                <br>
+                <br>
+        <button type="submit"> Submit </button>
+    </form> 
