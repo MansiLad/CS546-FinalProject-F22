@@ -109,10 +109,46 @@ router
   .route('/propertyRegistration')
   .get(async (req, res) => {
 
+      try{
+        const user = req.session.user;
+        if (!user){
+          res.render("userRegisteration", { title: "Registration Page"});
+        }
+        else{
+          res.render('propertyRegistration',{title: 'Enter the propety details'})
+        }
+      }catch(e){
+        return res.render('userRegisteration', {title:'Registeration Page', error: e})
+      }
+
+
   })
   .post(async (req, res) => {
 
+    try{
+
+    }catch(e){
+
+    }
   })
+
+  router
+  .route('/peopleRent')
+  .get(async (req, res) => {
+    try{
+      const user = req.session.user;
+      if (!user){
+        res.render("userRegisteration", { title: "Registration Page"});
+      }
+      else{
+        res.render('propertyRegistration',{title: 'Enter the propety details'})
+      }
+    }catch(e){
+      return res.render('userRegisteration', {title:'Registeration Page', error: e})
+    }
+
+  })
+
 
 
   router
