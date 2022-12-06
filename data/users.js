@@ -14,7 +14,8 @@ const createUser = async (
   city,
   state,
   phoneNumber,
-  password
+  password,
+
 ) => {
   let usersCollection = await users();
 
@@ -34,6 +35,7 @@ const createUser = async (
     password: encryptpassword,
     admin: false,
     favourites: [], //added favourites
+    propertyIDs: [], //for display of all properties
   };
 
   const checkusername = await usersCollection.findOne({email: email})
