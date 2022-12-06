@@ -54,7 +54,6 @@ const getAllListings = async () => {
   return JSON.parse(JSON.stringify(properties));
 };
 
-<<<<<<<<< Temporary merge branch 1
 const getPropertybtId = async (propertyID) => {
   let id = propertyID;
   if (!id || id.length == 0) {
