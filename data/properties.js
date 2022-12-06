@@ -146,7 +146,7 @@ module.exports = {
   removeListing,
   getAllListings,
 };
-=========
+
 const getpropertybyID = async (propertyID) => {
     let id = propertyID;
     if(!id || id.length == 0){
