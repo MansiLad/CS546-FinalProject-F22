@@ -17,6 +17,12 @@ router.route("/propUpload").post(async (req, res) => {
 
 router.route("/properties").get(async (req, res) => {
   //code here for GET
+  try {
+    let prop = await propertiesData.getAllListings();
+    res.render('name of tempelate', {prop: prop})
+  } catch (error) {
+    return res.render('error', {error: error})
+  }
   return res.render("Name of the template");
 });
 
@@ -31,9 +37,10 @@ router.route("/removelisting").post(async (req, res) => {
   id = req.params.id;
   id = helper.chekId(id);
   try {
-    propertiesData.removeListing(id);
+    await propertiesData.removeListing(id);
+    res.redirect('/properties')
   } catch (error) {
-    
+    return res.render('error', {error: error})
   }
   
 });

@@ -13,7 +13,8 @@ const createUser = async (
   city,
   state,
   phoneNumber,
-  password
+  password,
+  type,
 ) => {
   let usersCollection = await users();
 
@@ -26,7 +27,7 @@ const createUser = async (
     state: state,
     phoneNumber: phoneNumber,
     password: password,
-    admin: false,
+    type: type,
     favourites: [], //added favourites
   };
   const insertInfo = await usersCollection.insertOne(newUser);
@@ -56,7 +57,7 @@ const removeUser = async (userId) => {
   return `${user.firstName} ${user.lastName} has been sucessfully deleted!`;
 };
 
-const updateUser = async (
+const createAdmin = async (
   firstName,
   lastName,
   gender,
@@ -65,6 +66,34 @@ const updateUser = async (
   state,
   phoneNumber,
   password
+) => {
+  let usersCollection = await users();
+
+  let newUser = {
+    firstName: firstName,
+    lastName: lastName,
+    gender: gender,
+    email: email,
+    city: city,
+    state: state,
+    phoneNumber: phoneNumber,
+    password: password,
+    type: 'admin',
+    favourites: [], //added favourites
+  };
+  const insertInfo = await usersCollection.insertOne(newUser);
+  if (insertInfo.insertedCount === 0) throw "Could not register user";
+};
+
+const updateUser = async (
+  firstName,
+  lastName,
+  gender,
+  email,
+  city,
+  state,
+  phoneNumber,
+  password,
 ) => {
   const db = await dbConnection();
   const userCollection = await users();
@@ -89,8 +118,6 @@ const updateUser = async (
   if (updatedInfo.modifiedCount === 0) {
     throw "could not update user successfully";
   }
-  // await closeConnection();
-  // return await getMovieById(movieId);
 };
 
 // get user by id validations are left
@@ -110,4 +137,5 @@ module.exports = {
   createUser,
   updateUser,
   removeUser,
+  createAdmin,
 };
