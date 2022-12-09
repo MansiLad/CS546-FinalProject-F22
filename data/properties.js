@@ -3,6 +3,7 @@ const { ObjectId } = require("mongodb");
 const mongoCollections = require("../config/mongoCollections");
 const properties = mongoCollections.properties;
 const users = mongoCollections.users;
+const reviews = require('./reviews')
 const users_data = require("./users");
 
 // function to add listing validations left
@@ -54,7 +55,7 @@ const getAllListings = async () => {
   return JSON.parse(JSON.stringify(properties));
 };
 
-const getPropertybtId = async (propertyID) => {
+const getPropertyById = async (propertyID) => {
   let id = propertyID;
   if (!id || id.length == 0) {
     throw "Not valid id";
