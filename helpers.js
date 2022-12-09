@@ -29,13 +29,33 @@ const checkId = (id) => {
   if (!isNaN(strVal))
     throw 'Error: The parameter is not a valid value  as it only contains digits';
   
-
   if(!(/^[a-zA-Z\s]*$/.test(strVal))){
-    throw "The parameter is notvalid string."
+    throw "The parameter is not valid string."
   }
-  
+
   return strVal;
 };
+
+let checkNumber = (phoneNumber) => {
+  if(!phoneNumber) throw "Error : No valid number."
+
+  phoneNumber = phoneNumber.trim();
+  if (phoneNumber.length === 0)
+    throw 'Error: The parameter cannot be an empty number or number with just spaces';
+  
+  if(typeof(phoneNumber) === 'number') throw "Error: The parameter should be a number";
+
+  if(!(/^[0-9\s]*$/.test(phoneNumber))) throw "Error: The parameter should be a number";
+};
+
+
+
+
+
+
+
+
+
 
 
 
