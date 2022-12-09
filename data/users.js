@@ -15,6 +15,7 @@ const createUser = async (
   state,
   phoneNumber,
   password,
+  type,
 
 ) => {
   let usersCollection = await users();
@@ -33,7 +34,7 @@ const createUser = async (
     state: state,
     phoneNumber: phoneNumber,
     password: encryptpassword,
-    admin: type,
+    type: type,
     favourites: [], //added favourites
     propertyIDs: [], //for display of all properties
   };
@@ -82,8 +83,7 @@ const createAdmin = async (
   city,
   state,
   phoneNumber,
-  oldpassword,
-  newpassword
+  password,
 ) => {
   let usersCollection = await users();
 
@@ -97,7 +97,6 @@ const createAdmin = async (
     phoneNumber: phoneNumber,
     password: password,
     type: 'admin',
-    favourites: [], //added favourites
   };
   const insertInfo = await usersCollection.insertOne(newUser);
   if (insertInfo.insertedCount === 0) throw "Could not register user";
@@ -111,21 +110,12 @@ const updateUser = async (
   city,
   state,
   phoneNumber,
-  password,
 ) => {
   const db = await dbConnection();
   const userCollection = await users();
 
-  let password = oldpassword
-
   const checkUser = await userCollection.findOne({email: email})
   if(checkUser === null)  throw 'User doesnot exist'
-  const password_check = await bcrypt.compare(oldpassword, chechUser.password)
-  if(!password_check){
-    throw 'Incorrect password, Please enter correct current password to change the password'
-  } else {
-    password = newpassword
-  }
   
   const updateduser = {
     firstName: firstName,
@@ -135,7 +125,7 @@ const updateUser = async (
     city: city,
     state: state,
     phoneNumber: phoneNumber,
-    password: password,
+
   };
 
   let tmpUser = await getUserById(checkUser._id);
@@ -174,13 +164,23 @@ const checkUser = async (email, password) => {
   if(!checkusername)  throw 'Either the username or password is invalid'
 
   const password_check = await bcrypt.compare(password, checkusername.password)
-  let flag = {authenticatedUser: true}
 
-  if(!password_check){
-    throw 'Either the username or password is invalid'
-  } else {
-    return flag
+  if(!password_check) throw 'Either the username or password is invalid'
+
+  if(checkusername.type === 'admin'){
+    let flag = {authenticatedUser: true, type: 'admin'}
   }
+
+  if(checkusername.type === 'seller'){
+    let flag = {authenticatedUser: true, type: 'seller'}
+  }
+
+  if(checkusername.type === 'buyer'){
+    let flag = {authenticatedUser: true, type: 'buyer'}
+  }
+  
+  return flag
+  
 };
 
 module.exports = {
