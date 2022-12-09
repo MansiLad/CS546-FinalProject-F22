@@ -26,6 +26,22 @@ router.route("/properties").get(async (req, res) => {
   return res.render("Name of the template");
 });
 
+router.route("/propertydetails/:id").get(async (req, res) => {
+  if(isNaN(req.params.id)){
+    return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
+  }
+
+  const prop = await propertiesData.getPropertyByID(req.params.id)
+  if(prop === null || prop === undefined){
+    return res.status(404).render('../views/error', {title: 'Not found', Error: "No ID exist"})
+  }
+  let propname = prop.apartmentNumber + " " + prop.street
+  res.render("../views/propertybyID", {title:'Property', id:prop.id, propname: propname, 
+  street:prop.street, city: prop.city, state: prop.state, zipCode: prop.zipCode})
+  //add the rest 
+
+});
+
 router.route("/filtered").post(async (req, res) => {
   //code here for post
   // function for filter

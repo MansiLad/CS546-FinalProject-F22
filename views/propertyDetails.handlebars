@@ -1,5 +1,9 @@
 <title>{{title}}</title>
 <main>
     <h1>Property Details</h1>
-    
+    <ul>
+        {{#each result}}
+            <a href="/propertydetails/{{this.id}}"> {{this.propertyname}} {{this.apartmentnumber}} {{this.street}} {{this.city}}</a>
+        {{/each}}
+    </ul>
 </main>
