@@ -35,9 +35,7 @@ router.route("/propertydetails/:id").get(async (req, res) => {
   if(prop === null || prop === undefined){
     return res.status(404).render('../views/error', {title: 'Not found', Error: "No ID exist"})
   }
-  let propname = prop.apartmentNumber + " " + prop.street
-  res.render("../views/propertybyID", {title:'Property', id:prop.id, propname: propname, 
-  street:prop.street, city: prop.city, state: prop.state, zipCode: prop.zipCode})
+  res.render("../views/propertybyID", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
   //add the rest 
 
 });
