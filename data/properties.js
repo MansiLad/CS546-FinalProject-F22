@@ -54,7 +54,7 @@ const getAllListings = async () => {
   return JSON.parse(JSON.stringify(properties));
 };
 
-const getPropertybtId = async (propertyID) => {
+const getPropertyById = async (propertyID) => {
   let id = propertyID;
   if (!id || id.length == 0) {
     throw "Not valid id";
@@ -145,4 +145,5 @@ module.exports = {
   updateListing,
   removeListing,
   getAllListings,
+  getPropertyById
 };
