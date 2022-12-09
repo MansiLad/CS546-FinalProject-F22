@@ -33,7 +33,7 @@ const createUser = async (
     state: state,
     phoneNumber: phoneNumber,
     password: encryptpassword,
-    admin: false,
+    admin: type,
     favourites: [], //added favourites
   };
 
