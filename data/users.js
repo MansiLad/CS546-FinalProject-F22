@@ -15,7 +15,7 @@ const createUser = async (
   state,
   phoneNumber,
   password,
-  type,
+
 ) => {
   let usersCollection = await users();
 
@@ -35,6 +35,7 @@ const createUser = async (
     password: encryptpassword,
     admin: type,
     favourites: [], //added favourites
+    propertyIDs: [], //for display of all properties
   };
 
   const checkusername = await usersCollection.findOne({email: email})
@@ -81,7 +82,8 @@ const createAdmin = async (
   city,
   state,
   phoneNumber,
-  password
+  oldpassword,
+  newpassword
 ) => {
   let usersCollection = await users();
 
@@ -114,6 +116,17 @@ const updateUser = async (
   const db = await dbConnection();
   const userCollection = await users();
 
+  let password = oldpassword
+
+  const checkUser = await userCollection.findOne({email: email})
+  if(checkUser === null)  throw 'User doesnot exist'
+  const password_check = await bcrypt.compare(oldpassword, chechUser.password)
+  if(!password_check){
+    throw 'Incorrect password, Please enter correct current password to change the password'
+  } else {
+    password = newpassword
+  }
+  
   const updateduser = {
     firstName: firstName,
     lastName: lastName,
@@ -125,11 +138,15 @@ const updateUser = async (
     password: password,
   };
 
-  let tmpUser = await getUserById(userId);
+  let tmpUser = await getUserById(checkUser._id);
+
+  if(!tmpUser){
+    throw 'User does not exist!'
+  }
 
   const updatedInfo = await userCollection.updateOne(
-    { _id: ObjectId(userId) },
-    { $set: updatedUser }
+    { _id: ObjectId(tmpUser._id) },
+    { $set: updateduser }
   );
   if (updatedInfo.modifiedCount === 0) {
     throw "could not update user successfully";
@@ -148,10 +165,29 @@ const getUserById = async (userId) => {
   return user;
 };
 
+const checkUser = async (email, password) => { 
+
+  const usersindb = await users()
+
+  const checkusername = await usersindb.findOne({email: email})
+
+  if(!checkusername)  throw 'Either the username or password is invalid'
+
+  const password_check = await bcrypt.compare(password, checkusername.password)
+  let flag = {authenticatedUser: true}
+
+  if(!password_check){
+    throw 'Either the username or password is invalid'
+  } else {
+    return flag
+  }
+};
+
 module.exports = {
   getUserById,
   createUser,
   updateUser,
   removeUser,
   createAdmin,
+  checkUser
 };
