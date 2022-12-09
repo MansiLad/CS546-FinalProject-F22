@@ -14,7 +14,8 @@ const createUser = async (
   city,
   state,
   phoneNumber,
-  password
+  password,
+
 ) => {
   let usersCollection = await users();
 
@@ -32,7 +33,7 @@ const createUser = async (
     state: state,
     phoneNumber: phoneNumber,
     password: encryptpassword,
-    admin: false,
+    type: type,
     favourites: [], //added favourites
     propertyIDs: [], //for display of all properties
   };
@@ -73,7 +74,7 @@ const removeUser = async (userId) => {
   return `${user.firstName} ${user.lastName} has been sucessfully deleted!`;
 };
 
-const updateUser = async (
+const createAdmin = async (
   firstName,
   lastName,
   gender,
@@ -81,24 +82,11 @@ const updateUser = async (
   city,
   state,
   phoneNumber,
-  oldpassword,
-  newpassword
+  password,
 ) => {
-  const db = await dbConnection();
-  const userCollection = await users();
+  let usersCollection = await users();
 
-  let password = oldpassword;
-
-  const checkUser = await userCollection.findOne({ email: email });
-  if (checkUser === null) throw "User doesnot exist";
-  const password_check = await bcrypt.compare(oldpassword, chechUser.password);
-  if (!password_check) {
-    throw "Incorrect password, Please enter correct current password to change the password";
-  } else {
-    password = newpassword;
-  }
-
-  const updateduser = {
+  let newUser = {
     firstName: firstName,
     lastName: lastName,
     gender: gender,
@@ -107,6 +95,44 @@ const updateUser = async (
     state: state,
     phoneNumber: phoneNumber,
     password: password,
+    type: 'admin',
+  };
+  const insertInfo = await usersCollection.insertOne(newUser);
+  if (insertInfo.insertedCount === 0) throw "Could not register user";
+};
+
+const updateUser = async (
+  firstName,
+  lastName,
+  gender,
+  email,
+  city,
+  state,
+  phoneNumber,
+) => {
+  const db = await dbConnection();
+  const userCollection = await users();
+
+  let password = oldpassword
+
+  const checkUser = await userCollection.findOne({email: email})
+  if(checkUser === null)  throw 'User doesnot exist'
+  const password_check = await bcrypt.compare(oldpassword, chechUser.password)
+  if(!password_check){
+    throw 'Incorrect password, Please enter correct current password to change the password'
+  } else {
+    password = newpassword
+  }
+  
+  const updateduser = {
+    firstName: firstName,
+    lastName: lastName,
+    gender: gender,
+    email: email,
+    city: city,
+    state: state,
+    phoneNumber: phoneNumber,
+
   };
 
   let tmpUser = await getUserById(checkUser._id);
@@ -122,8 +148,6 @@ const updateUser = async (
   if (updatedInfo.modifiedCount === 0) {
     throw "could not update user successfully";
   }
-  // await closeConnection();
-  // return await getMovieById(movieId);
 };
 
 // get user by id validations are left
@@ -148,11 +172,17 @@ const checkUser = async (email, password) => {
   const password_check = await bcrypt.compare(password, checkusername.password);
   let flag = { authenticatedUser: true };
 
-  if (!password_check) {
-    throw "Either the username or password is invalid";
+  const password_check = await bcrypt.compare(password, checkusername.password)
+  let flag = {authenticatedUser: true}
+
+  if(!password_check){
+    throw 'Either the username or password is invalid'
   } else {
-    return flag;
+    return flag
   }
+  
+  return flag
+  
 };
 
 module.exports = {
@@ -160,5 +190,5 @@ module.exports = {
   createUser,
   updateUser,
   removeUser,
-  checkUser,
+  checkUser
 };

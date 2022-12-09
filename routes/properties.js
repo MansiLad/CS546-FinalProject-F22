@@ -20,26 +20,13 @@ router.route("/propUpload").post(async (req, res) => {
 
 router.route("/searchProperties").get(async (req, res) => {
   //code here for GET
-  
-  if(!req.session.user) return res.redirect('/userlogin')
-  
-  return res.render("renters",{title:'Search Properties'});
-});
-
-router.route("/property/:id").get(async (req, res) => {
-  //code here for GET
-  if(!req.session.user){
-    return res.redirect('/userlogin')
+  try {
+    let prop = await propertiesData.getAllListings();
+    res.render('name of tempelate', {prop: prop})
+  } catch (error) {
+    return res.render('error', {error: error})
   }
-  let id = req.params.id;
-
-  try{
-    
-    let prop = await propertiesData.getPropertyById()
-  }catch(e){
-
-  }
-  return res.render("");
+  return res.render("Name of the template");
 });
 
 router.route("/filtered").post(async (req, res) => {
@@ -53,9 +40,10 @@ router.route("/removelisting").post(async (req, res) => {
   id = req.params.id;
   id = helper.chekId(id);
   try {
-    propertiesData.removeListing(id);
+    await propertiesData.removeListing(id);
+    res.redirect('/properties')
   } catch (error) {
-    
+    return res.render('error', {error: error})
   }
   
 });
