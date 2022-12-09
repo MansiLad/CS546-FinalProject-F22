@@ -3,7 +3,7 @@ const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
 const { ObjectId } = require("mongodb");
 const { dbConnection, closeConnection } = require("../config/mongoConnection");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 
 // function for creating a user validations are left
 const createUser = async (
@@ -15,14 +15,14 @@ const createUser = async (
   state,
   phoneNumber,
   password,
-
+  type
 ) => {
   let usersCollection = await users();
 
   const saltRounds = 16;
-  const encryptpassword = await bcrypt.hash(password, saltRounds)
+  const encryptpassword = await bcrypt.hash(password, saltRounds);
 
-  let flag = {insertedUser: true}
+  let flag = { insertedUser: true };
 
   let newUser = {
     firstName: firstName,
@@ -33,21 +33,21 @@ const createUser = async (
     state: state,
     phoneNumber: phoneNumber,
     password: encryptpassword,
-    admin: type,
+    type: type,
     favourites: [], //added favourites
     propertyIDs: [], //for display of all properties
   };
 
-  const checkusername = await usersCollection.findOne({email: email})
+  const checkusername = await usersCollection.findOne({ email: email });
 
-  if(checkusername !== null)  throw 'Username Exist! Enter a new one'
+  if (checkusername !== null) throw "Username Exist! Enter a new one";
 
   const insertInfo = await usersCollection.insertOne(newUser);
 
-  if(insertInfo.insertedCount === 0) {
-    throw "Could not register user!"
+  if (insertInfo.insertedCount === 0) {
+    throw "Could not register user!";
   } else {
-    return flag
+    return flag;
   }
 };
 
@@ -82,8 +82,7 @@ const createAdmin = async (
   city,
   state,
   phoneNumber,
-  oldpassword,
-  newpassword
+  password
 ) => {
   let usersCollection = await users();
 
@@ -96,8 +95,7 @@ const createAdmin = async (
     state: state,
     phoneNumber: phoneNumber,
     password: password,
-    type: 'admin',
-    favourites: [], //added favourites
+    type: "admin",
   };
   const insertInfo = await usersCollection.insertOne(newUser);
   if (insertInfo.insertedCount === 0) throw "Could not register user";
@@ -110,23 +108,14 @@ const updateUser = async (
   email,
   city,
   state,
-  phoneNumber,
-  password,
+  phoneNumber
 ) => {
   const db = await dbConnection();
   const userCollection = await users();
 
-  let password = oldpassword
+  const checkUser = await userCollection.findOne({ email: email });
+  if (checkUser === null) throw "User doesnot exist";
 
-  const checkUser = await userCollection.findOne({email: email})
-  if(checkUser === null)  throw 'User doesnot exist'
-  const password_check = await bcrypt.compare(oldpassword, chechUser.password)
-  if(!password_check){
-    throw 'Incorrect password, Please enter correct current password to change the password'
-  } else {
-    password = newpassword
-  }
-  
   const updateduser = {
     firstName: firstName,
     lastName: lastName,
@@ -135,13 +124,12 @@ const updateUser = async (
     city: city,
     state: state,
     phoneNumber: phoneNumber,
-    password: password,
   };
 
   let tmpUser = await getUserById(checkUser._id);
 
-  if(!tmpUser){
-    throw 'User does not exist!'
+  if (!tmpUser) {
+    throw "User does not exist!";
   }
 
   const updatedInfo = await userCollection.updateOne(
@@ -165,22 +153,30 @@ const getUserById = async (userId) => {
   return user;
 };
 
-const checkUser = async (email, password) => { 
+const checkUser = async (email, password) => {
+  const usersindb = await users();
 
-  const usersindb = await users()
+  const checkusername = await usersindb.findOne({ email: email });
 
-  const checkusername = await usersindb.findOne({email: email})
+  if (!checkusername) throw "Either the username or password is invalid";
 
-  if(!checkusername)  throw 'Either the username or password is invalid'
+  const password_check = await bcrypt.compare(password, checkusername.password);
 
-  const password_check = await bcrypt.compare(password, checkusername.password)
-  let flag = {authenticatedUser: true}
+  if (!password_check) throw "Either the username or password is invalid";
 
-  if(!password_check){
-    throw 'Either the username or password is invalid'
-  } else {
-    return flag
+  if (checkusername.type === "admin") {
+    let flag = { authenticatedUser: true, type: "admin" };
   }
+
+  if (checkusername.type === "seller") {
+    let flag = { authenticatedUser: true, type: "seller" };
+  }
+
+  if (checkusername.type === "buyer") {
+    let flag = { authenticatedUser: true, type: "buyer" };
+  }
+
+  return flag;
 };
 
 module.exports = {
@@ -189,5 +185,5 @@ module.exports = {
   updateUser,
   removeUser,
   createAdmin,
-  checkUser
+  checkUser,
 };

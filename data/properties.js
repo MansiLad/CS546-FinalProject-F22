@@ -8,8 +8,9 @@ const users_data = require("./users");
 // function to add listing validations left
 const createListing = async (
   UserId,
-  apartmentNumber,
-  street,
+  // apartmentNumber,
+  // street,
+  address,
   city,
   state,
   zipCode,
@@ -18,15 +19,16 @@ const createListing = async (
   deposit,
   rent,
   description,
-  ammenities,
+  ammenities
 ) => {
   let propertiesCollection = await properties();
   let userCollection = await users();
   let date = new Date().toLocaleDateString();
   let newListing = {
-    UserId : UserId,
-    apartmentNumber: apartmentNumber,
-    street: street,
+    UserId: UserId,
+    // apartmentNumber: apartmentNumber,
+    // street: street,
+    address: address,
     city: city,
     state: state,
     zipCode: zipCode,
@@ -41,7 +43,6 @@ const createListing = async (
   };
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
-  
 };
 
 const getAllListings = async () => {
@@ -94,8 +95,7 @@ const removeListing = async (propertyID) => {
 
 const updateListing = async (
   propertyId,
-  apartmentNumber,
-  street,
+  address,
   city,
   state,
   zipCode,
@@ -112,8 +112,8 @@ const updateListing = async (
   const propertyCollection = await properties();
   let date = new Date().toLocaleDateString();
   const updatedListing = {
-    apartmentNumber: apartmentNumber,
-    street: street,
+    address: address,
+    // street: street,
     city: city,
     state: state,
     zipCode: zipCode,
@@ -139,11 +139,31 @@ const updateListing = async (
   // return await getPropertyById(propertyId);
 };
 
+const getByState = async (state) => {
+  // todo validations
+  const propertyCollection = await properties();
+  let props = await propertyCollection.find({ state: state }).toArray();
+  return props;
+};
+
+const getByCity = async (city) => {
+  // todo validations
+  const propertyCollection = await properties();
+  let props = await propertyCollection.find({ city: city }).toArray();
+  return props;
+};
+
+const getByZipcode = async (zipCode) => {
+  // todo validations
+  const propertyCollection = await properties();
+  let props = await propertyCollection.find({ zipCode: zipCode }).toArray();
+  return props;
+};
+
 module.exports = {
   getPropertyById,
   createListing,
   updateListing,
   removeListing,
   getAllListings,
-  getPropertyById
 };
