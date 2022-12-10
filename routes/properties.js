@@ -20,22 +20,43 @@ router.route("/propUpload").post(async (req, res) => {
 
 router.route("/searchProperties").get(async (req, res) => {
   //code here for GET
+  //let prop_det = req.body.
   try {
     let prop = await propertiesData.getAllListings();
-    res.render('name of tempelate', {prop: prop})
+    res.render('searchProp', {title:'Get your favourite properties!'})
   } catch (error) {
     return res.render('error', {error: error})
+  }
+  //return res.render("renters");
+});
+
+router.route('/searchProperties').post(async(req,res) =>{
+  let city = req.body.city
+  let zip = req.body.zipcode
+  let state = req.body.state
+  if(!city && !zip && !state){
+    res.render('error',{title:'Error', error: `The inputs cannot be empty`})
+  }
+  
+})
+
+router.route('/propdetails/:id').get(async(req,res) =>{
+
+})
+
+router.route("/filtered").get(async (req, res) => {
+  //code here for post
+  // function for filter
+  try {
+    let search = req.body.search
+
+  } catch (error) {
+    return res.render('error',  {error:error})
   }
   return res.render("Name of the template");
 });
 
-router.route("/filtered").post(async (req, res) => {
-  //code here for post
-  // function for filter
-  return res.render("Name of the template");
-});
-
-router.route("/removelisting").post(async (req, res) => {
+router.route("/removelisting").delete(async (req, res) => {
   //code here for post
   id = req.params.id;
   id = helper.chekId(id);
