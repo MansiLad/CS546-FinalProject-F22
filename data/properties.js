@@ -37,18 +37,23 @@ const createListing = async (
     baths: baths,
     deposit: deposit,
     rent: rent,
-    description: description,
+    //description: description,
     ammenities: ammenities,
     reviews: [],
     datePosted: date,
   };
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
+  // error
+  const newid = insert_movie.insertedId.toString();
+ let ans = getPropertyById(newid)
+//  return JSON.parse(JSON.stringify(ans));
+return ans;
 };
 
 const getAllListings = async () => {
   const property_Collection = await properties();
-  const properties = await property_Collection.find({}).toArray();
+  const properties = await property_Collection.find({},{projection:{_id:1,address:1}}).toArray();
   arr = [];
   if (!properties) {
     return arr;

@@ -45,6 +45,12 @@ const validatePass = (password) => {
 
 router
   .route('/userLogin')
+  .get(async (req,res) => {
+    if(req.session.user){
+      res.redirect('/protected');
+    }
+    return res.render('userLogin', {title:'Login Page'})
+  })
   .post(async (req, res) => {
     if(req.session.user){
       res.redirect('/protected');
@@ -65,12 +71,20 @@ router
         req.session.admin = validUserName;
         return res.redirect("/admin_route");
       }
-
-      if(authenticatedUser.type === 'buyer')
-      {
-        req.session.admin = validUserName;
-        return res.redirect("/admin_route");
+      else{
+        return res.redirect('/protected')
       }
+      // else if(authenticatedUser.type === 'buyer')
+      // {
+      //   req.session.user = validUserName;
+      //   return res.redirect("/searchProperties");
+      // }
+
+      // else if(authenticatedUser.type === 'seller')
+      // {
+      //   req.session.user = validUserName;
+      //   return res.redirect('/propUpload')
+      // }
 
     }catch(e){
       return res.status(400).render('userLogin', {title: 'login',error: e});
@@ -79,18 +93,18 @@ router
   })
 
 router
-  .route('/userRegistration')
+  .route('/userRegisteration')
   .get(async (req, res) => {
     try{
       const user = req.session.user;
       if (!user){
-        res.render("userRegisteration", { title: "Registration Page"});
+        res.render("userRegistration", { title: "Registration Page"});
       }
       else{
         res.redirect("/protected");
       }
     }catch(e){
-      return res.render('userRegisteration', {title:'Registeration Page', error: e})
+      return res.render('userRegistration', {title:'Registeration Page', error: e})
     }
 
   })
@@ -183,7 +197,7 @@ router
   })
 
 
-
+module.exports = router;
 
 
 /* 
