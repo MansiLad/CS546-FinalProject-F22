@@ -144,9 +144,9 @@ const getReview = async (reviewId) => {
     throw "Not a valid object id";
   }
   const property_Collection = await properties();
-  const review = await property_Collection.findOne(
+  const review = await property_Collection.findAll(
     { "reviews._id": ObjectId(reviewId) },
-    { projection: { _id: 0, "reviews.$": 1 } }
+    { projection: { _id: 0, "reviews": 1 } }
   );
   if (!review) throw "No reviews found with this particular id.";
   const [r] = review.reviews;
