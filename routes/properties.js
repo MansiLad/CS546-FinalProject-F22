@@ -1,21 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const data = require("/data");
+const data = require("../data");
 const propertiesData = data.properties;
+const reviewsData= data.reviews;
 const path = require("path");
 // const userData = data.users;
 
 router.route("/").get(async (req, res) => {
   //code here for GET
-  res.sendFile(path.resolve("static/property_homepage.html"));
+  //if(!req.session.user) return res.redirect('/userlogin');
+  res.sendFile(path.resolve("static/homepage.html"));
 });
 
 router.route("/propUpload").post(async (req, res) => {
+  if(!req.session.user) return res.redirect('/userlogin')
   //code here for post
   console.log(req.body.filename);
 });
 
-router.route("/properties").get(async (req, res) => {
+router.route("/searchProperties").get(async (req, res) => {
   //code here for GET
   try {
     let prop = await propertiesData.getAllListings();

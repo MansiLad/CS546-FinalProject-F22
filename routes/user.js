@@ -36,11 +36,11 @@ const validatePass = (password) => {
   return password;
 }
 
-router
-  .route('/')
-  .get(async (req, res) =>{
-    res.sendFile(path.resolve("static/homepage.html"))
-  })
+// router
+//   // .route('/')
+//   // .get(async (req, res) =>{
+//   //   res.sendFile(path.resolve("static/homepage.html"))
+//   // })
 
 
 router
@@ -55,12 +55,22 @@ router
       let pass = postData.password;
       let validUserName = validUserCheck(userN)
       let validPassowerd = validatePass(pass);
-      let {authenticatedUser} = await data.checkUser(validUserName, validPassowerd);
-      if(!authenticatedUser){
+      let authenticatedUser = await data.checkUser(validUserName, validPassowerd);
+      if(authenticatedUser.authenticatedUser != true){
         return res.status(404).render('userLogin', {title: 'login', error: 'Not authenticated'});
       }
-      req.session.user = validUserName;
-      res.redirect("/protected");
+
+      if(authenticatedUser.type === 'admin')
+      {
+        req.session.admin = validUserName;
+        return res.redirect("/admin_route");
+      }
+
+      if(authenticatedUser.type === 'buyer')
+      {
+        req.session.admin = validUserName;
+        return res.redirect("/admin_route");
+      }
 
     }catch(e){
       return res.status(400).render('userLogin', {title: 'login',error: e});
@@ -95,7 +105,7 @@ router
       let validUserName = validUserCheck(userN)
       //validUserName = validUserName.toLowerCase();
       let validPassowerd = validatePass(pass);
-      let {insertedUser} = await data.createUser(validUserName, validPassowerd);
+      let {insertedUser} = await data.createUser(firstname,lastname,gender,validUserName,city,state,phonenumber,validPassowerd,type,favourates);
       if(insertedUser){
         res.redirect('/')
       }
