@@ -6,7 +6,7 @@ const users = mongoCollections.users;
 const auth = mongoCollections.unauthprop;
 const reviews = require("./reviews");
 const users_data = require("./users");
-const fs = require('fs');
+const fs = require("fs");
 
 // function to add listing validations left
 const createListing = async (
@@ -31,7 +31,6 @@ const createListing = async (
   let date = new Date().toLocaleDateString();
   // let image_buffer = new Buffer ()
 
-
   let newListing = {
     UserId: UserId,
     // apartmentNumber: apartmentNumber,
@@ -50,6 +49,7 @@ const createListing = async (
     reviews: [],
     datePosted: date,
     approved: false,
+    available: true,
   };
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
@@ -58,7 +58,9 @@ const createListing = async (
 const getAllListings = async () => {
   // todo validations
   const properties_Collection = await properties();
-  const properties = await properties_Collection.find({approved: true}).toArray();
+  const properties = await properties_Collection
+    .find({ approved: true, available: true })
+    .toArray();
   arr = [];
   if (!properties) {
     return arr;
@@ -117,7 +119,8 @@ const updateListing = async (
   deposit,
   rent,
   description,
-  ammenities
+  ammenities,
+  available,
 ) => {
   // todo validations
 
@@ -137,6 +140,7 @@ const updateListing = async (
     description: description,
     ammenities: ammenities,
     datePosted: date,
+    available: available,
   };
 
   let tmpListing = await getPropertyById(propertyId);
@@ -155,28 +159,36 @@ const updateListing = async (
 const getByState = async (state) => {
   // todo validations
   const propertyCollection = await properties();
-  let props = await propertyCollection.find({ state: state, approved: true }).toArray();
+  let props = await propertyCollection
+    .find({ state: state, approved: true, available: true, })
+    .toArray();
   return props;
 };
 
 const getByCity = async (city) => {
   // todo validations
   const propertyCollection = await properties();
-  let props = await propertyCollection.find({ city: city, approved: true }).toArray();
+  let props = await propertyCollection
+    .find({ city: city, approved: true, available: true, })
+    .toArray();
   return props;
 };
 
 const getByZipcode = async (zipCode) => {
   // todo validations
   const propertyCollection = await properties();
-  let props = await propertyCollection.find({ zipCode: zipCode, approved: true }).toArray();
+  let props = await propertyCollection
+    .find({ zipCode: zipCode, approved: true, available: true, })
+    .toArray();
   return props;
 };
 
 const getAllAuthListings = async () => {
   // todo validations
   const properties_Collection = await properties();
-  const properties = await properties_Collection.find({approved: false}).toArray();
+  const properties = await properties_Collection
+    .find({ approved: false })
+    .toArray();
   arr = [];
   if (!properties) {
     return arr;
@@ -239,9 +251,8 @@ const approveAuth = async (propertyID) => {
   const properties_Collection = await properties();
   const updatedInfo = await properties_Collection.updateOne(
     { _id: ObjectId(propertyId) },
-    { $set: {aprroved: true} }
+    { $set: { aprroved: true } }
   );
-  
 };
 
 module.exports = {
