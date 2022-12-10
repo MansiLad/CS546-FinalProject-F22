@@ -2,7 +2,7 @@ const helper = require("../helpers");
 const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
 const { ObjectId } = require("mongodb");
-const { dbConnection, closeConnection } = require("../config/mongoConnection");
+const { dbConnection, closeConnection } = require("../config/mongoConnections");
 const bcrypt = require("bcryptjs");
 
 // function for creating a user validations are left
