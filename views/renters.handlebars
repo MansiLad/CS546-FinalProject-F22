@@ -1,0 +1,29 @@
+<title>{{title}}</title>
+<main>
+    <h1>{{title}}</h1>
+    <form action="/filtered" method="post">
+    <label for="search">Search</label>
+    <input type="text" id="search" placeholder="Search" name="search"> <br>
+    <button type="submit">Search</button>
+    <input type="radio" id="bed" name="bed">
+<label for="bed">1 bed</label><br>
+<input type="radio" id="bed" name="bed" value="bed">
+<label for="bed">2 bed</label><br>
+<input type="radio" id="bed" name="bed" value="bed">
+<label for="bed">2+ beds</label>
+
+   <input type="radio" id="bath" name="bath" value="bath">
+<label for="bath">1 bath</label><br>
+<input type="radio" id="bath" name="bath" value="bath">
+<label for="bath">2 bath</label><br>
+<input type="radio" id="bath" name="bath" value="bath">
+<label for="bath">2+ baths</label>
+
+<label for="price-range">Price Range:</label>
+<input type="range" id="price-range" min="0" max="1000" step="50" value="0">
+
+    </form>
+
+ {{!-- add filters --}}
+
+</main>

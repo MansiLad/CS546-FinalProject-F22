@@ -1,6 +1,9 @@
 <main>
+    {{#if error}}
+    <p>{{error}}</p>
+{{/if}}
     <div class="content">
-        <form action="/userLogin" method="post">
+        <form action="/user/userLogin" method="post">
             <div>
                 <label for="">Email</label>
                 <input type="email" name="email" id="">
@@ -13,6 +16,10 @@
                 <button type="submit">submit</button>
             </div>
         </form>
+        <br>
+        <br>
+
+        <a href="/user/userRegister">Coming for the first time? Register Here!</a>
     </div>
-</main>>
+</main>
     
