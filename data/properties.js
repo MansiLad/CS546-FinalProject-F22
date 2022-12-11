@@ -269,8 +269,4 @@ module.exports = {
   getByCity,
   getByState,
   getByZipcode,
-  getAllAuthListings,
-  // removeAuthListings,
-  // getAuthById,
-  approveAuth,
 };
