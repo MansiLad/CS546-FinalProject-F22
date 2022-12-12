@@ -45,8 +45,17 @@ router.route('/searchProperties').post(async(req,res) =>{
   let city = req.body.city
   let zip = req.body.zipcode
   let state = req.body.state
-  if(!city && !zip && !state){
-    res.render('error',{title:'Error', error: `The inputs cannot be empty`})
+  try{
+    if(!city && !zip && !state){
+      throw 'No empty fields allowed!'
+    }
+    let all_prop = await  propertiesData.getAllListings();
+    return res.render('propertyDetails',{id:all_prop.UserId, address:all_prop.address,city:all_prop.city,state:all_prop.state,zipcode:all_prop.zipcode,rent:all_prop.rent,deposit:all_prop.deposit,amenities:all_prop.amenities,reviews:all_prop.reviews,date:all_prop.date,images:all_prop.images})
+    
+
+
+  }catch(e){
+    return res.render('error', {error:e, title:'Error'})
   }
   
 })

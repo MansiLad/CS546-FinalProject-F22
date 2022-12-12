@@ -5,18 +5,15 @@ const property_data = require("./properties");
 
 const createReview = async (
   propertyId,
-  propertyName,
-  reviewerName,
+  propertyAddress,
   review,
-  rating // if proptery id will be need we will see later
 ) => {
-  if (!propertyId || !propertyName || !reviewerName || !review || !rating) {
+  if (!propertyId || !propertyAddress || !review) {
     throw "No Input";
   }
   if (
     typeof propertyId != "string" ||
-    typeof propertyName != "string" ||
-    typeof reviewerName != "string" ||
+    typeof propertyAddress != "string" ||
     typeof review != "string"
   ) {
     throw "Parameters are not string";
@@ -24,8 +21,7 @@ const createReview = async (
 
   if (
     propertyId.trim().length == 0 ||
-    propertyName.trim().length == 0 ||
-    reviewerName.trim().length == 0 ||
+    propertyAddress.trim().length == 0 ||
     review.trim().length == 0
   ) {
     throw "Length should not be zero";
@@ -35,68 +31,57 @@ const createReview = async (
     throw "Not a valid object id";
   }
 
-  let data = await property_data.getMovieById(propertyId);
+  let data = await property_data.getPropertyById(propertyId);
   if (data == null) {
     throw "No movie woth this id";
   }
   if (
-    data.propertyName == propertyName &&
-    data.reviewerName == reviewerName &&
-    data.review == review &&
-    data.rating == rating
+    data.propertyName == propertyAddress &&
+    data.review == review
   ) {
     throw "every thing seems to be same";
   }
 
-  let rate = parseFloat(rating);
-  //console.log(typeof rate)
-  if (rate < 1 || rate > 5) {
-    throw "Not valid ratings";
-  }
-  let rrate = rate.toFixed(1);
-  rrate = Number(rrate);
   let reviewsDate = new Date().toLocaleDateString();
 
   const property_collection = await properties();
   const property = await property_collection.findOne({
     _id: ObjectId(propertyId),
   });
-  if (property === null) throw "Could not find movie";
+  if (!property) throw "Could not find movie";
 
   const new_Review = {
     _id: ObjectId(),
-    propertyName: propertyName,
-    reviewerName: reviewerName,
+    propertyName: propertyAddress,
     review: review,
-    rating: rrate,
     reviewDate: reviewsDate,
   };
   property.reviews.push(new_Review);
 
-  const newOverallRating = avaerage_ratings_movie(property.reviews);
-  const updatedInfo = await property_collection.updateOne(
-    { _id: ObjectId(userId) },
-    {
-      $push: { reviews: new_Review },
-      $set: { overallRating: newOverallRating },
-    }
-  );
+  //const newOverallRating = avaerage_ratings_movie(property.reviews);
+  // const updatedInfo = await property_collection.updateOne(
+  //   { _id: ObjectId(userId) },
+  //   {
+  //     $push: { reviews: new_Review },
+  //     $set: { overallRating: newOverallRating },
+  //   }
+  // );
   if (updatedInfo.modifiedCount === 0) throw "Could not add review";
   // new_Review = new_Review._id.toString();
   // return new_Review;
   return JSON.parse(JSON.stringify(new_Review));
 };
-const avaerage_ratings_movie = (reviews) => {
-  let deno = 0;
-  let sum = 0;
+// const avaerage_ratings_movie = (reviews) => {
+//   let deno = 0;
+//   let sum = 0;
 
-  for (let i of reviews) {
-    sum += i.rating;
-    deno++;
-  }
-  let avg = sum / deno;
-  return Number(avg.toFixed(1));
-};
+//   for (let i of reviews) {
+//     sum += i.rating;
+//     deno++;
+//   }
+//   let avg = sum / deno;
+//   return Number(avg.toFixed(1));
+// };
 
 const removeReview = async (reviewId) => {
   if (!reviewId) {
@@ -133,19 +118,19 @@ const removeReview = async (reviewId) => {
   return `${reviewId} is succesfully deleted`;
 };
 
-const getReview = async (reviewId) => {
-  if (!reviewId) {
+const getReview = async (propertyId) => {
+  if (!propertyId) {
     throw "No id";
   }
-  if (typeof reviewId !== "string") throw "Not string datatype";
-  if (reviewId.trim().length == 0) throw "lenght should not be zero";
+  if (typeof propertyId !== "string") throw "Not string datatype";
+  if (propertyId.trim().length == 0) throw "lenght should not be zero";
   //objid = ObjectId(reviewId);
-  if (!ObjectId.isValid(reviewId)) {
+  if (!ObjectId.isValid(propertyId)) {
     throw "Not a valid object id";
   }
   const property_Collection = await properties();
   const review = await property_Collection.findAll(
-    { "reviews._id": ObjectId(reviewId) },
+    { "reviews._id": ObjectId(propertyId) },
     { projection: { _id: 0, "reviews": 1 } }
   );
   if (!review) throw "No reviews found with this particular id.";
@@ -156,5 +141,5 @@ const getReview = async (reviewId) => {
 module.exports = {
   createReview,
   getReview,
-  removeReview,
+  removeReview
 };

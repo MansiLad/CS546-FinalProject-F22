@@ -21,9 +21,9 @@ const createListing = async (
   baths,
   deposit,
   rent,
-  description,
-  ammenities,
-  images,
+  //description,
+  ammenities
+  //images,
 ) => {
   // todo validations
   let propertiesCollection = await properties();
@@ -45,9 +45,9 @@ const createListing = async (
     rent: rent,
     //description: description,
     ammenities: ammenities,
-    images: images,
+    images: [],
     reviews: [],
-    datePosted: date,
+    date: date,
     approved: false,
     available: true,
   };
@@ -72,6 +72,7 @@ const getAllListings = async () => {
   }
   return JSON.parse(JSON.stringify(properties));
 };
+
 
 const getPropertyById = async (propertyID) => {
   // todo validations
@@ -150,7 +151,7 @@ const updateListing = async (
 
   let tmpListing = await getPropertyById(propertyId);
 
-  const updatedInfo = await movieCollection.updateOne(
+  const updatedInfo = await propertyCollection.updateOne(
     { _id: ObjectId(propertyId) },
     { $set: updatedListing }
   );

@@ -41,7 +41,19 @@ const validatePass = (password) => {
 //   //   res.sendFile(path.resolve("static/homepage.html"))
 //   // })
 
-router.route("/userLogin").post(async (req, res) => {
+router
+.route("/userLogin")
+.get(async(req,res) => {
+
+  if(req.session.user){
+    return res.render('protected')
+  }
+  else{
+    return res.render('userLogin',{title:'Login Page'})
+  }
+})
+
+.post(async (req, res) => {
   if (req.session.user) {
     res.redirect("/protected");
   }
@@ -78,12 +90,12 @@ router
     try {
       const user = req.session.user;
       if (!user) {
-        res.render("userRegisteration", { title: "Registration Page" });
+        res.render("userRegistration", { title: "Registration Page" });
       } else {
         res.redirect("/protected");
       }
     } catch (e) {
-      return res.render("userRegisteration", {
+      return res.render("userRegistration", {
         title: "Registeration Page",
         error: e,
       });
@@ -105,8 +117,8 @@ router
         lastname,
         gender,
         validUserName,
-        city,
-        state,
+        // city,
+        // state,
         phonenumber,
         validPassowerd,
         type,
@@ -164,7 +176,7 @@ router.route("/peopleRent").get(async (req, res) => {
   }
 });
 
-router.route("/protected").get(async (req, res) => {
+router.route("/protected").get(async (req, res,next) => {
   //code here for GET
   if (!req.session.admin) {
     res
@@ -187,4 +199,6 @@ router.route("/logout").get(async (req, res) => {
     message: "User has been successfully logged out",
   });
 });
+
+module.exports = router
 
