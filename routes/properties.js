@@ -64,16 +64,37 @@ router.route("/searchProperties").get(async (req, res) => {
   //return res.render("renters");
 });
 
-router.route("/filters/").get(async (req, res) => {
+router.route("/filters").get(async (req, res) => {
   try{
     const results = await filters.getAllproperties();
     //console.log(results);
-    res.render("filters/filter",{results});
+    res.render("renters",{results});
   }catch(e)
   {
     console.log(e);
   }
-  //res.render("filters/filter",{});
+ 
+});
+
+router.route("/filters").post(async (req, res) => {
+
+  console.log(req.body);
+  // search_location= req.body.search_location;
+  select_sortBy = req.body.select_sortBy;
+  beds = req.body.beds
+  baths = req.body.baths
+  minimum = req.body.minimum
+  maximum = req.body.maximum
+  try{
+    
+    const results = await filters.getpropertyByFilterandSort(select_sortBy,beds,baths,minimum,maximum);
+    console.log(results);
+    res.render("renters",{results: results, minimum : minimum, maximum : maximum });
+  }catch(e)
+  {
+    console.log(e);
+  }
+  
 });
 
 
