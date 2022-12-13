@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const data = require("../data");
 const propertiesData = data.properties;
+const filters = data.filters;
 const path = require("path");
 // const userData = data.users;
 
@@ -63,6 +64,19 @@ router.route("/searchProperties").get(async (req, res) => {
   //return res.render("renters");
 });
 
+router.route("/filters/").get(async (req, res) => {
+  try{
+    const results = await filters.getAllproperties();
+    //console.log(results);
+    res.render("filters/filter",{results});
+  }catch(e)
+  {
+    console.log(e);
+  }
+  //res.render("filters/filter",{});
+});
+
+
 router.route("/ownedProperties").get(async (req, res) => {
   //code here for GET
   //let prop_det = req.body.
@@ -74,6 +88,10 @@ router.route("/ownedProperties").get(async (req, res) => {
   }
   
 });
+
+
+
+
 
 router.route("/propertydetails/:id").get(async (req, res) => {
   if(isNaN(req.params.id)){
