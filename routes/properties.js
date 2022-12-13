@@ -12,11 +12,46 @@ router.route("/").get(async (req, res) => {
   res.sendFile(path.resolve("static/homepage.html"));
 });
 
-router.route("/propUpload").post(async (req, res) => {
-  if(!req.session.user) return res.redirect('/userlogin')
+router.route('/propertyRegistration').get(async(req,res) =>{
+  if(!req.session.user) return res.redirect('/user/userlogin')
+  return res.render('propertyRegistration',{title:'Resgister your property here!'})
+})
+
+router.route("/propertyRegistration").post(async (req, res) => {
+  if(!req.session.user) return res.redirect('/user/userlogin')
   //code here for post
-  console.log(req.body.filename);
+  let address = req.body.address;
+  let city = req.body.city;
+  let state = req.body.state;
+  let zip = req.body.zip
+  let bed = req.body.beds
+  let bath = req.body.baths
+  let deposit = req.body.deposit
+  let rent = req.body.rent
+  let amenities  = req.body.amenities
+  let desc = req.body.description
+
+  try{
+    let {insertedProp} = await propertiesData.createListing(
+      address,city,state,zip, bed,bath,deposit,rent,amenities,desc
+    )
+    if(insertedProp){
+      return res.redirect('/manageRentals')
+    }
+  }catch(e){
+    return res.render('error',{title:'Error',error:'Search Again!'})
+  }
 });
+
+router.route('/manageRentals').get(async(req,res)=>{
+  if(!req.session.user) return res.redirect('/user/userlogin')
+  return res.render('updateProp',{title:'Manage your properties'})
+})
+
+router.route('/manageRentals').post(async(req,res)=>{
+  if(!req.session.user) return res.redirect('/user/userlogin')
+  // todo- mansi update/manage rentals code
+})
 
 router.route("/searchProperties").get(async (req, res) => {
   //code here for GET
@@ -40,7 +75,7 @@ router.route('/searchProperties').post(async(req,res) =>{
     }
     let all_prop = await  propertiesData.getAllListings();
     return res.render('propertyDetails',{id:all_prop.UserId, address:all_prop.address,city:all_prop.city,state:all_prop.state,zipcode:all_prop.zipcode,rent:all_prop.rent,deposit:all_prop.deposit,amenities:all_prop.amenities,reviews:all_prop.reviews,date:all_prop.date,images:all_prop.images})
-    
+
 
 
   }catch(e){
