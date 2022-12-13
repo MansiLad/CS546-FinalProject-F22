@@ -11,8 +11,8 @@ const createUser = async (
   lastName,
   gender,
   email,
-  city,
-  state,
+  // city,
+  // state,
   phoneNumber,
   password,
   type
@@ -29,8 +29,8 @@ const createUser = async (
     lastName: lastName,
     gender: gender,
     email: email,
-    city: city,
-    state: state,
+    // city: city,
+    // state: state,
     phoneNumber: phoneNumber,
     password: encryptpassword,
     type: type,
@@ -79,8 +79,8 @@ const createAdmin = async (
   lastName,
   gender,
   email,
-  city,
-  state,
+  // city,
+  // state,
   phoneNumber,
   password
 ) => {
@@ -91,8 +91,8 @@ const createAdmin = async (
     lastName: lastName,
     gender: gender,
     email: email,
-    city: city,
-    state: state,
+    // city: city,
+    // state: state,
     phoneNumber: phoneNumber,
     password: password,
     type: "admin",
@@ -106,8 +106,8 @@ const updateUser = async (
   lastName,
   gender,
   email,
-  city,
-  state,
+  // city,
+  // state,
   phoneNumber
 ) => {
   const db = await dbConnection();
@@ -121,8 +121,8 @@ const updateUser = async (
     lastName: lastName,
     gender: gender,
     email: email,
-    city: city,
-    state: state,
+    // city: city,
+    // state: state,
     phoneNumber: phoneNumber,
   };
 
