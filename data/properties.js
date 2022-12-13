@@ -261,6 +261,14 @@ const approveAuth = async (propertyID) => {
   );
 };
 
+const getPropOwnerbyId = async (ownerId) => {
+  const propertyCollection = await properties();
+  let props = await propertyCollection
+    .find({ UserId: ownerId, approved: true, available: true,})
+    .toArray();
+  return props;
+}
+
 module.exports = {
   getPropertyById,
   createListing,
@@ -270,4 +278,8 @@ module.exports = {
   getByCity,
   getByState,
   getByZipcode,
+  approveAuth,
+  getAllListings,
+  getPropOwnerbyId,
+  getAllAuthListings
 };

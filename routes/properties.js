@@ -7,7 +7,7 @@ const path = require("path");
 
 router.route("/").get(async (req, res) => {
   //code here for GET
-  res.sendFile(path.resolve("static/property_homepage.html"));
+  res.sendFile(path.resolve("static/homepage.html"));
 });
 
 router.route("/propUpload").post(async (req, res) => {
@@ -27,6 +27,18 @@ router.route("/searchProperties").get(async (req, res) => {
   //return res.render("renters");
 });
 
+router.route("/ownedProperties").get(async (req, res) => {
+  //code here for GET
+  //let prop_det = req.body.
+  try {
+    let prop = await propertiesData.getPropOwnerbyId(req.params.id);
+    res.render('allProperties', {title:'Properties owned by you',OwnerName: req.params.id, result: prop})
+  } catch (error) {
+    return res.render('error', {error: error})
+  }
+  
+});
+
 router.route("/propertydetails/:id").get(async (req, res) => {
   if(isNaN(req.params.id)){
     return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
@@ -36,7 +48,7 @@ router.route("/propertydetails/:id").get(async (req, res) => {
   if(prop === null || prop === undefined){
     return res.status(404).render('../views/error', {title: 'Not found', Error: "No ID exist"})
   }
-  res.render("../views/propertybyID", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
+  res.render("../views/propertyDetails", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
   //add the rest 
 
 });

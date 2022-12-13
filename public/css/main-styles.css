@@ -1,5 +1,3 @@
-* {box-sizing:border-box}
-
 /* Slideshow container */
 .slideshow-container {
   max-width: 1000px;
@@ -84,4 +82,30 @@
 @keyframes fade {
   from {opacity: .4}
   to {opacity: 1}
+}
+
+nav{
+  float: right;
+  word-spacing: 20px;
+  padding: 10px;
+}
+nav li{
+  display: inline-block;
+  line-height: 40px;
+}
+
+.logo
+{
+	float :left;
+  margin-top: 20px;
+	padding-left: 20px;
+
+}
+.logo img
+{
+  float :left;
+	padding-left: 20px;
+  padding-top: 0px;
+  max-width:20%;
+  height:auto;
 }

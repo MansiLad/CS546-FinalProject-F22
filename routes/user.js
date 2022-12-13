@@ -158,7 +158,8 @@ router
     } catch (e) {}
   });
 
-router.route("/peopleRent").get(async (req, res) => {
+router.route("/peopleRent")
+  .get(async (req, res) => {
   try {
     const user = req.session.user;
     if (!user) {
@@ -176,7 +177,8 @@ router.route("/peopleRent").get(async (req, res) => {
   }
 });
 
-router.route("/protected").get(async (req, res,next) => {
+router.route("/protected")
+  .get(async (req, res,next) => {
   //code here for GET
   if (!req.session.admin) {
     res
@@ -190,7 +192,8 @@ router.route("/protected").get(async (req, res,next) => {
   }
 });
 
-router.route("/logout").get(async (req, res) => {
+router.route("/logout")
+.get(async (req, res) => {
   //code here for GET
   req.session.destroy();
   //res.send('Logged out');
