@@ -36,6 +36,7 @@ const createListing = async (
     UserId: UserId,
     // apartmentNumber: apartmentNumber,
     // street: street,
+    propertyId: ObjectId(),
     address: address,
     city: city,
     state: state,
@@ -47,7 +48,7 @@ const createListing = async (
     //description: description,
     ammenities: ammenities,
     images: [],
-    reviews: [],
+    reviews: {},
     date: date,
     approved: false,
     available: true,
@@ -55,12 +56,7 @@ const createListing = async (
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
   return flag;
-  // error
 
-//   const newid = insert_movie.insertedId.toString();
-//  let ans = getPropertyById(newid)
-//  return JSON.parse(JSON.stringify(ans));
-return ans;
 };
 
 const getAllListings = async () => {

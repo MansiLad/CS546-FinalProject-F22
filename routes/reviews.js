@@ -60,15 +60,15 @@ router
       if(!ObjectId.isValid(object_id)){
         throw "bad input 4"
       } 
-      let rate = rev_data.rating;
-      rate = parseFloat(rate);
-      if(rate<1 || rate>5){
-        throw "bad input 5"
-      }
-      let rrate = rate.toFixed(1);
-      if(rrate<1.5 || rrate > 4.8){
-        throw "bad input 6"
-      }
+      // let rate = rev_data.rating;
+      // rate = parseFloat(rate);
+      // if(rate<1 || rate>5){
+      //   throw "bad input 5"
+      // }
+      // let rrate = rate.toFixed(1);
+      // if(rrate<1.5 || rrate > 4.8){
+      //   throw "bad input 6"
+      // }
       // rrate = Number(rrate)
     }catch(e){
       return res.status(400).json({ error: e });
@@ -78,18 +78,24 @@ router
         let review = await review_data.createReview( 
         req.params.propertyId, 
         rev_data.reviewTitle, 
-        rev_data.reviewerName, 
+        // rev_data.reviewerName, 
         rev_data.review, 
-        rev_data.rating
+        // rev_data.rating
       )
+      return review;
 
-      let findMovie = await movieData.getMovieById(req.params.propertyId);
-      res.redirect('error')//what to do here..
-      //res.status(200).json(findMovie)
+      // let findMovie = await movieData.getMovieById(req.params.propertyId);
+      // res.redirect('error')//what to do here..
+      // //res.status(200).json(findMovie)
     }catch(e){
       res.status(404).json({ error: 'review not found' });
     }
   });
+
+router.route('/reviews').post(async(req,res)=>{
+  if(!req.session.user) return res.redirect('/user/userlogin')
+  return res.render()
+})
 
 router
 //get ka dalna hai??
@@ -136,5 +142,4 @@ router
     }
   });
 
-  
   module.exports= router;
