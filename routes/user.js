@@ -1,3 +1,4 @@
+
 const express = require("express");
 const router = express.Router();
 const path = require("path");
@@ -16,7 +17,7 @@ const validUserCheck = (username) => {
   for (var i = 0; i < username.length; i++) {
     if (username[i] == " ") throw "Empty spaces are provided in Username";
   }
-  return username;
+  return username.toLowerCase();
 };
 
 const validatePass = (password) => {
@@ -49,7 +50,7 @@ router
     return res.render('protected')
   }
   else{
-    return res.render('userLogin',{title:'Login Page'})
+    return res.render('../views/userLogin',{title:'Login Page'})
   }
 })
 
@@ -59,15 +60,23 @@ router
   }
   try {
     let postData = req.body;
-    let userN = postData.email;
-    let pass = postData.password;
-    let validUserName = validUserCheck(userN);
-    let validPassowerd = validatePass(pass);
-    let authenticatedUser = await data.checkUser(validUserName, validPassowerd);
+
+    if(!postData){
+      res.status(400).render("userLogin",{title: 'User Login',error: "Provide login details"})
+      return 
+    }
+
+    const username = postData.emailInput
+    const password = postData.passwordInput
+
+    let validUserName = validUserCheck(username);
+    let validPassword = validatePass(password);
+    let authenticatedUser = await data.checkUser(validUserName, validPassword);
+
     if (authenticatedUser.authenticatedUser != true) {
       return res
         .status(404)
-        .render("userLogin", { title: "login", error: "Not authenticated" });
+        .render("userLogin", { title: "Login", error: "Not authenticated" });
     }
 
     if (authenticatedUser.type === "admin") {
