@@ -97,7 +97,11 @@ router.route('/searchProperties').post(async(req,res) =>{
     if(!city && !zip && !state){
       throw 'No empty fields allowed!'
     }
-    let all_prop = await  propertiesData.getAllListings();
+    let all_prop = [];
+    let propCity = await propertiesData.getByCity(city);
+    let propState = await propertiesData.getByState(state);
+    let propZip = await propertiesData.getByZipcode(zip);
+    all_prop = [...propCity,...propState,...propZip]
     return res.render('propertyDetails',{id:all_prop.UserId, address:all_prop.address,city:all_prop.city,state:all_prop.state,zipcode:all_prop.zipcode,rent:all_prop.rent,deposit:all_prop.deposit,amenities:all_prop.amenities,reviews:all_prop.reviews,date:all_prop.date,images:all_prop.images})
 
 
