@@ -45,12 +45,13 @@ router
 .route("/userLogin")
 .get(async(req,res) => {
 
-  if(req.session.user){
-    return res.render('protected')
-  }
-  else{
-    return res.render('userLogin',{title:'Login Page'})
-  }
+  // if(req.session.user){
+  //   return res.render('commonPage')
+  // }
+  // else{
+    console.log('get login')
+     return res.render('userLogin',{title:'Login Page'})
+  // }
 })
 
 .post(async (req, res) => {
@@ -76,8 +77,8 @@ router
     }
 
     if (authenticatedUser.type === "buyer") {
-      req.session.admin = validUserName;
-      return res.redirect("/admin_route");
+      req.session.user = validUserName;
+      return res.redirect("/searchProperties");
     }
   } catch (e) {
     return res.status(400).render("userLogin", { title: "login", error: e });
@@ -87,6 +88,7 @@ router
 router
   .route("/userRegistration")
   .get(async (req, res) => {
+    console.log('get reg')
     try {
       const user = req.session.user;
       if (!user) {
@@ -102,9 +104,11 @@ router
     }
   })
   .post(async (req, res) => {
+    // console.log('post reg')
     if (req.session.user) {
       return res.redirect("/protected");
     }
+    console.log(req.body)
     try {
       let postData = req.body;
       let userN = postData.email;
@@ -129,16 +133,19 @@ router
         // state,
         phonenumber,
         validPassowerd,
-        type,
-        favourates// i think favourites ka alag data banana  padega (get all favorites by userid)
+        type
+        //favourates// i think favourites ka alag data banana  padega (get all favorites by userid)
       );
+      console.log(insertedUser)
+
       if (insertedUser) {
-        return res.redirect('/userLogin');
+        console.log('if entered')
+        return res.redirect('/user/userLogin');
       }
     } catch (e) {
       return res
         .status(500)
-        .render("userRegister", { title: "Register", error: e });
+        .render("userRegistration", { title: "Register", error: e });
     }
   });
 

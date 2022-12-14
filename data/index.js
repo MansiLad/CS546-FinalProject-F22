@@ -1,11 +1,11 @@
 const properties = require('./properties');
 const reviews = require('./reviews');
-const user = require('./user');
+const users = require('./users');
 const filters = require('./filters');
 
 module.exports = {
     filters : filters,
     properties : properties,
     reviews : reviews,
-    user : user
+    users : users
 };
