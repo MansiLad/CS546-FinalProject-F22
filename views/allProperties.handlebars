@@ -1,0 +1,14 @@
+<title>Properties</title>
+
+<main>
+    <h2>Properties Owned by: {{OwnerName}}</h2>
+    <ul>
+        {{#each result}}
+        <li>
+            <a href="/persondetails/{{this.id}}"> {{this.address}}</a>
+        </li>
+        {{/each}}
+    </ul>
+
+
+</main>

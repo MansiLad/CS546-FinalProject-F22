@@ -2,13 +2,11 @@ const express = require("express");
 const router = express.Router();
 const data = require("../data");
 const propertiesData = data.properties;
-const reviewsData= data.reviews;
 const path = require("path");
 // const userData = data.users;
 
 router.route("/").get(async (req, res) => {
   //code here for GET
-  //if(!req.session.user) return res.redirect('/userlogin');
   res.sendFile(path.resolve("static/homepage.html"));
 });
 
@@ -63,6 +61,32 @@ router.route("/searchProperties").get(async (req, res) => {
     return res.render('error', {error: error})
   }
   //return res.render("renters");
+});
+
+router.route("/ownedProperties").get(async (req, res) => {
+  //code here for GET
+  //let prop_det = req.body.
+  try {
+    let prop = await propertiesData.getPropOwnerbyId(req.params.id);
+    res.render('allProperties', {title:'Properties owned by you',OwnerName: req.params.id, result: prop})
+  } catch (error) {
+    return res.render('error', {error: error})
+  }
+  
+});
+
+router.route("/propertydetails/:id").get(async (req, res) => {
+  if(isNaN(req.params.id)){
+    return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
+  }
+
+  const prop = await propertiesData.getPropertyByID(req.params.id)
+  if(prop === null || prop === undefined){
+    return res.status(404).render('../views/error', {title: 'Not found', Error: "No ID exist"})
+  }
+  res.render("../views/propertyDetails", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
+  //add the rest 
+
 });
 
 router.route('/searchProperties').post(async(req,res) =>{

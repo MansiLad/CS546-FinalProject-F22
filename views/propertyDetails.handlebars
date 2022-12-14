@@ -10,7 +10,6 @@
         <dd>{{state}}</dd>
         <dt>Zip Code</dt>
         <dd>{{zip_code}}</dd>
-        
         <dt>Phone number of owner</dt>
         <dd>{{phonenumber}}</dd>
         <dt>Rent</dt>
@@ -23,27 +22,16 @@
         <dd>{{bed}}</dd>
         <dt>Date Posted</dt>
         <dd>{{date}}</dd>
-        {{!-- <dt>Reviews</dt>
-        <dd>{{reviews}}</dd> --}}
+        <dt>Reviews</dt>
+        <dd>{{reviews}}</dd>
     </dl>
-
     <ul class="pf">
-            {{#each id}}
+            {{#each result}}
             <li>
-                {{reviews}}
+                <a href="/reviews/{{id}}">{{reviews}}</a>
             </li>
             {{/each}}
         </ul>
-
-    <div id="new-content-review">
-    </div>
-    <form action="/reviews/reviews" method="post" id="new-review">
-    {{!-- <label for="review">Reviews of the Property</label>
-    <textarea name="" id="" cols="30" rows="10"></textarea>
-    <input type="text" name="review" id="review" placeholder="What do you think about the property?"> --}}
-    <label>Task Description <textarea id="new-review-description"></textarea></label>
-    <button type="submit">Submit the review</button>
-    </form>
    
     <a href="/">Make another search</a>?
 </main>
