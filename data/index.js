@@ -1,6 +1,6 @@
 const properties = require('./properties');
 const reviews = require('./reviews');
-const user = require('./user');
+const user = require('./users');
 const filters = require('./filters');
 
 module.exports = {
