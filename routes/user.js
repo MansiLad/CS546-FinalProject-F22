@@ -42,53 +42,61 @@ const validatePass = (password) => {
 //   // })
 
 router
-.route("/userLogin")
-.get(async(req,res) => {
+  .route("/userLogin")
+  .get(async (req, res) => {
+    
 
-  // if(req.session.user){
-  //   return res.render('commonPage')
-  // }
-  // else{
-    console.log('get login')
-     return res.render('userLogin',{title:'Login Page'})
-  // }
-})
+    // if(req.session.user){
+    //   return res.render('commonPage')
+    // }
+    // else{
+    console.log("get login");
+    return res.render("userLogin", { title: "Login Page" });
+    // }
+  })
 
-.post(async (req, res) => {
-  if (req.session.user) {
-    res.redirect("/protected");
-  }
-  try {
-    let postData = req.body;
-    let userN = postData.email;
-    let pass = postData.password;
-    let validUserName = validUserCheck(userN);
-    let validPassowerd = validatePass(pass);
-    let authenticatedUser = await data.checkUser(validUserName, validPassowerd);
-    if (authenticatedUser.authenticatedUser != true) {
-      return res
-        .status(404)
-        .render("userLogin", { title: "login", error: "Not authenticated" });
+  .post(async (req, res) => {
+    try {
+      let postData = req.body;
+      let userN = postData.email;
+      let pass = postData.password;
+      let validUserName = validUserCheck(userN);
+      let validPassowerd = validatePass(pass);
+      let authenticatedUser = await data.checkUser(
+        validUserName,
+        validPassowerd
+      );
+      if (authenticatedUser.authenticatedUser != true) {
+        return res
+          .status(404)
+          .render("userLogin", { title: "login", error: "Not authenticated" });
+      }
+
+      if (authenticatedUser.type === "admin") {
+        req.session.user = validUserName;
+        req.session.user.type = "admin";
+        return res.redirect("/admin_route");
+      }
+
+      if (authenticatedUser.type === "buyer") {
+        req.session.user = validUserName;
+        req.session.user.type = "buyer";
+        return res.redirect("/searchProperties");
+      }
+      if (authenticatedUser.type === "seller") {
+        req.session.user = validUserName;
+        req.session.user.type = "seller";
+        return res.redirect("/propertyRegistration");
+      }
+    } catch (e) {
+      return res.status(400).render("userLogin", { title: "login", error: e });
     }
-
-    if (authenticatedUser.type === "admin") {
-      req.session.admin = validUserName;
-      return res.redirect("/admin_route");
-    }
-
-    if (authenticatedUser.type === "buyer") {
-      req.session.user = validUserName;
-      return res.redirect("/searchProperties");
-    }
-  } catch (e) {
-    return res.status(400).render("userLogin", { title: "login", error: e });
-  }
-});
+  });
 
 router
   .route("/userRegistration")
   .get(async (req, res) => {
-    console.log('get reg')
+    console.log("get reg");
     try {
       const user = req.session.user;
       if (!user) {
@@ -108,7 +116,7 @@ router
     if (req.session.user) {
       return res.redirect("/protected");
     }
-    console.log(req.body)
+    console.log(req.body);
     try {
       let postData = req.body;
       let userN = postData.email;
@@ -118,9 +126,9 @@ router
       let lastname = postData.lastname;
       let gender = postData.gender;
       let phonenumber = postData.phoneNumber;
-      let type = postData.type
+      let type = postData.type;
 
-// todo favoitites which will be done by sanika..
+      // todo favoitites which will be done by sanika..
 
       //validUserName = validUserName.toLowerCase();
       let validPassowerd = validatePass(pass);
@@ -136,11 +144,11 @@ router
         type
         //favourates// i think favourites ka alag data banana  padega (get all favorites by userid)
       );
-      console.log(insertedUser)
+      console.log(insertedUser);
 
       if (insertedUser) {
-        console.log('if entered')
-        return res.redirect('/user/userLogin');
+        console.log("if entered");
+        return res.redirect("/user/userLogin");
       }
     } catch (e) {
       return res
@@ -173,7 +181,8 @@ router
 //     } catch (e) {}
 //   });
 
-router.route("/peopleRent")
+router
+  .route("/peopleRent")
   .get(async (req, res) => {
     try {
       const user = req.session.user;
@@ -196,8 +205,7 @@ router.route("/peopleRent")
     } catch (e) {}
   });
 
-router.route("/peopleRent")
-  .get(async (req, res) => {
+router.route("/peopleRent").get(async (req, res) => {
   try {
     const user = req.session.user;
     if (!user) {
@@ -215,23 +223,19 @@ router.route("/peopleRent")
   }
 });
 
-router.route("/protected")
-  .get(async (req, res,next) => {
+router.route("/protected").get(async (req, res, next) => {
   //code here for GET
   if (!req.session.admin) {
-    res
-      .status(403)
-      .render("forbiddenAccess", {
-        title: "Access Denied",
-        error: "Access Denied",
-      });
+    res.status(403).render("forbiddenAccess", {
+      title: "Access Denied",
+      error: "Access Denied",
+    });
   } else {
     return res.render("commonPage", { title: "Welcome" });
   }
 });
 
-router.route("/logout")
-.get(async (req, res) => {
+router.route("/logout").get(async (req, res) => {
   //code here for GET
   req.session.destroy();
   //res.send('Logged out');
@@ -241,5 +245,4 @@ router.route("/logout")
   });
 });
 
-module.exports = router
-
+module.exports = router;

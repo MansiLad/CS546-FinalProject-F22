@@ -19,7 +19,7 @@ const createUser = async (
 ) => {
   let usersCollection = await users();
 
-  const saltRounds = 16;
+  const saltRounds = 10;
   const encryptpassword = await bcrypt.hash(password, saltRounds);
 
   let flag = { insertedUser: true };
