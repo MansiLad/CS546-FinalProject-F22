@@ -163,17 +163,17 @@ const checkUser = async (email, password) => {
   const password_check = await bcrypt.compare(password, checkusername.password);
 
   if (!password_check) throw "Either the username or password is invalid";
-
+  let flag = null;
   if (checkusername.type === "admin") {
-    let flag = { authenticatedUser: true, type: "admin" };
+     flag = { authenticatedUser: true, type: "admin" };
   }
 
   if (checkusername.type === "seller") {
-    let flag = { authenticatedUser: true, type: "seller" };
+     flag = { authenticatedUser: true, type: "seller" };
   }
 
   if (checkusername.type === "buyer") {
-    let flag = { authenticatedUser: true, type: "buyer" };
+     flag = { authenticatedUser: true, type: "buyer" };
   }
 
   return flag;
