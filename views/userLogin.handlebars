@@ -1,19 +1,22 @@
-<main>
+
     {{#if error}}
     <p>{{error}}</p>
     {{/if}}
     <div class="content">
-        <form action="/user/userLogin" method="post">
+        <form action="/userLogin" method="post">
             <div>
-                <label for="">Email</label>
-                <input type="email" name="email" id="">
+                <label for="emailInput" id="emailInputLabel">Email</label>
+                <input type="email" name="emailInput" id="emailInput">
             </div><br>
             <div>
-                <label for="">password</label>
-                <input type="password" name="password" id="">
+                <label for="passwordInput" id="passwordInputLabel">Password</label>
+                <input type="password" name="passwordInput" id="passwordInput">
             </div>
             <div>
-                <button type="submit">submit</button>
+                <p class="error">{{error}}</p>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-default" id="login-button">Log In</button>
             </div>
         </form>
         <br>
@@ -21,5 +24,5 @@
 
         <a href="/userRegistration">Coming for the first time? Register Here!</a>
     </div>
-</main>
+
     
