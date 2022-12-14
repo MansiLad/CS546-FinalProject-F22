@@ -161,32 +161,32 @@ const updateListing = async (
   // return await getPropertyById(propertyId);
 };
 
-const getByState = async (state) => {
+// const getByState = async (state, city, zipCode) => {
+//   // todo validations
+//   const propertyCollection = await properties();
+//   let props = await propertyCollection
+//     .find({ state: state, approved: true, available: true, })
+//     .toArray();
+//   return props;
+// };
+
+const getByCity = async (city,state,zipCode) => {
   // todo validations
   const propertyCollection = await properties();
   let props = await propertyCollection
-    .find({ state: state, approved: true, available: true, })
+    .find({ city: city,zipCode: zipCode, state: state, approved: true, available: true })
     .toArray();
   return props;
 };
 
-const getByCity = async (city) => {
-  // todo validations
-  const propertyCollection = await properties();
-  let props = await propertyCollection
-    .find({ city: city, approved: true, available: true, })
-    .toArray();
-  return props;
-};
-
-const getByZipcode = async (zipCode) => {
-  // todo validations
-  const propertyCollection = await properties();
-  let props = await propertyCollection
-    .find({ zipCode: zipCode, approved: true, available: true, })
-    .toArray();
-  return props;
-};
+// const getByZipcode = async (zipCode) => {
+//   // todo validations
+//   const propertyCollection = await properties();
+//   let props = await propertyCollection
+//     .find({ zipCode: zipCode, approved: true, available: true, })
+//     .toArray();
+//   return props;
+// };
 
 const getAllAuthListings = async () => {
   // todo validations
