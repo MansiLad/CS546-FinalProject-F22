@@ -30,6 +30,7 @@ const createListing = async (
   let userCollection = await users();
   let date = new Date().toLocaleDateString();
   // let image_buffer = new Buffer ()
+  let flag = { insertedProp: true };
 
   let newListing = {
     UserId: UserId,
@@ -53,9 +54,11 @@ const createListing = async (
   };
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
+  return flag;
   // error
-  const newid = insert_movie.insertedId.toString();
- let ans = getPropertyById(newid)
+
+//   const newid = insert_movie.insertedId.toString();
+//  let ans = getPropertyById(newid)
 //  return JSON.parse(JSON.stringify(ans));
 return ans;
 };
