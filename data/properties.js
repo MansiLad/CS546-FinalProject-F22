@@ -30,7 +30,8 @@ const createListing = async (
   let userCollection = await users();
   let date = new Date().toLocaleDateString();
   // let image_buffer = new Buffer ()
-  let flag = {insertedProp:true}
+  let flag = { insertedProp: true };
+
   let newListing = {
     UserId: UserId,
     // apartmentNumber: apartmentNumber,

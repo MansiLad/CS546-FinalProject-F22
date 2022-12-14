@@ -1,29 +1,180 @@
 <title>{{title}}</title>
+
 <main>
-    <h1>{{title}}</h1>
-    <form action="/filtered" method="post">
-    <label for="search">Search</label>
-    <input type="text" id="search" placeholder="Search" name="search"> <br>
-    <button type="submit">Search</button>
-    <input type="radio" id="bed" name="bed">
-<label for="bed">1 bed</label><br>
-<input type="radio" id="bed" name="bed" value="bed">
-<label for="bed">2 bed</label><br>
-<input type="radio" id="bed" name="bed" value="bed">
-<label for="bed">2+ beds</label>
+      <nav class="navbar navbar navbar-expand-md navbar-dark bg-dark justify-content-center">
+        <a href="/" class="navbar-brand px-5 my-3 d-flex w-40 mr-auto">Navbar 3</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse w-100" id="main-nav">
+            <ul class="navbar-nav px-5 my-2 justify-content-start align-items-start">
+                <li class="nav-item active">
+                    <a class="nav-link px-3 my-1" href="#">Properties</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 my-1" href="//codeply.com">Rent</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 my-1" href="#">Sell</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav ml-auto w-100 px-5 my-2 justify-content-end">
+                <li class="nav-item px-3 my-1">
+                    <a class="nav-link" href="#">Login</a>
+                </li>
+                <li class="nav-item px-3 my-1">
+                    <a class="nav-link" href="#">SignUp</a>
+                </li>
+                <li class="nav-item px-3 my-1">
+                    <a class="nav-link" href="#">Favorites</a>
+                </li>
+            </ul>
+        </div>
+      </nav>
+    
+      <!--Search option by state and country and sort by option-->
+      
+        {{!-- <nav class="navbar navbar-expand-lg navbar-light bg-light border"> --}}
+          
+        {{!-- </nav> --}}
 
-   <input type="radio" id="bath" name="bath" value="bath">
-<label for="bath">1 bath</label><br>
-<input type="radio" id="bath" name="bath" value="bath">
-<label for="bath">2 bath</label><br>
-<input type="radio" id="bath" name="bath" value="bath">
-<label for="bath">2+ baths</label>
+         <!--Filters beds and baths, price range, for rent, for sell ,apartments type condo house apartment, ratings-->
+      
+      <div class="container-fluid ">
+        <form method="post" action="/filters">
+        <div class="container-fluid border">
+          <div class="row">
+           
+                <div class="d-flex col-3 px-5 my-1 align-items-center">
+                  <input class="form-control me-2 col-3 border p-2" type="search" placeholder="Search" name="search_location"  value="Search" id="search_location" aria-label="Search">
+                  <button class="btn btn-outline-success" type="submit">
+                    <span class="col-2 h4 rounded">Search</span>
+                  </button>
+                  </div>
+                  <div class="col-9 px-5 my-2 align-items-center">
+                    <div class="d-flex col-3 filter-condition px-5 my-2 justify-contents-end align-items-center">
+                        <select class="form-select form-select-lg me-2" aria-label=".form-select-lg example" name="select_sortBy" value="{{SortBy}}"id="select_sortBy">
+                          <option selected value="Default">Sort By: Default</option>
+                          <option value="LowtoHigh">Price Low to High</option>
+                          <option value="HightoLow">Price High to Low</option>
+                          <option value="Recent">Recent Listings</option>
+                        </select>
+                    </div>
+                  </div>
+                </div>
+                </div>
 
-<label for="price-range">Price Range:</label>
-<input type="range" id="price-range" min="0" max="1000" step="50" value="0">
+                
+            
+           </div>     
+            
+          
+        <div class="row">
+        <div class="col-3 div-extend">
+            <div class="row align-items-center pad-right"> 
+              <div class="col-10 border-div">
 
-    </form>
+              {{!-- </div> div-extend"> --}} 
+                <h1 class="col-8 my-2 px-5 text-md-center">Filters</h1>
+                <br>
 
- {{!-- add filters --}}
+                <div class="row">
+                  
+                    <div class="form-row align-items-center">
+                      <div class="form-group col-auto my-1">
+                        
+                        <select class="custom-select h5 px-4 mr-sm-2" id="inlineFormCustomSelect" name="beds" value="{{beds}}">
+                          <option selected value="Any">Any</option>
+                          <option value="1">1</option>
+                          <option value="1.5">1.5</option>
+                          <option value="2">2</option>
+                          <option value="2.5">2.5</option>
+                          <option value="3">3</option>
+                        </select>
+                        <label class="mr-sm-2 sr-only h4 px-3" for="inlineFormCustomSelect">Beds</label>
+                      </div>
+                    </div>
+                  
+                    <div class="form-row align-items-center">
+                      <div class="form-group col-auto my-1">
+                        
+                        <select class="custom-select h5 px-4 mr-sm-2" id="inlineFormCustomSelect_2" name="baths" value="{{baths}}">
+                          <option value="Any" selected>Any</option>
+                          <option value="1">1</option>
+                          <option value="1.5">1.5</option>
+                          <option value="2">2</option>
+                          <option value="2.5">2.5</option>
+                          <option value="3">3</option>
+                        </select>
+                        <label class="mr-sm-2 sr-only h4 px-3" for="inlineFormCustomSelect_2">Baths</label>
+                      </div>
+                    </div>
+                <br>
+                <h4 class="h4">Price Range(in $)</h4>
+                <div class="form-group range_container">
+                  <div class="sliders_control">
+                      <input id="fromSlider" type="range" value={{minimum}} min="0" max="10000">
+                      <input id="toSlider" type="range" value={{maximum}} min="0" max="10000">
+                  </div>
+                  <div class="form_control">
+                      <div class="form_control_container">
+                          <div class="form_control_container__time">Minimum</div>
+                          <input class="form_control_container__time__input" type="number" name= "minimum" id="fromInput" value={{minimum}} min="0" max="10000">
+                      </div>
+                      <div class="form_control_container">
+                          <div class="form_control_container__time">Maximum</div>
+                          <input class="form_control_container__time__input" type="number" name="maximum" id="toInput" value={{maximum}} min="0" max="10000">
+                      </div>
+                  </div>
+                </div>
+                <br>
+                <button class="form-group col-5 h2  rounded m-1 p-1 btn btn-primary"> 
+                  <span class="search_clear h5">Search</span>
+                </button>
+                <button class="form-group col-5 h2 rounded m-1 p-1 btn btn-secondary">
+                  <span class="search_clear h5">Clear</span>
+                </button>
+              </form>
+     
+                
+              </div> 
+            </div>
+          </div>
+        
+        
 
-</main>
+        </div>
+        <div class="col-9 align-items-end">
+         
+            <div class="row">
+              {{#each results}}
+              <div class="col-6">
+                
+                <div class="row">
+                  <div class="col-12">
+                    {{!-- how will be give the link to individual display --}}
+                    <br><br>
+                    <a href="#"><span class="h2">{{apartmentNumber}}, {{street}}, {{city}}, {{state}}, {{zipCode}}</span></a>
+                    <br>
+                    <h4 class="h4">Beds : {{beds}}   Baths : {{baths}}</h4>
+                    <h4 class="h4" id="rent">Rent : {{rent}}   </h4>
+                    <h4 class="h4">Deposit : {{deposit}}</h4>
+                    <h4 class="h4">Description : {{description}}</h4>
+                    <a href="#"><span class="h6">Add to favorites</span></a>
+                  </div>
+                </div>
+                
+              </div>
+              {{/each}}
+            </div>
+          
+        </div>
+      </div>
+     </div>
+   
+
+      
+     
+        <script src="/public/script1.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  </main>

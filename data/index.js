@@ -1,9 +1,11 @@
-const propertyData = require("./properties");
-const reviewsData = require("./reviews");
-const userData = require("./users");
+const properties = require('./properties');
+const reviews = require('./reviews');
+const user = require('./user');
+const filters = require('./filters');
 
 module.exports = {
-    properties: propertyData,
-    reviews: reviewsData,
-    users: userData
+    filters : filters,
+    properties : properties,
+    reviews : reviews,
+    user : user
 };
