@@ -18,7 +18,7 @@ const createUser = async (
   type
 ) => {
   let usersCollection = await users();
-
+//TO DO: change the salt round to 10 
   const saltRounds = 16;
   const encryptpassword = await bcrypt.hash(password, saltRounds);
 
