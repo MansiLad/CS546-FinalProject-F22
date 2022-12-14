@@ -110,6 +110,14 @@ router
       let userN = postData.email;
       let pass = postData.password;
       let validUserName = validUserCheck(userN);
+      let firstname = postData.firstName;
+      let lastname = postData.lastname;
+      let gender = postData.gender;
+      let phonenumber = postData.phoneNumber;
+      let type = postData.type
+
+// todo favoitites which will be done by sanika..
+
       //validUserName = validUserName.toLowerCase();
       let validPassowerd = validatePass(pass);
       let { insertedUser } = await data.createUser(
@@ -122,7 +130,7 @@ router
         phonenumber,
         validPassowerd,
         type,
-        favourates
+        favourates// i think favourites ka alag data banana  padega (get all favorites by userid)
       );
       if (insertedUser) {
         return res.redirect('/userLogin');
@@ -133,6 +141,8 @@ router
         .render("userRegister", { title: "Register", error: e });
     }
   });
+
+
 
 // router
 //   .route("/propertyRegistration")
