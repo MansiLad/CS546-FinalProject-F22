@@ -1,9 +1,8 @@
-
     {{#if error}}
     <p>{{error}}</p>
     {{/if}}
     <div class="content">
-        <form action="/userLogin" method="post">
+        <form action="/userLogin" method="POST" id="userlogin">
             <div>
                 <label for="emailInput" id="emailInputLabel">Email</label>
                 <input type="email" name="emailInput" id="emailInput">
@@ -12,8 +11,8 @@
                 <label for="passwordInput" id="passwordInputLabel">Password</label>
                 <input type="password" name="passwordInput" id="passwordInput">
             </div>
-            <div>
-                <p class="error">{{error}}</p>
+            <div class="form-group hidden" id="error">
+                <div class="alert alert-danger text-goes-here"></div>
             </div>
             <div>
                 <button type="submit" class="btn btn-default" id="login-button">Log In</button>

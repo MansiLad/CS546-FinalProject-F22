@@ -45,11 +45,13 @@ router.route('/propertyRegistration')
 router.route('/manageRentals')
 .get(async(req,res)=>{
   if(!req.session.user) return res.redirect('/user/userlogin')
-  return res.render('allProperties',{title:'Manage your properties'})
+  return res.render('manageProperties',{title:'Manage your properties'})
 })
 .post(async(req,res)=>{
   if(!req.session.user) return res.redirect('/user/userlogin')
   // todo- mansi update/manage rentals code
+
+
 })
 
 router.route("/searchProperties")
@@ -123,6 +125,17 @@ router.route("/propertydetails/:id")
   res.render("../views/propertyDetails", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
   //add the rest 
 
+})
+.delete(async (req, res) => {
+  //code here for post
+  id = req.params.id;
+  id = helper.chekId(id);
+  try {
+    await propertiesData.removeListing(id);
+    res.redirect('/manageProperties')
+  } catch (error) {
+    return res.render('error', {error: error})
+  }
 });
 
 router.route('/searchProperties')
@@ -160,17 +173,6 @@ router.route("/filtered")
   return res.render("Name of the template");
 });
 
-router.route("/removelisting")
-.delete(async (req, res) => {
-  //code here for post
-  id = req.params.id;
-  id = helper.chekId(id);
-  try {
-    await propertiesData.removeListing(id);
-    res.redirect('/properties')
-  } catch (error) {
-    return res.render('error', {error: error})
-  }
-});
+
 
 module.exports = router;

@@ -275,8 +275,8 @@ module.exports = {
   removeListing,
   getAllListings,
   getByCity,
-  getByState,
-  getByZipcode,
+/*   getByState,
+  getByZipcode, */
   approveAuth,
   getAllListings,
   getPropOwnerbyId,

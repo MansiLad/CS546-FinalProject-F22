@@ -1,9 +1,4 @@
-// sab apne functions idhr likho..
-// nai mai idhar nahi karugaa 
-
 const {ObjectId} = require('mongodb');
-
-
 
 
 const checkId = (id) => {
@@ -22,7 +17,7 @@ const checkId = (id) => {
   return id;
 };
 
- const checkString = (strVal) => {
+const checkString = (strVal) => {
   if (!strVal) throw 'Error: You must supply a string!';
   if (typeof strVal !== 'string') throw 'Error: The parameter must be a string!';
 
@@ -40,7 +35,7 @@ const checkId = (id) => {
   return strVal;
 };
 
-let checkNumber = (phoneNumber) => {
+const checkNumber = (phoneNumber) => {
   if(!phoneNumber) throw "Error : No valid number."
 
   phoneNumber = phoneNumber.trim();
@@ -52,6 +47,43 @@ let checkNumber = (phoneNumber) => {
   if(!(/^[0-9\s]*$/.test(phoneNumber))) throw "Error: The parameter should be a number";
 };
 
+const checkUsername = (username) => {
+  if (typeof username !== "string") throw "Username must be string";
+  if (username.trim().length === 0) {
+    throw "Only spaces not allowed";
+  }
+  if (username.length < 4) throw " Length should be greater than 4";
+  var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  if (!username.match(regex)) throw "Invalid Email";
+  for (var i = 0; i < username.length; i++) {
+    if (username[i] == " ") throw "Empty spaces are provided in Username";
+  }
+  return username.toLowerCase();
+};
+
+const checkPassword = (password) => {
+  //if(!password) throw 'Password is not provided'
+  if (typeof password != "string") throw "Password must be string";
+  if (password.length < 6) throw "Password should be minimum 6 characters long";
+  if (password.trim() == "") throw "Blank spaces provided";
+  for (var i = 0; i < password.length; i++) {
+    if (password[i] == " ") throw "Empty spaces privided in password";
+  }
+  if (
+    !/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])((?=.*\W)|(?=.*_))^[^ ]+$/.test(password)
+  ) {
+    throw "Incorrect format of password";
+  }
+  return password;
+};
+
+module.exports = {
+  checkId,
+  checkNumber,
+  checkUsername,
+  checkPassword,
+  checkString
+}
 
 
 
