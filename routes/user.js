@@ -174,7 +174,7 @@ router.route("/protected").get(async (req, res) => {
         error: "Access Denied",
       });
   } else {
-    return res.render("commonPage", { title: "Welcome" });
+    return res.render("admin_handlebar", { title: "Welcome" });
   }
 });
 
