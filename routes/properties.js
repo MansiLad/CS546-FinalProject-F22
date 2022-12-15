@@ -45,7 +45,7 @@ router.route('/propertyRegistration')
 router.route('/manageRentals')
 .get(async(req,res)=>{
   if(!req.session.user) return res.redirect('/user/userlogin')
-  return res.render('updateProp',{title:'Manage your properties'})
+  return res.render('allProperties',{title:'Manage your properties'})
 })
 .post(async(req,res)=>{
   if(!req.session.user) return res.redirect('/user/userlogin')
@@ -91,7 +91,7 @@ router.route("/filters")
     res.render("renters",{results: results, minimum : minimum, maximum : maximum });
   }catch(e)
   {
-    console.log(e);
+    return res.render('error',{title:'Error',error:'Error'})
   }
   
 });
