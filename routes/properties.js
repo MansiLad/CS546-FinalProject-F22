@@ -109,8 +109,6 @@ router.route("/ownedProperties")
   }
 });
 
-router.route("/allProperties")
-
 
 router.route("/propertydetails/:id")
 .get(async (req, res) => {
@@ -148,7 +146,6 @@ router.route('/searchProperties')
   }
   
 })
-
 
 router.route("/filtered")
 .get(async (req, res) => {
