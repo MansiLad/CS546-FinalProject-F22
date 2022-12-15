@@ -44,7 +44,7 @@ router.route("/propertyRegistration").post(async (req, res) => {
 
 router.route('/manageRentals').get(async(req,res)=>{
   if(!req.session.user) return res.redirect('/user/userlogin')
-  return res.render('updateProp',{title:'Manage your properties'})
+  return res.render('allProperties',{title:'Manage your properties'})
 })
 
 router.route('/manageRentals').post(async(req,res)=>{
@@ -56,7 +56,7 @@ router.route("/searchProperties").get(async (req, res) => {
   //code here for GET
   //let prop_det = req.body.
   try {
-    let prop = await propertiesData.getAllListings();
+    //let prop = await propertiesData.getAllListings();
     res.render('searchProp', {title:'Get your favourite properties!'})
   } catch (error) {
     return res.render('error', {error: error})
@@ -92,7 +92,7 @@ router.route("/filters").post(async (req, res) => {
     res.render("renters",{results: results, minimum : minimum, maximum : maximum });
   }catch(e)
   {
-    console.log(e);
+    return res.render('error',{title:'Error',error:'Error'})
   }
   
 });
