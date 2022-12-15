@@ -68,6 +68,8 @@ router.route("/searchProperties")
 
 router.route("/filters")
 .get(async (req, res) => {
+  if(!req.session.user) return res.redirect('/user/userlogin')
+  
   try{
     const results = await filters.getAllproperties();
     //console.log(results);
@@ -78,6 +80,8 @@ router.route("/filters")
   }
 })
 .post(async (req, res) => {
+  if(!req.session.user) return res.redirect('/user/userlogin')
+  
   console.log(req.body);
   // search_location= req.body.search_location;
   select_sortBy = req.body.select_sortBy;
