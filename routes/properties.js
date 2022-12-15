@@ -4,6 +4,7 @@ const data = require("../data");
 const propertiesData = data.properties;
 const filters = data.filters;
 const path = require("path");
+const xss = require('xss');
 // const userData = data.users;
 
 router.route("/").get(async (req, res) => {
@@ -11,12 +12,12 @@ router.route("/").get(async (req, res) => {
   res.sendFile(path.resolve("static/homepage.html"));
 });
 
-router.route('/propertyRegistration').get(async(req,res) =>{
+router.route('/propertyRegistration')
+.get(async(req,res) =>{
   if(!req.session.user) return res.redirect('/user/userlogin')
-  return res.render('propertyRegistration',{title:'Resgister your property here!'})
+  return res.render('propertyRegistration',{title:'Register your property here!'})
 })
-
-router.route("/propertyRegistration").post(async (req, res) => {
+.post(async (req, res) => {
   if(!req.session.user) return res.redirect('/user/userlogin')
   //code here for post
   let address = req.body.address;
@@ -42,17 +43,18 @@ router.route("/propertyRegistration").post(async (req, res) => {
   }
 });
 
-router.route('/manageRentals').get(async(req,res)=>{
+router.route('/manageRentals')
+.get(async(req,res)=>{
   if(!req.session.user) return res.redirect('/user/userlogin')
-  return res.render('allProperties',{title:'Manage your properties'})
-})
+  return res.render('manageProperties',{title:'Manage your properties'})
+});
+router.route('/propertydetails/edit/:id')
+.post(async(req, res)=>{
+  //TO DO: input the 4 vales from the from that are changed
+});
 
-router.route('/manageRentals').post(async(req,res)=>{
-  if(!req.session.user) return res.redirect('/user/userlogin')
-  // todo- mansi update/manage rentals code
-})
-
-router.route("/searchProperties").get(async (req, res) => {
+router.route("/searchProperties")
+.get(async (req, res) => {
   //code here for GET
   //let prop_det = req.body.
   try {
@@ -64,7 +66,8 @@ router.route("/searchProperties").get(async (req, res) => {
   //return res.render("renters");
 });
 
-router.route("/filters").get(async (req, res) => {
+router.route("/filters")
+.get(async (req, res) => {
   try{
     const results = await filters.getAllproperties();
     //console.log(results);
@@ -73,11 +76,8 @@ router.route("/filters").get(async (req, res) => {
   {
     console.log(e);
   }
- 
-});
-
-router.route("/filters").post(async (req, res) => {
-
+})
+.post(async (req, res) => {
   console.log(req.body);
   // search_location= req.body.search_location;
   select_sortBy = req.body.select_sortBy;
@@ -98,7 +98,8 @@ router.route("/filters").post(async (req, res) => {
 });
 
 
-router.route("/ownedProperties").get(async (req, res) => {
+router.route("/ownedProperties")
+.get(async (req, res) => {
   //code here for GET
   //let prop_det = req.body.
   try {
@@ -107,14 +108,11 @@ router.route("/ownedProperties").get(async (req, res) => {
   } catch (error) {
     return res.render('error', {error: error})
   }
-  
 });
 
 
-
-
-
-router.route("/propertydetails/:id").get(async (req, res) => {
+router.route("/propertydetails/:id")
+.get(async (req, res) => {
   if(isNaN(req.params.id)){
     return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
   }
@@ -126,9 +124,21 @@ router.route("/propertydetails/:id").get(async (req, res) => {
   res.render("../views/propertyDetails", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
   //add the rest 
 
+})
+.delete(async (req, res) => {
+  //code here for post
+  id = req.params.id;
+  id = helper.chekId(id);
+  try {
+    await propertiesData.removeListing(id);
+    res.redirect('/manageProperties')
+  } catch (error) {
+    return res.render('error', {error: error})
+  }
 });
 
-router.route('/searchProperties').post(async(req,res) =>{
+router.route('/searchProperties')
+.post(async(req,res) =>{
   let city = req.body.city
   let zip = req.body.zipcode
   let state = req.body.state
@@ -143,19 +153,14 @@ router.route('/searchProperties').post(async(req,res) =>{
     all_prop = [...propCity,...propState,...propZip]
     return res.render('propertyDetails',{id:all_prop.UserId, address:all_prop.address,city:all_prop.city,state:all_prop.state,zipcode:all_prop.zipcode,rent:all_prop.rent,deposit:all_prop.deposit,amenities:all_prop.amenities,reviews:all_prop.reviews,date:all_prop.date,images:all_prop.images})
 
-
-
   }catch(e){
     return res.render('error', {error:e, title:'Error'})
   }
   
 })
 
-router.route('/propdetails/:id').get(async(req,res) =>{
-
-})
-
-router.route("/filtered").get(async (req, res) => {
+router.route("/filtered")
+.get(async (req, res) => {
   //code here for post
   // function for filter
   try {
@@ -167,17 +172,6 @@ router.route("/filtered").get(async (req, res) => {
   return res.render("Name of the template");
 });
 
-router.route("/removelisting").delete(async (req, res) => {
-  //code here for post
-  id = req.params.id;
-  id = helper.chekId(id);
-  try {
-    await propertiesData.removeListing(id);
-    res.redirect('/properties')
-  } catch (error) {
-    return res.render('error', {error: error})
-  }
-  
-});
+
 
 module.exports = router;

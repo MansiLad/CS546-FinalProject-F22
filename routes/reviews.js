@@ -7,6 +7,7 @@ const session = require('express-session');
 const { ObjectId } = require("mongodb");
 const review_data = data.reviews;
 const userData = data.properties;
+const xss = require('xss');
 
 router
   .route('/:propertyId')

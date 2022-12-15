@@ -1,52 +1,59 @@
 <title>{{title}}</title>
-<p>
-    Registration form 
-</p>
+
 {{#if error}}
 <p>{{error}}</p>
 {{/if}}
-    <form id="regform" method="POST" action="/user/userRegistration">
+    <form id="userreg" method="POST" action="/user/userRegistration" class="text-center p-3 m-3">
         <h1>Registration Form</h1>
         <br>
-        <label for="firstName"> First Name </label>
-                <input type="text" class="form-control" id="firstName" name="firstName" value="firstname" placeholder="First Name"> 
+        <label for="firstName"> First Name:
+                <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"> 
+        </label>
+                
                 <br>
+                
+        <label for="lastName"> Last Name:
+                <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name">
+        </label>
+                 
                 <br>
-        <label for="lastName"> Last Name </label>
-                <input type="text" class="form-control" id="lastName" name="lastName" value="lastName" placeholder="Last Name"> 
-                <br>
-                <br>
-        <label for="gender"> Gender </label>
+                
+        <label for="gender"> Gender: 
                 <label for="male" class="radio-inline"><input type="radio" name="gender" value="m" id="male">Male</label>
                 <label for="female" class="radio-inline"><input type="radio" name="gender" value="f" id="female">Female</label>
                 <label for="other" class="radio-inline"><input type="radio" name="gender" value="o" id="other">Others</label>
+        </label>
+                
                 <br>
-                <br>
+                
                 {{!-- user type dropdown -> change in data --}}
-        <label for="email"> Email </label>
+        <label for="email"> Email:
                 <input type="email" class="form-control" id="email" name="email" placeholder="Email"> 
-                <br>
-                <br>
-        {{!-- <label for="city"> City </label>
+        </label>
+               <br>
+        <label for="city"> City:
                 <input type="text" class="form-control" id="city" name="city"> 
-                <br>
-                <br>
-        <label for="state"> State </label>
+        </label>
+             <br>
+        <label for="state"> State:
                 <input type="text" class="form-control" id="state" name="state"> 
-                <br>
-                <br> --}}
-        <label for="phoneNumber"> Phone Number </label>
-                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" value="phoneNumber" placeholder="Phone Number"> 
-                <br>
-                <br>
-        <label for="type"> Type of User </label>
+        </label>
+               <br>
+        <label for="phoneNumber"> Phone Number:
+                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number"> 
+        </label>
+          <br>
+        <label for="type"> Type of User:
                 <label for="type-user" class="radio-inline"><input type="radio" name="type" value="buyer" id="male">User</label>
                 <label for="type-owner" class="radio-inline"><input type="radio" name="type" value="seller" id="female">Owner</label>
-                <br>
-                <br>
-        <label for="password"> Password </label>
+        </label><br>
+            
+        <label for="password"> Password 
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password"> 
-                <br>
-                <br>
+        </label><br>
+
+        <div class="form-group hidden" id="error">
+                <div class="alert alert-danger text-goes-here"></div>
+        </div>
         <button type="submit"> Submit </button>
     </form> 

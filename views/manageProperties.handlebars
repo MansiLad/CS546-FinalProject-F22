@@ -1,0 +1,13 @@
+<title>Properties</title>
+    <h2>Properties Owned by: {{OwnerName}}</h2>
+    <ul>
+        {{#each result}}
+        <div>
+            <a href="/propertydetails/{{this.id}}"> {{this.address}}</a> 
+            <a href="/propertydetails/edit/{{this.id}}" class="btn btn-info">Edit</a>
+            <form action="/propertydetails/{{this.id}}" method="DELETE" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+            </form>
+        </div>
+        {{/each}}
+    </ul>

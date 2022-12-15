@@ -1,40 +1,12 @@
-
 const express = require("express");
 const router = express.Router();
 const path = require("path");
 const data = require("../data/users");
 const app = express();
 const session = require("express-session");
+const validation = require('../helpers');
+const xss = require('xss');
 
-const validUserCheck = (username) => {
-  if (typeof username !== "string") throw "Username must be string";
-  if (username.trim().length === 0) {
-    throw "Onlhy spaces not allowed";
-  }
-  if (username.length < 4) throw " Length should be greater than 4";
-  var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  if (!username.match(regex)) throw "Invalid Email";
-  for (var i = 0; i < username.length; i++) {
-    if (username[i] == " ") throw "Empty spaces are provided in Username";
-  }
-  return username.toLowerCase();
-};
-
-const validatePass = (password) => {
-  //if(!password) throw 'Password is not provided'
-  if (typeof password != "string") throw "Password must be string";
-  if (password.length < 6) throw "Password should be minimum 6 characters long";
-  if (password.trim() == "") throw "Blank spaces provided";
-  for (var i = 0; i < password.length; i++) {
-    if (password[i] == " ") throw "Empty spaces privided in password";
-  }
-  if (
-    !/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])((?=.*\W)|(?=.*_))^[^ ]+$/.test(password)
-  ) {
-    throw "Incorrect format of password";
-  }
-  return password;
-};
 
 // router
 //   // .route('/')
@@ -46,15 +18,14 @@ router
   .route("/userLogin")
   .get(async (req, res) => {
     
-
-    // if(req.session.user){
-    //   return res.render('commonPage')
-    // }
-    // else{
-    console.log("get login");
-    return res.render("userLogin", { title: "Login Page" });
-    // }
-  })
+  // if(req.session.user){
+  //   return res.render('commonPage')
+  // }
+  // else{
+    console.log('get login')
+     return res.render('userLogin',{title:'Login Page'})
+  // }
+})
 
 .post(async (req, res) => {
   if (req.session.user) {
@@ -64,9 +35,9 @@ router
     let postData = req.body;
     let userN = postData.email;
     let pass = postData.password;
-    let validUserName = validUserCheck(userN);
-    let validPassowerd = validatePass(pass);
-    let authenticatedUser = await data.checkUser(validUserName, validPassowerd);
+    let validUserName = validation.checkUsername(userN);
+    let validPassword = validation.checkPassword(pass);
+    let authenticatedUser = await data.checkUser(validUserName, validPassword);
     if (authenticatedUser.authenticatedUser != true) {
       return res
         .status(404)
@@ -122,7 +93,7 @@ router
       let postData = req.body;
       let userN = postData.email;
       let pass = postData.password;
-      let validUserName = validUserCheck(userN);
+      let validUserName = validation.checkUsername(userN);
       let firstname = postData.firstName;
       let lastname = postData.lastname;
       let gender = postData.gender;
@@ -132,7 +103,7 @@ router
       // todo favoitites which will be done by sanika..
 
       //validUserName = validUserName.toLowerCase();
-      let validPassowerd = validatePass(pass);
+      let validPassowerd = validation.checkPassword(pass);
       let { insertedUser } = await data.createUser(
         firstname,
         lastname,

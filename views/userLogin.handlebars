@@ -1,25 +1,25 @@
+<title>{{title}}</title>
 
-    {{#if error}}
+{{!-- {{#if error}}
     <p>{{error}}</p>
-    {{/if}}
-    <div class="content">
-        <form action="/userLogin" method="post">
+{{/if}} --}}
+    <div class="content" >
+        <form action="/user/userLogin" method="POST" id="userlogin" class="text-center p-3 m-3">
             <div>
-                <label for="emailInput" id="emailInputLabel">Email</label>
+                <label for="emailInput" id="emailInputLabel">Email: </label>
                 <input type="email" name="emailInput" id="emailInput">
             </div><br>
             <div>
-                <label for="passwordInput" id="passwordInputLabel">Password</label>
+                <label for="passwordInput" id="passwordInputLabel">Password: </label>
                 <input type="password" name="passwordInput" id="passwordInput">
             </div>
-            <div>
-                <p class="error">{{error}}</p>
+            <div class="form-group hidden" id="error">
+                <div class="alert alert-danger text-goes-here"></div>
             </div>
             <div>
                 <button type="submit" class="btn btn-default" id="login-button">Log In</button>
             </div>
         </form>
-        <br>
         <br>
 
         <a href="/user/userRegistration">Coming for the first time? Register Here!</a>
