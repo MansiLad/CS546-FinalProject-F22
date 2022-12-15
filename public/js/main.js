@@ -13,8 +13,6 @@ const validation = require('.../helpers');
 
         const checkusername = await usersindb.findOne({ email: validUsername });
         if (!checkusername) throw "Either the username or password is invalid";
-      
-        const password_check = await bcrypt.compare(validPassword, checkusername.password);
         if (!password_check) throw "Either the username or password is invalid";
     }
 
@@ -23,7 +21,9 @@ const validation = require('.../helpers');
     if(userlogindata) {
         const username = document.getElementById("emailInput")
         const password = document.getElementById("passwordInput")
-
+        console.log(username)
+            if(!username)   throw 'Provide a username'
+            if(!password)   throw 'Provide a password'
         const errorContainer = document.getElementById('error')
         const errorTextElement = errorContainer.getElementsByClassName('text-goes-here')[0]
 
@@ -32,9 +32,6 @@ const validation = require('.../helpers');
             try {
                 errorContainer.hidden = true;
                 
-                if(!username)   throw 'Provide a username'
-                if(!password)   throw 'Provide a password'
-
                 const successLogin = userLogin(username, password)
                 
             }

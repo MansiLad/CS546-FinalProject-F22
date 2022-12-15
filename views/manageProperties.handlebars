@@ -4,11 +4,10 @@
         {{#each result}}
         <div>
             <a href="/propertydetails/{{this.id}}"> {{this.address}}</a> 
-            <a href="edit/{{this.id}}" class="btn btn-info">Edit</a>
-            <form action="/propertydetails/{{this.id}}" method="POST" class="d-inline">
+            <a href="/propertydetails/edit/{{this.id}}" class="btn btn-info">Edit</a>
+            <form action="/propertydetails/{{this.id}}" method="DELETE" class="d-inline">
                 <button type="submit" class="btn btn-outline-danger">Delete</button>
             </form>
         </div>
-             
         {{/each}}
     </ul>

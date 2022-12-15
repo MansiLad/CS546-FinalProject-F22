@@ -4,6 +4,7 @@ const data = require("../data");
 const propertiesData = data.properties;
 const filters = data.filters;
 const path = require("path");
+const xss = require('xss');
 // const userData = data.users;
 
 router.route("/").get(async (req, res) => {
@@ -46,13 +47,11 @@ router.route('/manageRentals')
 .get(async(req,res)=>{
   if(!req.session.user) return res.redirect('/user/userlogin')
   return res.render('manageProperties',{title:'Manage your properties'})
-})
-.post(async(req,res)=>{
-  if(!req.session.user) return res.redirect('/user/userlogin')
-  // todo- mansi update/manage rentals code
-
-
-})
+});
+router.route('/propertydetails/edit/:id')
+.post(async(req, res)=>{
+  //TO DO: input the 4 vales from the from that are changed
+});
 
 router.route("/searchProperties")
 .get(async (req, res) => {
