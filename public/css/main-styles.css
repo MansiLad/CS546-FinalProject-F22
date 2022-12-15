@@ -1,17 +1,41 @@
 .nav{
-  float: right;
+  float: left;
   word-spacing: 20px;
   padding: 10px;
   overflow: hidden;
 }
-.nav li{
-  display: inline-block;
-  line-height: 20px;
+.nav ul{
+  margin: 0;
+  padding: 0;
+  text-align: right;
 }
+
+.nav ul li{
+  display: inline-block;
+  list-style-type: none;
+  text-align: right;
+}
+
+.nav > ul > li > a{
+  display: block;
+  line-height: 10px;
+  padding: 5px;
+  text-decoration: none;
+  text-align: right;
+}
+
 h1{
   text-align: center;
 }
-.logo
+
+.logo-img{
+  float: left;
+  position: relative;
+  margin: 5px;
+  max-width:15%;
+}
+
+/* .logo
 {
 	float :left;
   margin-top: 20px;
@@ -25,7 +49,8 @@ h1{
   padding-top: 0px;
   max-width:20%;
   height:auto;
-}
+  position: relative;
+} */
 /* 
 .button {
   background-color: #1c87c9;
