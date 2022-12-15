@@ -11,15 +11,15 @@ const createUser = async (
   lastName,
   gender,
   email,
-  city,
-  state,
+  // city,
+  // state,
   phoneNumber,
   password,
   type
 ) => {
   let usersCollection = await users();
 
-  const saltRounds = 16;
+  const saltRounds = 10;
   const encryptpassword = await bcrypt.hash(password, saltRounds);
 
   let flag = { insertedUser: true };
@@ -29,8 +29,8 @@ const createUser = async (
     lastName: lastName,
     gender: gender,
     email: email,
-    city: city,
-    state: state,
+    // city: city,
+    // state: state,
     phoneNumber: phoneNumber,
     password: encryptpassword,
     type: type,
@@ -79,8 +79,8 @@ const createAdmin = async (
   lastName,
   gender,
   email,
-  city,
-  state,
+  // city,
+  // state,
   phoneNumber,
   password
 ) => {
@@ -91,8 +91,8 @@ const createAdmin = async (
     lastName: lastName,
     gender: gender,
     email: email,
-    city: city,
-    state: state,
+    // city: city,
+    // state: state,
     phoneNumber: phoneNumber,
     password: password,
     type: "admin",
@@ -106,8 +106,8 @@ const updateUser = async (
   lastName,
   gender,
   email,
-  city,
-  state,
+  // city,
+  // state,
   phoneNumber
 ) => {
   const db = await dbConnection();
@@ -121,8 +121,8 @@ const updateUser = async (
     lastName: lastName,
     gender: gender,
     email: email,
-    city: city,
-    state: state,
+    // city: city,
+    // state: state,
     phoneNumber: phoneNumber,
   };
 
@@ -163,17 +163,17 @@ const checkUser = async (email, password) => {
   const password_check = await bcrypt.compare(password, checkusername.password);
 
   if (!password_check) throw "Either the username or password is invalid";
-
+  let flag = null;
   if (checkusername.type === "admin") {
-    let flag = { authenticatedUser: true, type: "admin" };
+     flag = { authenticatedUser: true, type: "admin" };
   }
 
   if (checkusername.type === "seller") {
-    let flag = { authenticatedUser: true, type: "seller" };
+     flag = { authenticatedUser: true, type: "seller" };
   }
 
   if (checkusername.type === "buyer") {
-    let flag = { authenticatedUser: true, type: "buyer" };
+     flag = { authenticatedUser: true, type: "buyer" };
   }
 
   return flag;

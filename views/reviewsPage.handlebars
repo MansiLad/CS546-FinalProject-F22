@@ -1,0 +1,14 @@
+<title>{{title}}</title>
+
+<main>
+    <p>All the reviews of the property</p>
+    <ul class="pf">
+            {{#each result}}
+            <li>
+                <a href="/persondetails/{{id}}">{{firstName}} {{lastName}}</a>
+            </li>
+            {{/each}}
+        </ul>
+   
+    {{!-- <a href="/">Make another search</a> --}}
+</main>

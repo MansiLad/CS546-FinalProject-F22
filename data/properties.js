@@ -21,20 +21,22 @@ const createListing = async (
   baths,
   deposit,
   rent,
-  description,
-  ammenities,
-  images,
+  //description,
+  ammenities
+  //images,
 ) => {
   // todo validations
   let propertiesCollection = await properties();
   let userCollection = await users();
   let date = new Date().toLocaleDateString();
   // let image_buffer = new Buffer ()
+  let flag = { insertedProp: true };
 
   let newListing = {
     UserId: UserId,
     // apartmentNumber: apartmentNumber,
     // street: street,
+    propertyId: ObjectId(),
     address: address,
     city: city,
     state: state,
@@ -45,19 +47,16 @@ const createListing = async (
     rent: rent,
     //description: description,
     ammenities: ammenities,
-    images: images,
-    reviews: [],
-    datePosted: date,
+    images: [],
+    reviews: {},
+    date: date,
     approved: false,
     available: true,
   };
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
-  // error
-  const newid = insert_movie.insertedId.toString();
- let ans = getPropertyById(newid)
-//  return JSON.parse(JSON.stringify(ans));
-return ans;
+  return flag;
+
 };
 
 const getAllListings = async () => {
@@ -72,6 +71,7 @@ const getAllListings = async () => {
   }
   return JSON.parse(JSON.stringify(properties));
 };
+
 
 const getPropertyById = async (propertyID) => {
   // todo validations
@@ -150,7 +150,7 @@ const updateListing = async (
 
   let tmpListing = await getPropertyById(propertyId);
 
-  const updatedInfo = await movieCollection.updateOne(
+  const updatedInfo = await propertyCollection.updateOne(
     { _id: ObjectId(propertyId) },
     { $set: updatedListing }
   );
@@ -260,6 +260,14 @@ const approveAuth = async (propertyID) => {
   );
 };
 
+const getPropOwnerbyId = async (ownerId) => {
+  const propertyCollection = await properties();
+  let props = await propertyCollection
+    .find({ UserId: ownerId, approved: true, available: true,})
+    .toArray();
+  return props;
+}
+
 module.exports = {
   getPropertyById,
   createListing,
@@ -269,8 +277,8 @@ module.exports = {
   getByCity,
   getByState,
   getByZipcode,
-  getAllAuthListings,
-  // removeAuthListings,
-  // getAuthById,
   approveAuth,
+  getAllListings,
+  getPropOwnerbyId,
+  getAllAuthListings
 };

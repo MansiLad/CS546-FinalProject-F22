@@ -25,5 +25,14 @@
         <dt>Reviews</dt>
         <dd>{{reviews}}</dd>
     </dl>
-    <a href="/">Make another search</a>
+    <ul class="pf">
+            {{#each result}}
+            <li>
+                <a href="/reviews/{{id}}">{{reviews}}</a>
+            </li>
+            {{/each}}
+        </ul>
+   
+    <a href="/">Make another search</a>?
+
 </main>
