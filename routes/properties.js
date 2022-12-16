@@ -123,6 +123,7 @@ router.route('/searchProperties').post(async(req,res) =>{
   let city = req.body.city
   let zip = req.body.zip
   let state = req.body.state
+  let id = [];
   try{
     if(!city && !zip && !state){
       throw 'No empty fields allowed!'
@@ -132,13 +133,17 @@ router.route('/searchProperties').post(async(req,res) =>{
     let all_prop = await filters.getByCityStateZip(city,state,zip);
     // let propState = await propertiesData.getByState(state);
     // let propZip = await propertiesData.getByZipcode(zip);
-    all_prop = JSON.parse(JSON.stringify(all_prop))
+  //  console.log(all_prop)
+  //  console.log(all_prop._id)
 
-   console.log(all_prop)
+   all_prop.forEach(props => {
+    id.push(props._id);
+   });
+    console.log(id);
     // console.log(propState)
     // console.log(propZip)
 
-    return res.render('afterSearch',{id:all_prop._id,result: all_prop,title:'Houses'})
+    return res.render('afterSearch',{id:id,result: all_prop,title:'Houses'})
 
 
 
@@ -151,8 +156,15 @@ router.route('/searchProperties').post(async(req,res) =>{
 router.route('/propdetails/:id').get(async(req,res) =>{
 let p_id = req.params.id
 p_id = p_id.trim();
+console.log(p_id)
 try{
-  let each_prop_detail = await data_people.searchPeopleByID(p_id)
+  let each_prop_detail = await propertiesData.getPropertyById(p_id)
+  console.log(each_prop_detail)
+  if(!each_prop_detail){
+    return res.render('error',{title:'Error Page',error:'No properties!'})
+  }
+  let add = each_prop_detail.address;
+  return res.render('propertyDetails',{address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipCode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,amenities:each_prop_detail.ammenities})
 
 }catch(e){
 return res.render('error',{title:'Error Page',error:'No property!'})
