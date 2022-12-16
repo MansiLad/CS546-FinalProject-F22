@@ -11,7 +11,7 @@ const console = require("console");
 
 // function to add listing validations left
 const createListing = async (
-  // UserId,
+  UserId,
   address,
   city,
   state,
@@ -32,10 +32,9 @@ const createListing = async (
   let flag = { insertedProp: true };
 console.log('error')
   let newListing = {
-    // UserId: UserId,
+    UserId: UserId,
     // apartmentNumber: apartmentNumber,
     // street: street,
-    // propertyId: _id,
     address: address,
     city: city,
     state: state,
@@ -292,10 +291,10 @@ const approveAuth = async (propertyID) => {
   );
 };
 
-const getPropOwnerbyId = async (ownerId) => {
+const getPropertybyOwner = async (ownerId) => {
   const propertyCollection = await properties();
   let props = await propertyCollection
-    .find({ UserId: ownerId, approved: true, available: true,})
+    .find({ "UserId": ownerId /* , approved: true, available: true, */})
     .toArray();
   return props;
 }
@@ -311,6 +310,6 @@ module.exports = {
   getByZipcode,
   approveAuth,
   getAllListings,
-  getPropOwnerbyId,
+  getPropertybyOwner,
   getAllAuthListings
 };

@@ -1,13 +1,35 @@
 <title>Properties</title>
-    <h2>Properties Owned by: {{OwnerName}}</h2>
-    <ul>
+<h3>Your Listings</h3>
+<h5><a class="btn btn-secondary" href="/propertyRegistration"><i class="fa fa-plus"></i> Create </a></h5>
+<table class="table table-striped">
+    <thread>
+        <tr>
+            <th>ADDRESS</th>
+            <th>CITY</th>
+            <th>STATE</th>
+            <th>ZIP CODE</th>
+            <th>NO. OF BEDS</th>
+            <th>NO. OF BATHS</th>
+            <th>DEPOSIT</th>
+            <th>RENT</th>
+        </tr>
+    </thread>
+    <tbody>
         {{#each result}}
-        <div>
-            <a href="/propertydetails/{{this.id}}"> {{this.address}}</a> 
-            <a href="/propertydetails/edit/{{this.id}}" class="btn btn-info">Edit</a>
-            <form action="/propertydetails/{{this.id}}" method="DELETE" class="d-inline">
-                <button type="submit" class="btn btn-outline-danger">Delete</button>
-            </form>
-        </div>
+            <tr>
+                <td>{{this.address}}</td>
+                <td>{{this.city}}</td>
+                <td>{{this.state}}</td>
+                <td>{{this.zipCode}}</td>
+                <td>{{this.beds}}</td>
+                <td>{{this.baths}}</td>
+                <td>{{this.deposit}}</td>
+                <td>{{this.rent}}</td>
+                <td>
+                    <a href="/propertydetails/edit/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
+                    <a href="/propertydetails/delete/{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+                </td>
+            </tr>
         {{/each}}
-    </ul>
+    </tbody>
+</table>

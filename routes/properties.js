@@ -5,21 +5,25 @@ const propertiesData = data.properties;
 const filters = data.filters;
 const path = require("path");
 const xss = require('xss');
-// const userData = data.users;
+const userData = data.users;
 
-router.route("/").get(async (req, res) => {
+router.route("/")
+.get(async (req, res) => {
   //code here for GET
   res.sendFile(path.resolve("static/homepage.html"));
 });
 
 router.route('/propertyRegistration')
 .get(async(req,res) =>{
+  
   if(!req.session.user) return res.redirect('/user/userlogin')
-  return res.render('propertyRegistration',{title:'Register your property here!'})
+  return res.render('propertyAddorEdit',{title:'Register your property here!'})
 })
 .post(async (req, res) => {
   if(!req.session.user) return res.redirect('/user/userlogin')
   //code here for post
+  //check this once
+  console.log(req.session.user)
   let userId = req.session.user;
   let address = req.body.address;
   let city = req.body.city;
@@ -30,11 +34,11 @@ router.route('/propertyRegistration')
   let deposit = req.body.deposit
   let rent = req.body.rent
   let amenities  = req.body.amenities
- // let desc = req.body.description
+  // let desc = req.body.description
 
   try{
     let {insertedProp} = await propertiesData.createListing(
-      address,city,state,zip, bed,bath,deposit,rent,amenities
+      userId,address,city,state,zip, bed,bath,deposit,rent,amenities
     )
    // console.log(insertedProp)
     if(insertedProp){
@@ -47,13 +51,45 @@ router.route('/propertyRegistration')
 
 router.route('/manageRentals')
 .get(async(req,res)=>{
+  
   if(!req.session.user) return res.redirect('/user/userlogin')
-  return res.render('manageProperties',{title:'Manage your properties'})
-});
+  try {
+    let prop = await propertiesData.getPropertybyOwner(req.session.user);
+    console.log(prop)
+    res.render('manageProperties', {title:'Properties owned by you', OwnerName: req.session.user, result: prop})
+  } catch (error) {
+    return res.render('error', {error: error})
+  }
+
+}); 
 router.route('/propertydetails/edit/:id')
 .post(async(req, res)=>{
   //TO DO: input the 4 vales from the from that are changed
 });
+
+router.route('/propertydetails/delete/:id')
+.get(async (req, res) => {
+  try{
+    let propowner = await propertiesData.getPropOwnerbyId(res.params.id)
+    let prop = await propertiesData.removeListing(req.params.id)
+    res.render('manageProperties', {title:'Properties owned by you',OwnerName: req.params.id, result: prop})
+  } catch(error) {
+    return res.render('error', {error: error})
+  }
+});
+
+/* router.route("/ownedProperties")
+.get(async (req, res) => {
+  //code here for GET
+  //let prop_det = req.body.
+  try {
+    let prop = await propertiesData.getPropOwnerbyId(req.params.id);
+    res.render('allProperties', {title:'Properties owned by you',OwnerName: req.params.id, result: prop})
+  } catch (error) {
+    return res.render('error', {error: error})
+  }
+}); */
+
 
 router.route("/searchProperties")
 .get(async (req, res) => {
@@ -68,7 +104,8 @@ router.route("/searchProperties")
   //return res.render("renters");
 });
 
-router.route("/filters").get(async (req, res) => {
+router.route("/filters")
+.get(async (req, res) => {
   try{
     const results = await filters.getAllproperties();
     //console.log(results);
@@ -80,7 +117,8 @@ router.route("/filters").get(async (req, res) => {
  
 });
 
-router.route("/filters").post(async (req, res) => {
+router.route("/filters")
+.post(async (req, res) => {
 
   console.log(req.body);
   // search_location= req.body.search_location;
@@ -102,23 +140,8 @@ router.route("/filters").post(async (req, res) => {
 });
 
 
-router.route("/ownedProperties")
+router.route("/propertydetails/:id")
 .get(async (req, res) => {
-  //code here for GET
-  //let prop_det = req.body.
-  try {
-    let prop = await propertiesData.getPropOwnerbyId(req.params.id);
-    res.render('allProperties', {title:'Properties owned by you',OwnerName: req.params.id, result: prop})
-  } catch (error) {
-    return res.render('error', {error: error})
-  }
-});
-
-
-
-
-
-router.route("/propertydetails/:id").get(async (req, res) => {
   if(isNaN(req.params.id)){
     return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
   }
@@ -160,11 +183,9 @@ router.route('/searchProperties')
   
 })
 
-router.route('/propdetails/:id').get(async(req,res) =>{
 
-})
-
-router.route("/filtered").get(async (req, res) => {
+router.route("/filtered")
+.get(async (req, res) => {
   //code here for post
   // function for filter
   try {

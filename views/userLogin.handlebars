@@ -1,13 +1,9 @@
 <title>{{title}}</title>
-
-{{!-- {{#if error}}
-    <p>{{error}}</p>
-{{/if}} --}}
     <div class="content" >
         <form action="/user/userLogin" method="POST" id="userlogin" class="text-center p-3 m-3">
             <div>
                 <label for="emailInput" id="emailInputLabel">Email: </label>
-                <input type="email" name="emailInput" id="emailInput">
+                <input type="text" name="emailInput" id="emailInput">
             </div><br>
             <div>
                 <label for="passwordInput" id="passwordInputLabel">Password: </label>
@@ -21,8 +17,5 @@
             </div>
         </form>
         <br>
-
         <a href="/user/userRegistration">Coming for the first time? Register Here!</a>
     </div>
-
-    

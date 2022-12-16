@@ -31,7 +31,7 @@ const validation = require('.../helpers');
             event.preventDefault()
             try {
                 errorContainer.hidden = true;
-                
+
                 const successLogin = userLogin(username, password)
                 
             }
