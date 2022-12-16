@@ -49,7 +49,7 @@ console.log('error')
     reviews: [],
     date: date,
     approved: true,
-    //available: true,
+    available: true,
   };
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
@@ -131,18 +131,15 @@ const updateListing = async (
   baths,
   deposit,
   rent,
-  description,
+  //description,
   ammenities,
   available,
 ) => {
   // todo validations
-
-  const db = await dbConnection();
   const propertyCollection = await properties();
   let date = new Date().toLocaleDateString();
   const updatedListing = {
     address: address,
-    // street: street,
     city: city,
     state: state,
     zipCode: zipCode,
@@ -150,7 +147,7 @@ const updateListing = async (
     baths: baths,
     deposit: deposit,
     rent: rent,
-    description: description,
+    //description: description,
     ammenities: ammenities,
     datePosted: date,
     available: available,

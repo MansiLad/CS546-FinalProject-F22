@@ -5,6 +5,7 @@ const propertiesData = data.properties;
 const filters = data.filters;
 const path = require("path");
 const xss = require('xss');
+const { updateUser } = require("../data/users");
 const userData = data.users;
 
 router.route("/")
@@ -15,7 +16,7 @@ router.route("/")
 
 router.route('/propertyRegistration')
 .get(async(req,res) =>{
-  
+
   if(!req.session.user) return res.redirect('/user/userlogin')
   return res.render('propertyAddorEdit',{title:'Register your property here!'})
 })
@@ -23,7 +24,6 @@ router.route('/propertyRegistration')
   if(!req.session.user) return res.redirect('/user/userlogin')
   //code here for post
   //check this once
-  console.log(req.session.user)
   let userId = req.session.user;
   let address = req.body.address;
   let city = req.body.city;
@@ -40,7 +40,6 @@ router.route('/propertyRegistration')
     let {insertedProp} = await propertiesData.createListing(
       userId,address,city,state,zip, bed,bath,deposit,rent,amenities
     )
-   // console.log(insertedProp)
     if(insertedProp){
       return res.redirect('/manageRentals')
     }
@@ -60,20 +59,33 @@ router.route('/manageRentals')
   } catch (error) {
     return res.render('error', {error: error})
   }
-
 }); 
 router.route('/propertydetails/edit/:id')
-.post(async(req, res)=>{
+.get(async(req, res)=>{
   //TO DO: input the 4 vales from the from that are changed
+  let updatedData = req.body;
+  try {
+    const updatedProp = await propertiesData.updateListing(
+      updatedData.propertyId, updatedData.address, updatedData.city,
+      updatedData.state, updatedData.zipcode, updatedData.beds, updatedData.baths,
+      updatedData.deposit, updatedData.rent, updatedData.ammenities, updatedData.available
+    )
+    res.render('propertyAddorEdit', {title:'Properties owned by you', result: prop})
+  } catch(error){
+    console.log(error)
+    return res.render('error', {error: error})
+  }
+
 });
 
 router.route('/propertydetails/delete/:id')
 .get(async (req, res) => {
   try{
-    let propowner = await propertiesData.getPropOwnerbyId(res.params.id)
-    let prop = await propertiesData.removeListing(req.params.id)
-    res.render('manageProperties', {title:'Properties owned by you',OwnerName: req.params.id, result: prop})
+    let deleted = await propertiesData.removeListing(req.params.id)
+    let prop = await propertiesData.getPropertybyOwner(req.session.user);
+    res.render('manageProperties', {title:'Properties owned by you', result: prop})
   } catch(error) {
+    console.log(error)
     return res.render('error', {error: error})
   }
 });
