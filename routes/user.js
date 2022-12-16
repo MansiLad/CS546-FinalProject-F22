@@ -33,8 +33,8 @@ router
   }
   try {
     let postData = req.body;
-    let userN = postData.email;
-    let pass = postData.password;
+    let userN = postData.emailInput;
+    let pass = postData.passwordInput;
     let validUserName = validation.checkUsername(userN);
     let validPassword = validation.checkPassword(pass);
     let authenticatedUser = await data.checkUser(validUserName, validPassword);
