@@ -92,11 +92,11 @@ const removeReview = async (userId) => {
   if (!ObjectId.isValid(userId)) {
     throw "Not a valid object id";
   }
-  const property_Collection = await properties();
-  const property_review = await property_Collection.findOne({
+  const users_Collection = await users();
+  const user_review = await users_Collection.findOne({
     "reviews.userId": ObjectId(userId),
   });
-  if (!property_review) throw "No movie review";
+  if (!user_review) throw "No movie review";
   //re
   // const non_reviews = property_review.reviews.filter((curr_rev) => {
   //   return curr_rev._id.toString() !== reviewId;

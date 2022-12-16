@@ -1,6 +1,9 @@
 <title>{{title}}</title>
 <main>
     <h1>Property Details</h1>
+
+
+
     <dl>
         <dt>Address</dt>
         <dd>{{address}}</dd>
@@ -33,6 +36,17 @@
             {{/each}}
         </ul>
    
-    <a href="/">Make another search</a>?
-
+    <a href="/searchProperties">Make another search</a>?
+<script>
+$(document).ready(function(){
+    $("new-review").on("submit", function(event){
+        event.preventDefault();
+        var formValues= $(this).serialize();
+        $.post("/createreview", formValues, function(data){
+            // Display the returned data in browser
+    $('#result').append(formValues)
+        });
+    });
+});
+</script>
 </main>

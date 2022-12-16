@@ -6,7 +6,15 @@
     <label for="city">City:</label>
     <input type="text" name="city" id="city" placeholder="Enter City to search in">
     <br>
-    <!--- United States states -->
+    <form action="/searchProperties" method="post">
+    <label for="city">State:</label>
+    <input type="text" name="state" id="city" placeholder="Enter City to search in">
+    <br>
+    <form action="/searchProperties" method="post">
+    <label for="city">Zip:</label>
+    <input type="text" name="zip" id="city" placeholder="Enter City to search in">
+    <br>
+    {{!-- <!--- United States states -->
 <select id="state" name="state">
     <option value="AL">Alabama</option>
     <option value="AK">Alaska</option>
@@ -78,8 +86,9 @@
 <br>
     <label for="zipcode">Zip Code:</label>
     <input type="text" name="zipcode" id="zipcode" placeholder="Enter zipcode to search for"> <br>
+    
+    </form> --}}
     <button type="submit">Submit</button>
-    </form>
-
+<br> <br>
     <a href="/user/logout">Logout</a>
 </main>

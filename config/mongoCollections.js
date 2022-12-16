@@ -18,4 +18,6 @@ module.exports = {
   users: getCollectionFn('users'),
   properties : getCollectionFn('properties'),
   unauthprop: getCollectionFn('unauthprop'),
+  
+  // dogs: getCollectionFn('dogs'),
 };
