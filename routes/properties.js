@@ -19,6 +19,7 @@ router.route('/propertyRegistration').get(async(req,res) =>{
 router.route("/propertyRegistration").post(async (req, res) => {
   if(!req.session.user) return res.redirect('/user/userlogin')
   //code here for post
+  let userId = req.session.user;
   let address = req.body.address;
   let city = req.body.city;
   let state = req.body.state;
@@ -28,12 +29,13 @@ router.route("/propertyRegistration").post(async (req, res) => {
   let deposit = req.body.deposit
   let rent = req.body.rent
   let amenities  = req.body.amenities
-  let desc = req.body.description
+ // let desc = req.body.description
 
   try{
     let {insertedProp} = await propertiesData.createListing(
-      address,city,state,zip, bed,bath,deposit,rent,amenities,desc
+      address,city,state,zip, bed,bath,deposit,rent,amenities
     )
+   // console.log(insertedProp)
     if(insertedProp){
       return res.redirect('/manageRentals')
     }
@@ -64,21 +66,10 @@ router.route("/searchProperties").get(async (req, res) => {
   //return res.render("renters");
 });
 
-router.route("/filters").get(async (req, res) => {
-  try{
-    const results = await filters.getAllproperties();
-    //console.log(results);
-    res.render("renters",{results});
-  }catch(e)
-  {
-    console.log(e);
-  }
- 
-});
 
 router.route("/filters").post(async (req, res) => {
 
-  console.log(req.body);
+  //console.log(req.body);
   // search_location= req.body.search_location;
   select_sortBy = req.body.select_sortBy;
   beds = req.body.beds
@@ -87,9 +78,9 @@ router.route("/filters").post(async (req, res) => {
   maximum = req.body.maximum
   try{
     
-    const results = await filters.getpropertyByFilterandSort(select_sortBy,beds,baths,minimum,maximum);
-    console.log(results);
-    res.render("renters",{results: results, minimum : minimum, maximum : maximum });
+    const result = await filters.getpropertyByFilterandSort(select_sortBy,beds,baths,minimum,maximum);
+    //console.log(result);
+    res.render("afterSearch",{result: result, minimum : minimum, maximum : maximum });
   }catch(e)
   {
     return res.render('error',{title:'Error',error:'Error'})
@@ -114,34 +105,40 @@ router.route("/ownedProperties").get(async (req, res) => {
 
 
 
-router.route("/propertydetails/:id").get(async (req, res) => {
-  if(isNaN(req.params.id)){
-    return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
-  }
+// router.route("/propertydetails/:id").get(async (req, res) => {
+//   if(isNaN(req.params.id)){
+//     return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
+//   }
 
-  const prop = await propertiesData.getPropertyByID(req.params.id)
-  if(prop === null || prop === undefined){
-    return res.status(404).render('../views/error', {title: 'Not found', Error: "No ID exist"})
-  }
-  res.render("../views/propertyDetails", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
-  //add the rest 
+//   const prop = await propertiesData.getPropertyByID(req.params.id)
+//   if(prop === null || prop === undefined){
+//     return res.status(404).render('../views/error', {title: 'Not found', Error: "No ID exist"})
+//   }
+//   res.render("../views/propertyDetails", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
+//   //add the rest 
 
-});
+// });
 
 router.route('/searchProperties').post(async(req,res) =>{
   let city = req.body.city
-  let zip = req.body.zipcode
+  let zip = req.body.zip
   let state = req.body.state
   try{
     if(!city && !zip && !state){
       throw 'No empty fields allowed!'
     }
-    let all_prop = [];
-    let propCity = await propertiesData.getByCity(city);
-    let propState = await propertiesData.getByState(state);
-    let propZip = await propertiesData.getByZipcode(zip);
-    all_prop = [...propCity,...propState,...propZip]
-    return res.render('propertyDetails',{id:all_prop.UserId, address:all_prop.address,city:all_prop.city,state:all_prop.state,zipcode:all_prop.zipcode,rent:all_prop.rent,deposit:all_prop.deposit,amenities:all_prop.amenities,reviews:all_prop.reviews,date:all_prop.date,images:all_prop.images})
+    // let all_prop = [];
+    // let all_prop = await propertiesData.getByState(city,state,zip);
+    let all_prop = await filters.getByCityStateZip(city,state,zip);
+    // let propState = await propertiesData.getByState(state);
+    // let propZip = await propertiesData.getByZipcode(zip);
+    all_prop = JSON.parse(JSON.stringify(all_prop))
+
+   console.log(all_prop)
+    // console.log(propState)
+    // console.log(propZip)
+
+    return res.render('afterSearch',{id:all_prop._id,result: all_prop,title:'Houses'})
 
 
 
@@ -152,6 +149,14 @@ router.route('/searchProperties').post(async(req,res) =>{
 })
 
 router.route('/propdetails/:id').get(async(req,res) =>{
+let p_id = req.params.id
+p_id = p_id.trim();
+try{
+  let each_prop_detail = await data_people.searchPeopleByID(p_id)
+
+}catch(e){
+return res.render('error',{title:'Error Page',error:'No property!'})
+}
 
 })
 
