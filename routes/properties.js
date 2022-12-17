@@ -117,15 +117,11 @@ router.route('/deleteProperty/:id')
 
 router.route("/searchProperties")
 .get(async (req, res) => {
-  //code here for GET
-  //let prop_det = req.body.
   try {
-    //let prop = await propertiesData.getAllListings();
     res.render('searchProp', {title:'Get your favourite properties!'})
   } catch (error) {
     return res.render('error', {error: error})
   }
-  //return res.render("renters");
 });
 
 router.route('/contact/:id').get(async(req,res)=>{
