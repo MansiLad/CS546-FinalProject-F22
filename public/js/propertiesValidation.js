@@ -97,7 +97,7 @@ function checkInputs() {
         } else if(baths.length === 0) {
             setErrorFor(docbaths, 'Baths just cannot be empty or spaces')
         } else if (!isNumeric(baths)) {
-            setErrorFor(docbaths, 'baths should be numeric');
+            setErrorFor(docbaths, 'aths should be numeric');
         } else {
             setSuccessFor(docbaths);
         }
@@ -158,7 +158,7 @@ function isUSAZipCode(str)
 
 function isNumeric(num)
 {
-    return /^[0-9]+\.[0-9]+$/.test(num)
+    return /^[0-9]+$/.test(num)
 }
 
 /* const form = document.getElementById('form');
