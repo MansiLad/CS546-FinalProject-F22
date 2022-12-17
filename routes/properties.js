@@ -60,6 +60,7 @@ router.route('/manageRentals')
     return res.render('error', {error: error})
   }
 }); 
+
 router.route('/propertydetails/edit/:id')
 .get(async(req, res)=>{
   //TO DO: input the 4 vales from the from that are changed
@@ -80,11 +81,14 @@ router.route('/propertydetails/edit/:id')
 
 router.route('/propertydetails/delete/:id')
 .get(async (req, res) => {
+  console.log("Hi")
   try{
+    console.log("try")
     let deleted = await propertiesData.removeListing(req.params.id)
     let prop = await propertiesData.getPropertybyOwner(req.session.user);
     res.render('manageProperties', {title:'Properties owned by you', result: prop})
   } catch(error) {
+    console.log("catch")
     console.log(error)
     return res.render('error', {error: error})
   }
