@@ -5,6 +5,8 @@ const propertiesData = data.properties;
 const reviewsData = data.reviews;
 const filters = data.filters;
 const path = require("path");
+const validation = require('../helpers')
+const nodemailer = require('nodemailer')
 // const userData = data.users;
 
 router.route("/")
@@ -126,6 +128,46 @@ router.route("/searchProperties")
   //return res.render("renters");
 });
 
+router.route('/contact/:id').get(async(req,res)=>{
+  if(!req.session.user) return res.redirect('/user/userLogin')
+  let p_id = req.params.id
+  p_id = p_id.trim()
+  return res.render('contact',{id:p_id,title:'Contact Page',msg:'Give yor contact details so that owner van get in touch with you!'})
+
+})
+
+router.route('/sent/:id').post(async(req,res)=>{
+  if(!req.session.user) return res.redirect('/user/userLogin')
+  let sender = req.body.name;
+  let s_n = req.body.phonenumber;
+  let ids = req.params.id
+  console.log(ids)
+  let owner = await propertiesData.getownerbypropId(ids)
+  console.log(owner)
+  let subject='Schedule a house tour';
+  let message = `${sender} is very interested in the property. Here is the contact number ${s_n}. Please get in touch to schedule a house tour`
+  var transporter = nodemailer.createTransport({
+    service:'gmail',
+    auth:{
+      user:'kartikgaglani7@gmail.com',
+      pass: 'hvgcmjcadlyehdfo'
+    }
+  })
+  var mailOptions = {
+    form:'kartikgaglani7@gmail.com',
+    to:owner,
+    subject:subject,
+    text:message
+  }
+  transporter.sendMail(mailOptions,function(error,info){
+    if(error){
+      console.log(error)
+    }
+    else{
+      return res.render('email')
+    }
+  })
+  })
 
 router.route("/filters").post(async (req, res) => {
 
@@ -157,24 +199,6 @@ router.route("/propertydetails/:id")
   
 });
 
-
-
-
-
-// router.route("/propertydetails/:id").get(async (req, res) => {
-//   if(isNaN(req.params.id)){
-//     return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
-//   }
-
-//   const prop = await propertiesData.getPropertyByID(req.params.id)
-//   if(prop === null || prop === undefined){
-//     return res.status(404).render('../views/error', {title: 'Not found', Error: "No ID exist"})
-//   }
-//   res.render("../views/propertyDetails", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
-//   //add the rest 
-
-// });
-
 router.route('/searchProperties').post(async(req,res) =>{
   let city = req.body.city
   let zip = req.body.zip
@@ -188,7 +212,7 @@ router.route('/searchProperties').post(async(req,res) =>{
    all_prop.forEach(props => {
     id.push(props._id);
    });
-    console.log(id);
+   // console.log(id);
     // console.log(propState)
     // console.log(propZip)
 
@@ -205,15 +229,15 @@ router.route('/searchProperties').post(async(req,res) =>{
 router.route('/propdetails/:id').get(async(req,res) =>{
 let p_id = req.params.id
 p_id = p_id.trim();
-console.log(p_id)
+//console.log(p_id)
 try{
   let each_prop_detail = await propertiesData.getPropertyById(p_id)
-  console.log(each_prop_detail)
+  //console.log(each_prop_detail)
   if(!each_prop_detail){
     return res.render('error',{title:'Error Page',error:'No properties!'})
   }
   let add = each_prop_detail.address;
-  return res.render('propertyDetails',{address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipCode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,amenities:each_prop_detail.ammenities})
+  return res.render('propertyDetails',{id:p_id,address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipCode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,amenities:each_prop_detail.ammenities})
 
 }catch(e){
 return res.render('error',{title:'Error Page',error:'No property!'})

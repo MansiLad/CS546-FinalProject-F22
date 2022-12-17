@@ -11,7 +11,7 @@ const console = require("console");
 
 // function to add listing validations left
 const createListing = async (
-  // UserId,
+  UserId,
   address,
   city,
   state,
@@ -32,7 +32,7 @@ const createListing = async (
   let flag = { insertedProp: true };
 //console.log('error')
   let newListing = {
-    // UserId: UserId,
+    UserId: UserId,
     address: address,
     city: city,
     state: state,
@@ -58,7 +58,7 @@ const createListing = async (
 const getownerbypropId = async(propId) =>{
   if(!propId) throw 'Id must be provided'
   const propertyCollection = await properties();
-  const prop_each = await propertyCollection.findOne({_id:ObjectId(id)})
+  const prop_each = await propertyCollection.findOne({_id:ObjectId(propId)})
   let email_id = prop_each.UserId
   return email_id;
 }
@@ -102,7 +102,7 @@ const getPropertyById = async (id) => {
 const propertyCollection = await properties();
   const prop_each = await propertyCollection.findOne({_id:ObjectId(id)})
 
-if(prop_each === null) throw "no movies with that id"
+if(!prop_each) throw "no movies with that id"
 return JSON.parse(JSON.stringify(prop_each));
 
 };
@@ -292,10 +292,17 @@ const approveAuth = async (propertyID) => {
   );
 };
 
-const getPropOwnerbyId = async (ownerId) => {
+// const getPropOwnerbyId = async (ownerId) => {
+//   const propertyCollection = await properties();
+//   let props = await propertyCollection
+//     .find({ UserId: ownerId, approved: true})
+//     .toArray();
+//   return props;
+// }
+const getPropertybyOwner = async (ownerId) => {
   const propertyCollection = await properties();
   let props = await propertyCollection
-    .find({ UserId: ownerId, approved: true})
+    .find({ "UserId": ownerId /* , approved: true, available: true, */})
     .toArray();
   return props;
 }
@@ -312,7 +319,7 @@ module.exports = {
   getByState,
   approveAuth,
   getAllListings,
-  getPropOwnerbyId,
+  getPropertybyOwner,
   getAllAuthListings,
   getownerbypropId
 };
