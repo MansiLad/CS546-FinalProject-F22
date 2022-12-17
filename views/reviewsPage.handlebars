@@ -1,14 +1,26 @@
 <title>{{title}}</title>
 
 <main>
-    <p>All the reviews of the property</p>
-    <ul class="pf">
+        <ul class="pf" id="rev-ul">
             {{#each result}}
             <li>
-                <a href="/persondetails/{{id}}">{{firstName}} {{lastName}}</a>
+                {{review}}
             </li>
             {{/each}}
         </ul>
-   <a href="/user/logout">Logout</a>
-    {{!-- <a href="/">Make another search</a> --}}
-</main>
+   
+<div class="row">
+    <div class="col-sm-12 col-md-6" id="todo-area">
+        {{#each todoItems}} {{> todo_item }} {{/each}}
+    </div>
+    <div id="new-content">
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <form id="new-item-form">
+            {{!-- <label>Task Name <input id="new-task-name" type="text" /></label> --}}
+            <label for="rev">Reviews</label>
+            <input type="text" id="new-task-review" placeholder="Enter your review">
+            <input type="submit" value="add new review"/>
+        </form>
+    </div>
+</div>

@@ -7,34 +7,34 @@ const createReview = async (
   propertyId,
   review
 ) => {
-  if (!propertyId || !review) {
-    throw "No Input";
-  }
-  if (
-    typeof propertyId != "string" ||
-    typeof review != "string"
-  ) {
-    throw "Parameters are not string";
-  }
+  // if (!propertyId || !review) {
+  //   throw "No Input";
+  // }
+  // if (
+  //   typeof propertyId != "string" ||
+  //   typeof review != "string"
+  // ) {
+  //   throw "Parameters are not string";
+  // }
 
-  if (
-    propertyId.trim().length == 0 ||
-    review.trim().length == 0
-  ) {
-    throw "Length should not be zero";
-  }
+  // if (
+  //   propertyId.trim().length == 0 ||
+  //   review.trim().length == 0
+  // ) {
+  //   throw "Length should not be zero";
+  // }
 
-  if (!ObjectId.isValid(propertyId)) {
-    throw "Not a valid object id";
-  }
+  // if (!ObjectId.isValid(propertyId)) {
+  //   throw "Not a valid object id";
+  // }
 
-  let data = await property_data.getPropertyById(propertyId);
-  if (!data) {
-    throw "No movie woth this id";
-  }
+  // let data = await property_data.getPropertyById(propertyId);
+  // if (!data) {
+  //   throw "No movie woth this id";
+  // }
   const property_collection = await properties();
   const property = await property_collection.findOne({
-    _id: ObjectId(propertyId),
+    _id: ObjectId(propertyId)
   });
   if (!property) throw "Could not find movie";
 
@@ -44,7 +44,8 @@ const createReview = async (
     review: review,
   };
   property.reviews.push(new_Review);
-  return JSON.parse(JSON.stringify(new_Review));
+  console.log(property.reviews)
+  return JSON.parse(JSON.stringify(property.reviews));
 };
 
 
@@ -63,7 +64,7 @@ const getAllReviews = async (propertyId) => {
   const all_reviews = await properties_Collection.findOne({_id:ObjectId(propertyId)});
   if(!all_reviews) throw "No reviews found"
   let list = all_reviews.reviews;
-  if(!list || list.length===0) throw "Reviews not found"
+ // if(!list || list.length===0) throw "Reviews not found"
   return JSON.parse(JSON.stringify(list));
 };
 

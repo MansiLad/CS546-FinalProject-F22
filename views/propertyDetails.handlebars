@@ -1,9 +1,6 @@
 <title>{{title}}</title>
 <main>
     <h1>Property Details</h1>
-
-
-
     <dl>
         <dt>Address</dt>
         <dd>{{address}}</dd>
@@ -23,24 +20,11 @@
         <dd>{{amenities}}</dd>
         <dt>Amenities</dt>
         <dd>{{bed}}</dd>
-        <dt>Date Posted</dt>
-        <dd>{{date}}</dd>
-        <dt>Reviews</dt>
-        <dd>{{reviews}}</dd>
     </dl>
-    <ul class="pf">
-            {{#each reviews}}
-            <li>
-                {{review}}
-            </li>
-            {{/each}}
-        </ul>
-   
-<form action="#" id="review-form">
-    <label>Reviews <textarea id="new-task-description"></textarea></label>
-    <input type="submit" value="add new review"/>
-</form>
-<script>
+
+    <a href="/prop/reviews?propId={{id}}">Get the property reviews!!!</a>
+
+{{!-- <script>
 $(document).ready(function(){
     $("new-review").on("submit", function(event){
         event.preventDefault();
@@ -51,7 +35,11 @@ $(document).ready(function(){
         });
     });
 });
-</script>
+</script> --}}
+<br><br>
 <a href="/searchProperties">Make another search</a>
+<br> <br>
 <a href="/user/logout">Logout</a>
+<br> <br>
+<a href="/contact"></a>
 </main>

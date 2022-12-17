@@ -2,8 +2,11 @@ const express = require("express");
 const router = express.Router();
 const data = require("../data");
 const propertiesData = data.properties;
+const reviewsData = data.reviews;
 const filters = data.filters;
 const path = require("path");
+const nodemailer = require('nodemailer');
+
 // const userData = data.users;
 
 router.route("/").get(async (req, res) => {
@@ -68,9 +71,6 @@ router.route("/searchProperties").get(async (req, res) => {
 
 
 router.route("/filters").post(async (req, res) => {
-
-  //console.log(req.body);
-  // search_location= req.body.search_location;
   select_sortBy = req.body.select_sortBy;
   beds = req.body.beds
   baths = req.body.baths
@@ -101,24 +101,6 @@ router.route("/ownedProperties").get(async (req, res) => {
   
 });
 
-
-
-
-
-// router.route("/propertydetails/:id").get(async (req, res) => {
-//   if(isNaN(req.params.id)){
-//     return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
-//   }
-
-//   const prop = await propertiesData.getPropertyByID(req.params.id)
-//   if(prop === null || prop === undefined){
-//     return res.status(404).render('../views/error', {title: 'Not found', Error: "No ID exist"})
-//   }
-//   res.render("../views/propertyDetails", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
-//   //add the rest 
-
-// });
-
 router.route('/searchProperties').post(async(req,res) =>{
   let city = req.body.city
   let zip = req.body.zip
@@ -128,61 +110,57 @@ router.route('/searchProperties').post(async(req,res) =>{
     if(!city && !zip && !state){
       throw 'No empty fields allowed!'
     }
-    // let all_prop = [];
-    // let all_prop = await propertiesData.getByState(city,state,zip);
     let all_prop = await filters.getByCityStateZip(city,state,zip);
-    // let propState = await propertiesData.getByState(state);
-    // let propZip = await propertiesData.getByZipcode(zip);
-  //  console.log(all_prop)
-  //  console.log(all_prop._id)
-
    all_prop.forEach(props => {
     id.push(props._id);
    });
-    console.log(id);
-    // console.log(propState)
-    // console.log(propZip)
-
-    return res.render('afterSearch',{id:id,result: all_prop,title:'Houses'})
-
-
-
+    //console.log(id);
+      return res.render('afterSearch',{id:id,result: all_prop,title:'Houses'})
   }catch(e){
     return res.render('error', {error:e, title:'Error'})
   }
-  
 })
 
 router.route('/propdetails/:id').get(async(req,res) =>{
 let p_id = req.params.id
 p_id = p_id.trim();
-console.log(p_id)
+//console.log(p_id)
 try{
   let each_prop_detail = await propertiesData.getPropertyById(p_id)
-  console.log(each_prop_detail)
+  //console.log(each_prop_detail)
   if(!each_prop_detail){
     return res.render('error',{title:'Error Page',error:'No properties!'})
   }
   let add = each_prop_detail.address;
-  return res.render('propertyDetails',{address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipCode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,amenities:each_prop_detail.ammenities})
+  return res.render('propertyDetails',{id:each_prop_detail._id,address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipCode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,amenities:each_prop_detail.ammenities})
 
 }catch(e){
 return res.render('error',{title:'Error Page',error:'No property!'})
 }
-
 })
 
-router.route("/filtered").get(async (req, res) => {
-  //code here for post
-  // function for filter
-  try {
-    let search = req.body.search
+router.route('/prop/reviews/?propId=id').get(async(req,res)=>{
+  let p_id = req.query.propId
+  console.log(p_id)
+p_id = p_id.trim();
+let reviews = await reviewsData.getAllReviews(p_id)
+  return res.render('reviewsPage',{title:'Get the reviews of your favourite property',result:reviews})
+})
 
-  } catch (error) {
-    return res.render('error',  {error:error})
-  }
-  return res.render("Name of the template");
-});
+router.route('/prop/reviews?propId=id').post(async(req,res)=>{
+  let review_property = req.body;
+  let p_id = req.params.id
+  let prop_rev = await reviewsData.createReview(p_id,review_property);
+  return res.render('partials/rev',{layout:null,...prop_rev})
+})
+
+router.route('/contact').get(async(req,res)=>{
+return res.render('contact',{title:'Contact Page', msg:'Provide your details, Owner will contact you'})
+})
+
+router.route('/contact').post(async(req,res)=>{
+  
+})
 
 router.route("/removelisting").delete(async (req, res) => {
   //code here for post

@@ -30,7 +30,7 @@ const createListing = async (
   let date = new Date().toLocaleDateString();
   // let image_buffer = new Buffer ()
   let flag = { insertedProp: true };
-console.log('error')
+//console.log('error')
   let newListing = {
     // UserId: UserId,
     // apartmentNumber: apartmentNumber,
@@ -96,12 +96,10 @@ const getPropertyById = async (id) => {
 
 const propertyCollection = await properties();
   const prop_each = await propertyCollection.findOne({_id:ObjectId(id)})
-//let data_id = await getAllListings();
-console.log(prop_each)
+
 if(prop_each === null) throw "no movies with that id"
 return JSON.parse(JSON.stringify(prop_each));
-// let property = data_id.find(prop => prop._id == id);
-// return property;
+
 };
 
 const removeListing = async (propertyID) => {
