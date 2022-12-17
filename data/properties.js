@@ -76,31 +76,27 @@ const getPropertyById = async (id) => {
   if(!id){
     throw 'Error:Id not defined'
 }
-// id = parseInt(id);
+id = parseInt(id);
 
-
-// if(typeof id !== 'number'){
-//     throw "Id should be number"
+if(typeof id !== 'number'){
+    throw "Id should be number"
+}
+if(id < 1){
+    throw 'ID not proper';
+}
+// if(!containsOnlyNumbers(id)){
+//     throw "ID should not contain alphabets"
 // }
-// if(id < 1){
-//     throw 'ID not proper';
-// }
-// // if(!containsOnlyNumbers(id)){
-// //     throw "ID should not contain alphabets"
-// // }
-// if((id)%1 !==0) {
-//     throw "Decimals are not allowed"
-// }
+if((id)%1 !==0) {
+    throw "Decimals are not allowed"
+}
 // id = id.trim();
-
-const propertyCollection = await properties();
-  const prop_each = await propertyCollection.findOne({_id:ObjectId(id)})
-//let data_id = await getAllListings();
-console.log(prop_each)
-if(prop_each === null) throw "no movies with that id"
-return JSON.parse(JSON.stringify(prop_each));
-// let property = data_id.find(prop => prop._id == id);
-// return property;
+const data_id = await getAllListings();
+if(id > data_id.length){
+    throw [404,'No data id present']
+}
+let property = data_id.find(prop => prop.id == id);
+return property;
 };
 
 const removeListing = async (propertyID) => {
@@ -120,7 +116,7 @@ const removeListing = async (propertyID) => {
   //let movie_name = get_movie.title;
 
   if (deletionInfo.deletedCount === 0) {
-    throw `Could not delete dog with id of ${id}`;
+    throw `Could not delete property with id of ${id}`;
   }
   return "Property is succesfully deleted!";
 };
