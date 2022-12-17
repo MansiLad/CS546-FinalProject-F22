@@ -12,9 +12,7 @@
         <dt>State</dt>
         <dd>{{state}}</dd>
         <dt>Zip Code</dt>
-        <dd>{{zip_code}}</dd>
-        <dt>Phone number of owner</dt>
-        <dd>{{phonenumber}}</dd>
+        <dd>{{zipcode}}</dd>
         <dt>Rent</dt>
         <dd>{{rent}}</dd>
         <dt>Deposit</dt>
@@ -22,6 +20,8 @@
         <dt>Bathrooms</dt>
         <dd>{{bath}}</dd>
         <dt>Bedrooms</dt>
+        <dd>{{amenities}}</dd>
+        <dt>Amenities</dt>
         <dd>{{bed}}</dd>
         <dt>Date Posted</dt>
         <dd>{{date}}</dd>
@@ -29,14 +29,17 @@
         <dd>{{reviews}}</dd>
     </dl>
     <ul class="pf">
-            {{#each result}}
+            {{#each reviews}}
             <li>
-                <a href="/reviews/{{id}}">{{reviews}}</a>
+                {{review}}
             </li>
             {{/each}}
         </ul>
    
-    <a href="/searchProperties">Make another search</a>?
+<form action="#" id="review-form">
+    <label>Reviews <textarea id="new-task-description"></textarea></label>
+    <input type="submit" value="add new review"/>
+</form>
 <script>
 $(document).ready(function(){
     $("new-review").on("submit", function(event){
@@ -49,6 +52,6 @@ $(document).ready(function(){
     });
 });
 </script>
-
+<a href="/searchProperties">Make another search</a>
 <a href="/user/logout">Logout</a>
 </main>

@@ -176,6 +176,7 @@ router.route('/searchProperties')
   let city = req.body.city
   let zip = req.body.zip
   let state = req.body.state
+  let id = [];
   try{
     if(!city && !zip && !state){
       throw 'No empty fields allowed!'
@@ -185,13 +186,17 @@ router.route('/searchProperties')
     let all_prop = await filters.getByCityStateZip(city,state,zip);
     // let propState = await propertiesData.getByState(state);
     // let propZip = await propertiesData.getByZipcode(zip);
-    all_prop = JSON.parse(JSON.stringify(all_prop))
+  //  console.log(all_prop)
+  //  console.log(all_prop._id)
 
-   console.log(all_prop)
+   all_prop.forEach(props => {
+    id.push(props._id);
+   });
+    console.log(id);
     // console.log(propState)
     // console.log(propZip)
 
-    return res.render('afterSearch',{id:all_prop._id,result: all_prop,title:'Houses'})
+    return res.render('afterSearch',{id:id,result: all_prop,title:'Houses'})
 
   }catch(e){
     return res.render('error', {error:e, title:'Error'})
@@ -199,6 +204,11 @@ router.route('/searchProperties')
   
 })
 
+router.route('/propdetails/:id').get(async(req,res) =>{
+let p_id = req.params.id
+p_id = p_id.trim();
+try{
+  let each_prop_detail = await data_people.searchPeopleByID(p_id)
 
 router.route("/filtered")
 .get(async (req, res) => {
