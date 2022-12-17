@@ -287,7 +287,7 @@ router.route("/upload").post(upload.array("file"), async (req, res) => {
     );
 
 
-    res.json({ status: "success" });
+    return res.redirect("/manageRentals");
   } catch (err) {
     console.log(err);
   }
