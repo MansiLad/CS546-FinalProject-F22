@@ -1,0 +1,64 @@
+<title>{{title}}</title>
+
+<h3>{{title}}</h3>
+<form action="/propertyedit/{{property.id}}" method="POST">
+    <input type="hidden" name="_id" value="{{property._id}}">
+    <div class="form-group">
+        <label>Address</label>
+        <style>console.log(property.address)</style>
+        <input type="text" class="form-control" name="address" value="{{property.address}}" disabled>
+        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+    </div>
+    <div class="form-control">
+        <label>City</label>
+        <input type="text" class="form-control" name="city" value="{{property.city}}" disabled>
+        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+    </div>
+    <div class="form-control">
+        <label>State</label>
+        <input type="text" class="form-control" name="state" value="{{property.state}}" disabled>
+        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+    </div>
+    <div class="form-control">
+        <label>Zip Code</label>
+        <input type="text" class="form-control" name="zipcode" value="{{property.zipCode}}" disabled>
+        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+    </div>
+    <div class="form-control">
+        <label>Beds</label>
+        <input type="text" class="form-control" name="beds"value="{{property.beds}}" disabled>
+        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+    </div>
+    <div class="form-control">
+        <label>Baths</label>
+        <input type="text" class="form-control" name="baths" value="{{property.baths}}" disabled>
+        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+    </div>
+    <div class="form-control">
+        <label>Deposit</label>
+        <input type="number" class="form-control" name="deposit" value="{{property.deposit}}">
+        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+    </div>
+    <div class="form-control">
+        <label>Rent</label>
+        <input type="text" class="form-control" name="rent" value="{{property.rent}}">
+        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+    </div>
+    <div class="form-control">
+        <label>Ammenities</label>
+        <input type="text" class="form-control" name="ammenities" value="{{property.ammenities}}">
+        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+    </div>
+
+    <div class="form-control">
+        <button type="submit" class="btn btn-info" value="update" >Update</button>
+        <a class="btn btn-secondary" href="/manageRentals"> View All</a>
+    </div>
+
+{{!--     
+    <script src="../public/js/propertiesValidation.js"></script>
+ --}}
+
+</form>
+
+
