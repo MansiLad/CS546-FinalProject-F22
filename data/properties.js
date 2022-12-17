@@ -72,35 +72,51 @@ const getAllListings = async () => {
 
 
 const getPropertyById = async (id) => {
-  // todo validations
-  if(!id){
-    throw 'Error:Id not defined'
-}
-id = parseInt(id);
 
-if(typeof id !== 'number'){
-    throw "Id should be number"
-}
-if(id < 1){
-    throw 'ID not proper';
-}
-// if(!containsOnlyNumbers(id)){
-//     throw "ID should not contain alphabets"
-// }
-if((id)%1 !==0) {
-    throw "Decimals are not allowed"
-}
-// id = id.trim();
-const data_id = await getAllListings();
+  if (!id) throw 'Error: You must provide an id to search for';
+  if (typeof id !== 'string') throw 'Error: id must be a string';
+  id = id.trim();
+  if (id.length === 0)
+    throw 'Error: id cannot be an empty string or just spaces';
+  if (!ObjectId.isValid(id)) throw 'Error: invalid object ID';
+
+  /* // todo validations
+  if(!id){
+    throw 'Error: Id not passed'
+    }
+    id = parseInt(id);
+
+    if(typeof id !== 'number'){
+        throw "Id should be number"
+    }
+    if(id < 1){
+        throw 'ID not proper';
+    }
+    // if(!containsOnlyNumbers(id)){
+    //     throw "ID should not contain alphabets"
+    // }
+    if((id)%1 !==0) {
+        throw "Decimals are not allowed"
+    }
+    // id = id.trim(); */
+
+  const propertyCollection = await properties();
+  const property = await propertyCollection.findOne({_id: ObjectId(id)});
+  if (!property) throw 'No property with that id';
+  return JSON.parse(JSON.stringify(property));
+
+/* const data_id = await getAllListings();
 if(id > data_id.length){
     throw [404,'No data id present']
 }
 let property = data_id.find(prop => prop.id == id);
-return property;
+return property; */
+
 };
 
 const removeListing = async (propertyID) => {
   // todo validations
+  console.log(propertyID)
   let id = propertyID;
   if (!id || id.length === 0) throw "You must provide an id to search for";
   if (typeof id !== "string") throw "Id must be a string";
@@ -108,8 +124,13 @@ const removeListing = async (propertyID) => {
     throw "id cannot be an empty string or just spaces";
   id = id.trim();
   if (!ObjectId.isValid(id)) throw "invalid object ID";
+  console.log(propertyID)
+
   const properties_Collection = await properties();
+  console.log(propertyID)
+  
   let get_property = await getPropertyById(id);
+  console.log(get_property)
   const deletionInfo = await properties_Collection.deleteOne({
     _id: ObjectId(id),
   });
@@ -152,13 +173,14 @@ const updateListing = async (
     datePosted: date,
     available: available,
   };
-
+  console.log("update")
   let tmpListing = await getPropertyById(propertyId);
-
+  console.log("update")
   const updatedInfo = await propertyCollection.updateOne(
     { _id: ObjectId(propertyId) },
     { $set: updatedListing }
   );
+  console.log("update")
   if (updatedInfo.modifiedCount === 0) {
     throw "could not update movie successfully";
   }

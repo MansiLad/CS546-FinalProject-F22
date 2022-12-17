@@ -1,58 +1,64 @@
 <title>{{title}}</title>
 
 <h3>{{title}}</h3>
-<form action="/propertyRegistration" method="POST">
+<form action="/propertyedit/{{property.id}}" method="POST">
     <input type="hidden" name="_id" value="{{property._id}}">
     <div class="form-group">
         <label>Address</label>
-        <input type="text" class="form-control" name="address" placeholder="Address of the Property" value="{{property.address}}">
+        <style>console.log(property.address)</style>
+        <input type="text" class="form-control" name="address" value="{{property.address}}" disabled>
         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
     </div>
-    <div class="form-group">
+    <div class="form-control">
         <label>City</label>
-        <input type="text" class="form-control" name="city" placeholder="City" value="{{property.city}}">
+        <input type="text" class="form-control" name="city" value="{{property.city}}" disabled>
         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
     </div>
-    <div class="form-group">
+    <div class="form-control">
         <label>State</label>
-        <input type="text" class="form-control" name="state" placeholder="State" value="{{property.state}}">
+        <input type="text" class="form-control" name="state" value="{{property.state}}" disabled>
         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
     </div>
-    <div class="form-group">
+    <div class="form-control">
         <label>Zip Code</label>
-        <input type="text" class="form-control" name="zipcode" placeholder="Zip Code" value="{{property.zipCode}}">
+        <input type="text" class="form-control" name="zipcode" value="{{property.zipCode}}" disabled>
         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-control">
         <label>Beds</label>
-        <input type="text" class="form-control" name="beds" placeholder="Beds" value="{{property.beds}}">
+        <input type="text" class="form-control" name="beds"value="{{property.beds}}" disabled>
         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-control">
         <label>Baths</label>
-        <input type="text" class="form-control" name="baths" placeholder="Baths" value="{{property.baths}}">
+        <input type="text" class="form-control" name="baths" value="{{property.baths}}" disabled>
         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-control">
         <label>Deposit</label>
-        <input type="number" class="form-control" name="deposit" placeholder="Deposit" value="{{property.deposit}}">
+        <input type="number" class="form-control" name="deposit" value="{{property.deposit}}">
         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-control">
         <label>Rent</label>
-        <input type="text" class="form-control" name="rent" placeholder="Rent" value="{{property.rent}}">
+        <input type="text" class="form-control" name="rent" value="{{property.rent}}">
         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
     </div>
-    <div class="form-group">
+    <div class="form-control">
         <label>Ammenities</label>
-        <input type="text" class="form-control" name="ammenities" placeholder="Ammenities" value="{{property.ammenities}}">
+        <input type="text" class="form-control" name="ammenities" value="{{property.ammenities}}">
         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
     </div>
 
-    <div class="form-group">
-        <button type="submit" class="btn btn-info">Submit</button>
+    <div class="form-control">
+        <button type="submit" class="btn btn-info" value="update" >Update</button>
         <a class="btn btn-secondary" href="/manageRentals"> View All</a>
     </div>
 
+{{!--     
+    <script src="../public/js/propertiesValidation.js"></script>
+ --}}
+
 </form>
+
 

@@ -7,6 +7,8 @@ const path = require("path");
 const xss = require('xss');
 const { updateUser } = require("../data/users");
 const userData = data.users;
+const validation = require('../helpers');
+const { prependListener } = require("process");
 
 router.route("/")
 .get(async (req, res) => {
@@ -16,9 +18,8 @@ router.route("/")
 
 router.route('/propertyRegistration')
 .get(async(req,res) =>{
-
   if(!req.session.user) return res.redirect('/user/userlogin')
-  return res.render('propertyAddorEdit',{title:'Register your property here!'})
+  return res.render('propertyAdd',{title:'Register your property here!'})
 })
 .post(async (req, res) => {
   if(!req.session.user) return res.redirect('/user/userlogin')
@@ -28,17 +29,17 @@ router.route('/propertyRegistration')
   let address = req.body.address;
   let city = req.body.city;
   let state = req.body.state;
-  let zip = req.body.zip
+  let zip = req.body.zipcode
   let bed = req.body.beds
   let bath = req.body.baths
   let deposit = req.body.deposit
   let rent = req.body.rent
-  let amenities  = req.body.amenities
+  let ammenities  = req.body.ammenities
   // let desc = req.body.description
 
   try{
     let {insertedProp} = await propertiesData.createListing(
-      userId,address,city,state,zip, bed,bath,deposit,rent,amenities
+      userId,address,city,state,zip, bed,bath,deposit,rent,ammenities
     )
     if(insertedProp){
       return res.redirect('/manageRentals')
@@ -57,39 +58,47 @@ router.route('/manageRentals')
     console.log(prop)
     res.render('manageProperties', {title:'Properties owned by you', OwnerName: req.session.user, result: prop})
   } catch (error) {
-    return res.render('error', {error: error})
+    return res.status(404).render('error', {error: error})
   }
 }); 
 
-router.route('/propertydetails/edit/:id')
-.get(async(req, res)=>{
-  //TO DO: input the 4 vales from the from that are changed
-  let updatedData = req.body;
+router.route('/editProperty/:id')
+.get(async (req, res) => {
+  if(!req.session.user) return res.redirect('/user/userlogin')
+  try{
+    id = validation.checkId(req.params.id)
+
+    const prop = await propertiesData.getPropertyById(id)
+
+    return res.render('propertyEdit', {title: "Edit Property", property: prop})
+  }catch(error){
+    return res.status(404).render('error', {error: error})
+  }
+})
+.post(async (req, res) => {
+  if(!req.session.user) return res.redirect('/user/userlogin')
   try {
+    id = validation.checkId(req.params.id)
+    let updatedData = req.body
     const updatedProp = await propertiesData.updateListing(
       updatedData.propertyId, updatedData.address, updatedData.city,
       updatedData.state, updatedData.zipcode, updatedData.beds, updatedData.baths,
       updatedData.deposit, updatedData.rent, updatedData.ammenities, updatedData.available
     )
-    res.render('propertyAddorEdit', {title:'Properties owned by you', result: prop})
-  } catch(error){
+    return res.redirect("/manageRentals");
+  }catch(error){
     console.log(error)
     return res.render('error', {error: error})
   }
-
 });
 
-router.route('/propertydetails/delete/:id')
+router.route('/deleteProperty/:id')
 .get(async (req, res) => {
-  console.log("Hi")
+  if(!req.session.user) return res.redirect('/user/userlogin')
   try{
-    console.log("try")
     let deleted = await propertiesData.removeListing(req.params.id)
-    let prop = await propertiesData.getPropertybyOwner(req.session.user);
-    res.render('manageProperties', {title:'Properties owned by you', result: prop})
+    return res.redirect("/manageRentals")
   } catch(error) {
-    console.log("catch")
-    console.log(error)
     return res.render('error', {error: error})
   }
 });
@@ -135,7 +144,6 @@ router.route("/filters")
 
 router.route("/filters")
 .post(async (req, res) => {
-
   console.log(req.body);
   // search_location= req.body.search_location;
   select_sortBy = req.body.select_sortBy;
@@ -202,13 +210,18 @@ router.route('/searchProperties')
     return res.render('error', {error:e, title:'Error'})
   }
   
-})
+});
 
-router.route('/propdetails/:id').get(async(req,res) =>{
-let p_id = req.params.id
-p_id = p_id.trim();
-try{
-  let each_prop_detail = await data_people.searchPeopleByID(p_id)
+router.route('/propdetails/:id')
+.get(async(req,res) =>{
+  let p_id = req.params.id
+  p_id = p_id.trim();
+  try{
+    let each_prop_detail = await data_people.searchPeopleByID(p_id)
+  } catch(e){
+    return res.render('error', {error:e, title:'Error'})
+  }
+});
 
 router.route("/filtered")
 .get(async (req, res) => {
@@ -222,7 +235,5 @@ router.route("/filtered")
   }
   return res.render("Name of the template");
 });
-
-
 
 module.exports = router;

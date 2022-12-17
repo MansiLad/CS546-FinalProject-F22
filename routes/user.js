@@ -23,7 +23,6 @@ router
   // }
   // else{
     console.log('get login')
-    debugger;
     return res.render('userLogin',{title:'Login Page'})
   // }
 })

@@ -12,6 +12,7 @@
             <th>NO. OF BATHS</th>
             <th>DEPOSIT</th>
             <th>RENT</th>
+            <th>ACTIONS</th>
         </tr>
     </thread>
     <tbody>
@@ -26,8 +27,8 @@
                 <td>{{this.deposit}}</td>
                 <td>{{this.rent}}</td>
                 <td>
-                    <a href="/propertydetails/edit/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
-                    <a href="/propertydetails/delete/{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+                    <a href="/editProperty/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"> Edit</i></a> <br>
+                    <a href="/deleteProperty/{{this._id}}"><i class="fa fa-trash fa-lg" aria-hidden="true"></i>Delete</a>
                 </td>
             </tr>
         {{/each}}
