@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const data = require("../data");
 const propertiesData = data.properties;
+const reviewsData = data.reviews;
 const filters = data.filters;
 const path = require("path");
 const multer = require("multer");
@@ -10,6 +11,8 @@ const app = express();
 const { s3Uploadv2 } = require("../s3Service");
 const { ObjectId } = require("mongodb");
 const { properties } = require("../config/mongoCollections");
+const validation = require('../helpers')
+const nodemailer = require('nodemailer')
 
 // const userData = data.users;
 
@@ -90,66 +93,62 @@ router.route("/imageupload/:id").get(async (req, res) => {
   // return res.sendFile(path.resolve("static/upload.html"));
 });
 
-router.route("/manageRentals").get(async (req, res) => {
-  if (!req.session.user) return res.redirect("/user/userlogin");
-  return res.render("allProperties", { title: "Manage your properties" });
-});
-
-router.route("/manageRentals").post(async (req, res) => {
-  if (!req.session.user) return res.redirect("/user/userlogin");
-  // todo- mansi update/manage rentals code
-});
-
-router.route("/searchProperties").get(async (req, res) => {
-  //code here for GET
-  //let prop_det = req.body.
+router.route('/manageRentals')
+.get(async(req,res)=>{
+  
+  if(!req.session.user) return res.redirect('/user/userlogin')
   try {
-    //let prop = await propertiesData.getAllListings();
-    res.render("searchProp", { title: "Get your favourite properties!" });
+    let prop = await propertiesData.getPropertybyOwner(req.session.user);
+    console.log(prop)
+    res.render('manageProperties', {title:'Properties owned by you', OwnerName: req.session.user, result: prop})
   } catch (error) {
-    return res.render("error", { error: error });
+    return res.status(404).render('error', {error: error})
   }
-  //return res.render("renters");
-});
+}); 
 
-router.route("/filters").get(async (req, res) => {
+router.route('/editProperty/:id')
+.get(async (req, res) => {
+  if(!req.session.user) return res.redirect('/user/userlogin')
+  try{
+    id = validation.checkId(req.params.id)
+
+    const prop = await propertiesData.getPropertyById(id)
+
+    return res.render('propertyEdit', {title: "Edit Property", property: prop})
+  }catch(error){
+    return res.status(404).render('error', {error: error})
+  }
+})
+.post(async (req, res) => {
+  if(!req.session.user) return res.redirect('/user/userlogin')
   try {
-    const results = await filters.getAllproperties();
-    //console.log(results);
-    res.render("renters", { results });
-  } catch (e) {
-    console.log(e);
+    id = validation.checkId(req.params.id)
+    let updatedData = req.body
+    const updatedProp = await propertiesData.updateListing(
+      updatedData.propertyId, updatedData.address, updatedData.city,
+      updatedData.state, updatedData.zipcode, updatedData.beds, updatedData.baths,
+      updatedData.deposit, updatedData.rent, updatedData.ammenities, updatedData.available
+    )
+    return res.redirect("/manageRentals");
+  }catch(error){
+    console.log(error)
+    return res.render('error', {error: error})
   }
 });
 
-router.route("/filters").post(async (req, res) => {
-  console.log(req.body);
-  // search_location= req.body.search_location;
-  select_sortBy = req.body.select_sortBy;
-  beds = req.body.beds;
-  baths = req.body.baths;
-  minimum = req.body.minimum;
-  maximum = req.body.maximum;
-  try {
-    const results = await filters.getpropertyByFilterandSort(
-      select_sortBy,
-      beds,
-      baths,
-      minimum,
-      maximum
-    );
-    console.log(results);
-    res.render("renters", {
-      results: results,
-      minimum: minimum,
-      maximum: maximum,
-    });
-  } catch (e) {
-    return res.render("error", { title: "Error", error: "Error" });
+router.route('/deleteProperty/:id')
+.get(async (req, res) => {
+  if(!req.session.user) return res.redirect('/user/userlogin')
+  try{
+    let deleted = await propertiesData.removeListing(req.params.id)
+    return res.redirect("/manageRentals")
+  } catch(error) {
+    return res.render('error', {error: error})
   }
 });
 
-router.route("/ownedProperties").get(async (req, res) => {
+/* router.route("/ownedProperties")
+.get(async (req, res) => {
   //code here for GET
   //let prop_det = req.body.
   try {
@@ -162,65 +161,133 @@ router.route("/ownedProperties").get(async (req, res) => {
   } catch (error) {
     return res.render("error", { error: error });
   }
-});
+}); */
 
-router.route("/propertydetails/:id").get(async (req, res) => {
-  if (isNaN(req.params.id)) {
-    return res.status(404).render("../views/error", {
-      title: "Invalid ID",
-      Error: "Id should be a number",
-    });
-  }
 
-  const prop = await propertiesData.getPropertyByID(req.params.id);
-  if (prop === null || prop === undefined) {
-    return res
-      .status(404)
-      .render("../views/error", { title: "Not found", Error: "No ID exist" });
-  }
-  res.render("../views/propertyDetails", {
-    title: "Property",
-    id: prop.id,
-    address: prop.address,
-    city: prop.city,
-    state: prop.state,
-    zipCode: prop.zipCode,
-  });
-  //add the rest
-});
-
-router.route("/searchProperties").post(async (req, res) => {
-  let city = req.body.city;
-  let zip = req.body.zipcode;
-  let state = req.body.state;
+router.route("/searchProperties")
+.get(async (req, res) => {
   try {
-    if (!city && !zip && !state) {
-      throw "No empty fields allowed!";
-    }
-    let all_prop = [];
-    let propCity = await propertiesData.getByCity(city);
-    let propState = await propertiesData.getByState(state);
-    let propZip = await propertiesData.getByZipcode(zip);
-    all_prop = [...propCity, ...propState, ...propZip];
-    return res.render("propertyDetails", {
-      id: all_prop.UserId,
-      address: all_prop.address,
-      city: all_prop.city,
-      state: all_prop.state,
-      zipcode: all_prop.zipcode,
-      rent: all_prop.rent,
-      deposit: all_prop.deposit,
-      amenities: all_prop.amenities,
-      reviews: all_prop.reviews,
-      date: all_prop.date,
-      images: all_prop.images,
-    });
-  } catch (e) {
-    return res.render("error", { error: e, title: "Error" });
+    res.render('searchProp', {title:'Get your favourite properties!'})
+  } catch (error) {
+    return res.render('error', {error: error})
   }
 });
 
-router.route("/propdetails/:id").get(async (req, res) => {});
+router.route('/contact/:id').get(async(req,res)=>{
+  if(!req.session.user) return res.redirect('/user/userLogin')
+  let p_id = req.params.id
+  p_id = p_id.trim()
+  return res.render('contact',{id:p_id,title:'Contact Page',msg:'Give yor contact details so that owner van get in touch with you!'})
+
+})
+
+router.route('/sent/:id').post(async(req,res)=>{
+  if(!req.session.user) return res.redirect('/user/userLogin')
+  let sender = req.body.name;
+  let s_n = req.body.phonenumber;
+  let ids = req.params.id
+  console.log(ids)
+  let owner = await propertiesData.getownerbypropId(ids)
+  console.log(owner)
+  let subject='Schedule a house tour';
+  let message = `${sender} is very interested in the property. Here is the contact number ${s_n}. Please get in touch to schedule a house tour`
+  var transporter = nodemailer.createTransport({
+    service:'gmail',
+    auth:{
+      user:'kartikgaglani7@gmail.com',
+      pass: 'hvgcmjcadlyehdfo'
+    }
+  })
+  var mailOptions = {
+    form:'kartikgaglani7@gmail.com',
+    to:owner,
+    subject:subject,
+    text:message
+  }
+  transporter.sendMail(mailOptions,function(error,info){
+    if(error){
+      console.log(error)
+    }
+    else{
+      return res.render('email')
+    }
+  })
+  })
+
+router.route("/filters").post(async (req, res) => {
+
+  //console.log(req.body);
+  // search_location= req.body.search_location;
+  select_sortBy = req.body.select_sortBy;
+  beds = req.body.beds
+  baths = req.body.baths
+  minimum = req.body.minimum
+  maximum = req.body.maximum
+  try{
+    
+    const result = await filters.getpropertyByFilterandSort(select_sortBy,beds,baths,minimum,maximum);
+    //console.log(result);
+    res.render("afterSearch",{result: result, minimum : minimum, maximum : maximum });
+  }catch(e)
+  {
+    return res.render('error',{title:'Error',error:'Error'})
+  }
+  
+});
+
+
+router.route("/propertydetails/:id")
+.get(async (req, res) => {
+  if(isNaN(req.params.id)){
+    return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
+  }
+  
+});
+
+router.route('/searchProperties').post(async(req,res) =>{
+  let city = req.body.city
+  let zip = req.body.zip
+  let state = req.body.state
+  let id = [];
+  try{
+    if(!city && !zip && !state){
+      throw 'No empty fields allowed!'
+    }
+    let all_prop = await filters.getByCityStateZip(city,state,zip);
+   all_prop.forEach(props => {
+    id.push(props._id);
+   });
+   // console.log(id);
+    // console.log(propState)
+    // console.log(propZip)
+
+    return res.render('afterSearch',{id:id,result: all_prop,title:'Houses'})
+
+
+
+  }catch(e){
+    return res.render('error', {error:e, title:'Error'})
+  }
+});
+
+router.route('/propdetails/:id').get(async(req,res) =>{
+let p_id = req.params.id
+p_id = p_id.trim();
+//console.log(p_id)
+try{
+  let each_prop_detail = await propertiesData.getPropertyById(p_id)
+  //console.log(each_prop_detail)
+  if(!each_prop_detail){
+    return res.render('error',{title:'Error Page',error:'No properties!'})
+  }
+  let add = each_prop_detail.address;
+  return res.render('propertyDetails',{id:p_id,address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipCode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,amenities:each_prop_detail.ammenities})
+
+}catch(e){
+return res.render('error',{title:'Error Page',error:'No property!'})
+}
+
+})
 
 router.route("/filtered").get(async (req, res) => {
   //code here for post

@@ -62,15 +62,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-// app.use('/user/userLogin',function(req,res,next){
-//     if(req.session.user){
-//         console.log('user  added')
-//     }
-//     else{
-//         console.log('user not added')
-//     }
-//     next();
-// })
+
 
 
 

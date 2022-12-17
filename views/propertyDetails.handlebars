@@ -9,9 +9,7 @@
         <dt>State</dt>
         <dd>{{state}}</dd>
         <dt>Zip Code</dt>
-        <dd>{{zip_code}}</dd>
-        <dt>Phone number of owner</dt>
-        <dd>{{phonenumber}}</dd>
+        <dd>{{zipcode}}</dd>
         <dt>Rent</dt>
         <dd>{{rent}}</dd>
         <dt>Deposit</dt>
@@ -19,20 +17,29 @@
         <dt>Bathrooms</dt>
         <dd>{{bath}}</dd>
         <dt>Bedrooms</dt>
+        <dd>{{amenities}}</dd>
+        <dt>Amenities</dt>
         <dd>{{bed}}</dd>
-        <dt>Date Posted</dt>
-        <dd>{{date}}</dd>
-        <dt>Reviews</dt>
-        <dd>{{reviews}}</dd>
     </dl>
-    <ul class="pf">
-            {{#each result}}
-            <li>
-                <a href="/reviews/{{id}}">{{reviews}}</a>
-            </li>
-            {{/each}}
-        </ul>
-   
-    <a href="/">Make another search</a>?
 
+    <a href="/prop/reviews/{{id}}">Get the property reviews!!!</a>
+
+{{!-- <script>
+$(document).ready(function(){
+    $("new-review").on("submit", function(event){
+        event.preventDefault();
+        var formValues= $(this).serialize();
+        $.post("/createreview", formValues, function(data){
+            // Display the returned data in browser
+    $('#result').append(formValues)
+        });
+    });
+});
+</script> --}}
+<br><br>
+<a href="/searchProperties">Make another search</a>
+<br> <br>
+<a href="/user/logout">Logout</a>
+<br> <br>
+<a href="/contact/{{id}}">Schedule a meet with the owner</a>
 </main>
