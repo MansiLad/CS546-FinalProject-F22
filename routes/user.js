@@ -75,7 +75,7 @@ router
       if (authenticatedUser.type === "admin") {
         req.session.user = validUserName;
         req.session.user.type = "admin";
-        return res.redirect("/admin_route");
+        return res.redirect("/adminlist");
       }
 
       if (authenticatedUser.type === "buyer") {

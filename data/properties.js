@@ -7,7 +7,7 @@ const auth = mongoCollections.unauthprop;
 const reviews = require("./reviews");
 const users_data = require("./users");
 const fs = require("fs");
-
+const multer = require('multer')
 // function to add listing validations left
 const createListing = async (
   UserId,
@@ -21,7 +21,7 @@ const createListing = async (
   baths,
   deposit,
   rent,
-  //description,
+  description,
   ammenities
   //images,
 ) => {
@@ -55,7 +55,8 @@ const createListing = async (
   };
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
-  return flag;
+  console.log(insertInfo);
+  return insertInfo.insertedId;
 
 };
 
@@ -252,7 +253,7 @@ const approveAuth = async (propertyID) => {
     throw "Id cannot be an empty string or just spaces";
   id = id.trim();
   if (!ObjectId.isValid(id)) throw "invalid object ID";
-  const auth_Collection = await auth();
+  // const auth_Collection = await auth();
   const properties_Collection = await properties();
   const updatedInfo = await properties_Collection.updateOne(
     { _id: ObjectId(propertyId) },
@@ -275,8 +276,8 @@ module.exports = {
   removeListing,
   getAllListings,
   getByCity,
-  getByState,
-  getByZipcode,
+  // getByState,
+  // getByZipcode,
   approveAuth,
   getAllListings,
   getPropOwnerbyId,
