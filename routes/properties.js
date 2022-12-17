@@ -9,8 +9,25 @@ require("dotenv").config();
 const app = express();
 const { s3Uploadv2 } = require("../s3Service");
 const { ObjectId } = require("mongodb");
+const { properties } = require("../config/mongoCollections");
 
 // const userData = data.users;
+
+const storage = multer.memoryStorage();
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.split("/")[0] === "image") {
+    cb(null, true);
+  } else {
+    cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE"), false);
+  }
+};
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 1000000000, files: 10 },
+});
 
 router.route("/").get(async (req, res) => {
   //code here for GET
@@ -40,11 +57,13 @@ router.route("/propertyRegistration").post(async (req, res) => {
   let rent = req.body.rent;
   let amenities = req.body.amenities;
   let desc = req.body.description;
+  let user = req.session.user
   console.log("route entered");
   // let images = req.body.images;
 
   try {
     let insertedProp = await propertiesData.createListing(
+      user,
       address,
       city,
       state,
@@ -53,20 +72,21 @@ router.route("/propertyRegistration").post(async (req, res) => {
       bath,
       deposit,
       rent,
+      desc,
       amenities,
-      desc
     );
     if (insertedProp) {
-      return res.redirect("/imageupload/" + ObjectID(insertedProp));
+      return res.redirect("/imageupload/" + ObjectId(insertedProp));
     }
   } catch (e) {
+    console.log(e);
     return res.render("error", { title: "Error", error: "Enter Again!" });
   }
 });
 
 router.route("/imageupload/:id").get(async (req, res) => {
   console.log(req.params.id);
-  return res.render("imageupload", {title: "Upload", id: req.params.id})
+  return res.render("imageupload", { title: "Upload", id: req.params.id });
   // return res.sendFile(path.resolve("static/upload.html"));
 });
 
@@ -226,19 +246,51 @@ router.route("/removelisting").delete(async (req, res) => {
 });
 
 router.route("/adminauth").get(async (req, res) => {
-  if (req.session.user.type != 'admin') return res.redirect("/user/userLogin")
+  if (req.session.user.type != "admin") return res.redirect("/user/userLogin");
   //todo add handlebar
-    return res.render("unauthprops", {title: 'Verify Properties'});
-  });
-  router.route("/adminauth").post(async (req, res) => {
-    if (req.session.user.type != 'admin') return res.redirect("/user/userLogin")
-    // todo get all prop id in array
-    // ids.forEach(id => {
-      let temp = []
-    for (let i=0; i<ids.length; i++) {
-      temp.push(await propertiesData.approveAuth(ids[i]));
-    }
-    // });
+  return res.render("unauthprops", { title: "Verify Properties" });
+});
+router.route("/adminauth").post(async (req, res) => {
+  if (req.session.user.type != "admin") return res.redirect("/user/userLogin");
+  // todo get all prop id in array
+  // ids.forEach(id => {
+  let temp = [];
+  for (let i = 0; i < ids.length; i++) {
+    temp.push(await propertiesData.approveAuth(ids[i]));
+  }
+  // });
+});
+
+router.route("/upload").post(upload.array("file"), async (req, res) => {
+  // console.log(req.params.id)
+  // console.log(req.id);
+  // console.log(req);
+  let id = req.body.id[0];
+  let images = [];
+
+  // let prop = propertiesData.getPropertyById(ObjectId(id));
+
+  try {
+    if (req.files.length < 3) throw `Atleast 3 images`;
+    const results = await s3Uploadv2(req.files);
+    console.log(results);
+    results.forEach((f) => {
+      images.push(f.Location);
     });
+    // console.log(req.body.id);
+    // console.log(images);
+    // console.log(req.body.id[0]);
+    const propertyCollection = await properties();
+    const updatedInfo = await propertyCollection.updateOne(
+      { _id: ObjectId(id) },
+      { $set: { images: images } }
+    );
+
+
+    res.json({ status: "success" });
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 module.exports = router;

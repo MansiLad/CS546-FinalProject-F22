@@ -72,36 +72,7 @@ app.use(function (req, res, next) {
 //     next();
 // })
 
-app.post("/upload", 
-upload.array("file"), 
-async (req, res) => {
-  // console.log(req.params.id)
-  // console.log(req.id);
-  // console.log(req);
-  let id = req.body.id;
-  let images = [];
-  // let prop = propertiesData.getPropertyById(ObjectId(id));
 
-
-  try {
-    if (req.files.length < 3) throw `Atleast 3 images`
-    const results = await s3Uploadv2(req.files);
-    console.log(results);
-    results.forEach( f=> {
-      images.push(f.Location);
-    });
-    // console.log(images);
-    // console.log(req.body.id[0]);
-    const updatedInfo = await propertyCollection.updateOne(
-      { _id: ObjectId(propertyId) },
-      { $set: {images: images} }
-    );
-
-    res.json({ status: "success" });
-  } catch (err) {
-    console.log(err);
-  }
-});
 
 // app.get("/iamgeupload/:id", async (req, res) => {
 //   console.log(req.params.id);
