@@ -180,6 +180,19 @@ router.route("/filters")
   }
   })
 
+
+router.route('/prop/reviews/:id').get(async(req,res)=>{
+if(!req.session.user) return res.render('/user/userLogin');
+let reviews = await reviewsData.getAllReviews(req.params.id);
+return res.render('reviewsPage',{title:'Reviews',result:reviews})
+})
+
+router.route('/prop/reviews/:id').post(async(req,res)=>{
+  if(!req.session.user) return res.render('/user/userLogin');
+  let createRev = await reviewsData.createReview(req.params.id,req.body.description)
+  return res.render('partails/rev',{layout:null,...createRev})
+})
+
 router.route("/filters").post(async (req, res) => {
 
   //console.log(req.body);
@@ -390,17 +403,7 @@ return res.render('error',{title:'Error Page',error:'No property!'})
 
 })
 
-router.route("/filtered").get(async (req, res) => {
-  //code here for post
-  // function for filter
-  try {
-    let search = req.body.search
 
-  } catch (error) {
-    return res.render('error',  {error:error})
-  }
-  return res.render("Name of the template");
-});
 
 router.route("/removelisting").delete(async (req, res) => {
   //code here for post

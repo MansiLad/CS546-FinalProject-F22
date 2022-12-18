@@ -1,14 +1,7 @@
 <title>{{title}}</title>
 
 <main>
-        <ul class="pf" id="rev-ul">
-            {{#each result}}
-            <li>
-                {{review}}
-            </li>
-            {{/each}}
-        </ul>
-   
+           
 <div class="row">
     <div class="col-sm-12 col-md-6" id="todo-area">
         {{#each todoItems}} {{> todo_item }} {{/each}}
@@ -16,8 +9,26 @@
     <div id="new-content">
     </div>
     <div class="col-sm-12 col-md-4">
+        <div class="row" class="rev-item">
+    <div class="col-sm-12 col-md-8">
+        {{!-- <h3>{{ title }}</h3> --}}
+        <ul id="rev_ul">
+
+        
+        {{#each result}}
+             <li>{{review}}</li>
+             {{!-- <li id="li_rev"></li> --}}
+        {{/each}}
+
+        </ul>
+
+
+        {{!-- <p>{{ task }}</p> --}}
+    </div>
+</div>
         <form id="new-item-form">
             {{!-- <label>Task Name <input id="new-task-name" type="text" /></label> --}}
+            
             <label for="rev">Reviews</label>
             <input type="text" id="review" name="review" placeholder="Enter your review">
             <input type="submit" value="add new review"/>

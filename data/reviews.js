@@ -44,8 +44,18 @@ const createReview = async (
     review: review,
   };
   property.reviews.push(new_Review);
-  console.log(property.reviews)
-  return JSON.parse(JSON.stringify(property.reviews));
+  let new_prop = property
+  const updatedInfo = await property_collection.updateOne(
+    { _id: ObjectId(propertyId) },
+    {
+        $push: { reviews: new_Review },
+       // $set: { overallRating: newOverallRating },
+    }
+  );
+  //console.log(property)
+  if(updatedInfo.modifiedCount=== 0) throw "Could not add review"
+  //console.log(property.reviews)
+  return JSON.parse(JSON.stringify(new_Review));
 };
 
 

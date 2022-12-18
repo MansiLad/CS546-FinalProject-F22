@@ -10,7 +10,7 @@ const fs = require("fs");
 const multer = require('multer')
 // function to add listing validations left
 const createListing = async (
-  User,
+  UserId,
   // apartmentNumber,
   // street,
   address,
@@ -23,7 +23,6 @@ const createListing = async (
   rent,
   description,
   amenities
-  //images,
 ) => {
   // todo validations
   let propertiesCollection = await properties();
@@ -33,9 +32,7 @@ const createListing = async (
   let flag = { insertedProp: true };
 //console.log('error')
   let newListing = {
-    User: User,
-    // apartmentNumber: apartmentNumber,
-    // street: street,
+    UserId: UserId,
     propertyId: ObjectId(),
     address: address,
     city: city,
@@ -51,7 +48,6 @@ const createListing = async (
     reviews: [],
     date: date,
     approved: true,
-    //available: true,
   };
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
