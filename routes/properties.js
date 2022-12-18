@@ -417,6 +417,7 @@ router.route("/propdetails/:id").get(async (req, res) => {
       bed: each_prop_detail.beds,
       bath: each_prop_detail.baths,
       amenities: each_prop_detail.ammenities,
+      images:each_prop_detail.images
     });
   } catch (e) {
     return res.render("error", { title: "Error Page", error: "No property!" });

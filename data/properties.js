@@ -9,6 +9,7 @@ const users_data = require("./users");
 const fs = require("fs");
 const multer = require('multer')
 // function to add listing validations left
+
 const createListing = async (
   UserId,
   // apartmentNumber,
@@ -326,6 +327,55 @@ const addToFavourite = async function (userId, propertyId) {
   return user.favourites;
 };
 
+
+
+const createListingSeed = async (
+  UserId,
+  // apartmentNumber,
+  // street,
+  address,
+  city,
+  state,
+  zipCode,
+  beds,
+  baths,
+  deposit,
+  rent,
+  images,
+  description,
+  amenities
+) => {
+  // todo validations
+  let propertiesCollection = await properties();
+  let userCollection = await users();
+  let date = new Date().toLocaleDateString();
+  // let image_buffer = new Buffer ()
+  let flag = { insertedProp: true };
+//console.log('error')
+  let newListing = {
+    UserId: UserId,
+   // propertyId: ObjectId(),
+    address: address,
+    city: city,
+    state: state,
+    zipCode: zipCode,
+    beds: beds,
+    baths: baths,
+    deposit: deposit,
+    rent: rent,
+    description: description,
+    amenities: amenities,
+    images: images,
+    reviews: [],
+    date: date,
+    approved: false,
+  };
+  const insertInfo = await propertiesCollection.insertOne(newListing);
+  if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
+  console.log(insertInfo);
+  return insertInfo.insertedId;
+
+};
 module.exports = {
   addToFavourite,
   getPropertyById,
@@ -341,5 +391,6 @@ module.exports = {
   getAllListings,
   getPropertybyOwner,
   getAllAuthListings,
-  getownerbypropId
+  getownerbypropId,
+  createListingSeed
 };
