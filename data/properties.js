@@ -45,7 +45,7 @@ const createListing = async (
     rent: rent,
     description: description,
     amenities: amenities,
-    images: {},
+    images: [],
     reviews: [],
     date: date,
     approved: false,
