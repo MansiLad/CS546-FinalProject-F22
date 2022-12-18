@@ -18,8 +18,14 @@ router
 .post(async (req, res) => {
   try {
     let postData = xss(req.body);
-    let userN = postData.emailInput;
+    if(!postData) {
+      res.status(400).json({error: "Provide user data to login"})
+      throw "Data not provided to login"
+    }
+
+    let userN = postData.emailInput; 
     let pass = postData.passwordInput;
+
     let validUserName = validation.checkUsername(userN);
     let validPassword = validation.checkPassword(pass);
     let authenticatedUser = await data.checkUser(validUserName, validPassword);
@@ -76,31 +82,94 @@ router
     }
     console.log(req.body);
     try {
-      let postData = req.body;
+      let postData = xss(req.body);
       let userN = postData.email;
       let pass = postData.password;
       let validUserName = validation.checkUsername(userN);
+      let validPassword = validation.checkPassword(pass)
+
       let firstname = postData.firstName;
+      if(!firstname) {
+        res.status(400).json({error: "Provide firstname of user"})
+        throw "Firstname not provided"
+      }
+      if(typeof firstname != 'string'){
+        res.status(400).json({error: 'Firstname should be a string'})
+        throw 'Firstname should be a string'
+      }
+      if(firstname.trim().length === 0){
+        res.status(400).json({error: 'Provide firstname of user'})
+        throw 'Firstname cannot be empty string or spaces'
+      }
+      firstname = firstname.trim()
+      if(firstname.length < 4){
+        res.status(400).json({error: 'Firstname should be atleast 4 characters long'})
+        throw 'Firstname should be of length 4 or more'
+      }
+    
+
+
       let lastname = postData.lastName;
+      if(!lastname) {
+        res.status(400).json({error: "Provide lastname of user"})
+        throw "Lastname not provided"
+      }
+      if(typeof lastname != 'string'){
+        res.status(400).json({error: 'Lastname should be a string'})
+        throw 'Lastname should be a string'
+      }
+      if(lastname.trim().length === 0){
+        res.status(400).json({error: 'Provide lastname of user'})
+        throw 'Lastname cannot be empty string or spaces'
+      }
+      lastname = lastname.trim()
+      if(lastname.length < 4){
+        res.status(400).json({error: 'Lastname should be atleast 4 characters long'})
+        throw 'Lastname should be of length 4 or more'
+      }
+
+
       let gender = postData.gender;
+      if(!gender){
+        res.status(400).json({error: 'Gender not provided'})
+        throw 'Gender not provided'
+      }
+
+
       let phonenumber = postData.phoneNumber;
+      if(!phonenumber){
+        res.status(400).json({error: "provide Phone Number"})
+        throw "Phone Number not provided"
+      }
+      if(phonenumber.trim().length === 0){
+        res.status(400).json({error: "Phone number cannot be empty or just spaces"})
+        throw "Phone number can not be empty or just spaces"
+      }
+      phonenumber = phonenumber.trim()
+      if(phonenumber.length < 10){
+        res.status(400).json({error: "Phone NUmber should be of 10 digits"})
+        throw 'Phone number should be of 10 digits'
+      }
+      if(!/^[0-9]+$/.test(phonenumber)) {
+        res.status(400).json({error: "Phone number should only contain numbers"})
+        throw 'Phone number should only contain numbers'
+      }
+
+
       let type = postData.type;
+      if(!type){
+        res.status(400).json({error: 'Type not provided'})
+        throw 'Type not provided'
+      }
 
-      // todo favoitites which will be done by sanika..
-
-      //validUserName = validUserName.toLowerCase();
-      let validPassowerd = validation.checkPassword(pass);
       let { insertedUser } = await data.createUser(
         firstname,
         lastname,
         gender,
         validUserName,
-        // city,
-        // state,
         phonenumber,
         validPassowerd,
         type
-        //favourates// i think favourites ka alag data banana  padega (get all favorites by userid)
       );
       console.log(insertedUser);
 
