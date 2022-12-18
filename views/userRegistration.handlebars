@@ -6,13 +6,13 @@
         <form id="userreg" method="POST" action="/user/userRegistration" class="text-center p-3 m-3">
                 <div class="form-control">
                         <label> First Name: </label><br><br>
-                        <input type="text" id="firstName" name="firstName"> 
+                        <input type="text" id="firstName" name="firstName" required> 
                         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
                 </div>
                 <br><br><br>
                 <div class="form-control">
                         <label for="lastName"> Last Name: </label><br><br>
-                        <input type="text" id="lastName" name="lastName">
+                        <input type="text" id="lastName" name="lastName" required>
                         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
                 </div>
                 <br><br><br>
@@ -26,25 +26,25 @@
                 <br><br><br>
                 <div class="form-control">
                         <label for="email"> Email: </label><br><br>
-                        <input type="email" id="email" name="email"> 
+                        <input type="email" id="email" name="email" required> 
                         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
                 </div>
                 <br><br><br>
                 <div class="form-control">
                         <label for="city"> City: </label><br><br>
-                        <input type="text" id="city" name="city"> 
+                        <input type="text" id="city" name="city" required> 
                         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
                 </div>
                 <br><br><br>
                 <div class="form-control">
                         <label for="state"> State: </label><br><br>
-                        <input type="text" id="state" name="state"> 
+                        <input type="text" id="state" name="state" required> 
                         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
                 </div>
                 <br><br><br>
                 <div class="form-control">
                         <label for="phoneNumber"> Phone Number: </label><br><br>
-                        <input type="tel" id="phoneNumber" name="phoneNumber"> 
+                        <input type="tel" id="phoneNumber" name="phoneNumber" required> 
                         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
                 </div>
                 <br><br><br>
@@ -58,7 +58,7 @@
                 <br><br><br>
                 <div class="form-control">
                         <label for="password"> Password: </label><br><br>
-                        <input type="password" id="password" name="password"> 
+                        <input type="password" id="password" name="password" required> 
                         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
                         <p>Password should contain atleast: 1 uppercase, 1 special character, 1 numeric value and no spaces</p>
                 </div>

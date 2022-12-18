@@ -112,32 +112,32 @@ router
     console.log(req.body);
     try {
       let postData = req.body;
-      let userN = xss(postData.email);
-      let pass = xss(postData.password);
+      let username = xss(postData.email);
+      let password = xss(postData.password);
 
-      if(!userN){
+      if(!username){
         res.status(400).render("error",{error: "Enter username"})
         throw 'Enter username'
       } 
-      if (userN.trim().length === 0){
+      if (username.trim().length === 0){
         res.status(400).render("error",{error: "Enter username and not just spaces"})
         throw "Enter username and not just spaces";
       } 
-      userN = userN.trim()
+      username = username.trim()
       if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
         res.status(400).render("error",{error: "Enter valid email id"})
         throw "Enter valid email id";
       }
   
-      if(!pass){
+      if(!password){
         res.status(400).render("error",{error: "Enter password"})
         throw 'Enter password'
       } 
-      if (pass.trim().length === 0){
+      if (password.trim().length === 0){
         res.status(400).render("error",{error: "Enter password and not just spaces"})
         throw "Enter password and not just spaces";
       } 
-      pass = pass.trim()
+      password = password.trim()
 
       let firstname = xss(postData.firstName);
       if(!firstname) {
@@ -217,9 +217,9 @@ router
         firstname,
         lastname,
         gender,
-        validUserName,
+        username,
         phonenumber,
-        validPassowerd,
+        password,
         type
       );
       console.log(insertedUser);
