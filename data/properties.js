@@ -11,7 +11,7 @@ const console = require("console");
 
 // function to add listing validations left
 const createListing = async (
-  // UserId,
+  UserId,
   address,
   city,
   state,
@@ -30,12 +30,9 @@ const createListing = async (
   let date = new Date().toLocaleDateString();
   // let image_buffer = new Buffer ()
   let flag = { insertedProp: true };
-console.log('error')
+//console.log('error')
   let newListing = {
-    // UserId: UserId,
-    // apartmentNumber: apartmentNumber,
-    // street: street,
-    // propertyId: _id,
+    UserId: UserId,
     address: address,
     city: city,
     state: state,
@@ -58,6 +55,14 @@ console.log('error')
 
 };
 
+const getownerbypropId = async(propId) =>{
+  if(!propId) throw 'Id must be provided'
+  const propertyCollection = await properties();
+  const prop_each = await propertyCollection.findOne({_id:ObjectId(propId)})
+  let email_id = prop_each.UserId
+  return email_id;
+}
+
 const getAllListings = async () => {
   // todo validations
   const properties_Collection = await properties();
@@ -76,12 +81,28 @@ const getPropertyById = async (id) => {
   if(!id){
     throw 'Error:Id not defined'
 }
-const propertyCollection = await properties();
-const prop_each = await propertyCollection.findOne({_id:ObjectId(id)})
+// id = parseInt(id);
 
-// console.log(prop_each)
-if(prop_each === null) throw "no movies with that id"
-return JSON.parse(JSON.stringify(prop_each));
+
+if(typeof id !== 'number'){
+    throw "Id should be number"
+}
+if(id < 1){
+    throw 'ID not proper';
+}
+// if(!containsOnlyNumbers(id)){
+//     throw "ID should not contain alphabets"
+// }
+if((id)%1 !==0) {
+    throw "Decimals are not allowed"
+}
+// id = id.trim();
+const data_id = await getAllListings();
+if(id > data_id.length){
+    throw [404,'No data id present']
+}
+let property = data_id.find(prop => prop.id == id);
+return property;
 };
 
 
@@ -187,14 +208,7 @@ const getCity = async(city) =>{
   });
 return prop_City;
 }
-// const getByCity = async (value) => {
-//   // todo validations
-//   const propertyCollection = await properties();
-//   let props = await propertyCollection
-//     .find({$text:{$search:value}})
-//     .toArray();
-//   return props;
-// };
+
 
 const getByZipcode = async (zipCode) => {
   // todo validations
@@ -277,10 +291,17 @@ const approveAuth = async (propertyID) => {
   );
 };
 
-const getPropOwnerbyId = async (ownerId) => {
+// const getPropOwnerbyId = async (ownerId) => {
+//   const propertyCollection = await properties();
+//   let props = await propertyCollection
+//     .find({ UserId: ownerId, approved: true})
+//     .toArray();
+//   return props;
+// }
+const getPropertybyOwner = async (ownerId) => {
   const propertyCollection = await properties();
   let props = await propertyCollection
-    .find({ UserId: ownerId, approved: true, available: true,})
+    .find({ "UserId": ownerId /* , approved: true, available: true, */})
     .toArray();
   return props;
 };
@@ -317,6 +338,7 @@ module.exports = {
   getByState,
   approveAuth,
   getAllListings,
-  getPropOwnerbyId,
-  getAllAuthListings
+  getPropertybyOwner,
+  getAllAuthListings,
+  getownerbypropId
 };

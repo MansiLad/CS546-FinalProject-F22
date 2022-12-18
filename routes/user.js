@@ -23,14 +23,12 @@ router
   // }
   // else{
     console.log('get login')
-     return res.render('userLogin',{title:'Login Page'})
+    return res.render('userLogin',{title:'Login Page'})
   // }
 })
 
 .post(async (req, res) => {
-  if (req.session.user) {
-    res.redirect("/protected");
-  }
+  
   try {
     let postData = req.body;
     let userN = postData.emailInput;
@@ -59,6 +57,9 @@ router
         req.session.user = validUserName;
         req.session.user.type = "seller";
         return res.redirect("/propertyRegistration");
+      }
+      if (req.session.user) {
+        res.redirect("/protected");
       }
     } catch (e) {
       return res.status(400).render("userLogin", { title: "login", error: e });
