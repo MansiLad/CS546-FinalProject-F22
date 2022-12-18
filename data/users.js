@@ -271,7 +271,6 @@ const checkUser = async (email, password) => {
   if (checkusername.type === "buyer") {
      flag = { authenticatedUser: true, type: "buyer" };
   }
-
   return flag;
 };
 
