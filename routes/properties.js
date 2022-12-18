@@ -112,36 +112,15 @@ router.route("/searchProperties")
   }
 });
 
-router.route('/contact/:id').get(async(req,res)=>{
-  if(!req.session.user) return res.redirect('/user/userLogin')
-  let p_id = req.params.id
-  p_id = p_id.trim()
-  return res.render('contact',{id:p_id,title:'Contact Page',msg:'Give yor contact details so that owner van get in touch with you!'})
-
-})
-
-router.route('/sent/:id').post(async(req,res)=>{
-  if(!req.session.user) return res.redirect('/user/userLogin')
-  let sender = req.body.name;
-  let s_n = req.body.phonenumber;
-  let ids = req.params.id
-  console.log(ids)
-  let owner = await propertiesData.getownerbypropId(ids)
-  console.log(owner)
-  let subject='Schedule a house tour';
-  let message = `${sender} is very interested in the property. Here is the contact number ${s_n}. Please get in touch to schedule a house tour`
-  var transporter = nodemailer.createTransport({
-    service:'gmail',
-    auth:{
-      user:'kartikgaglani7@gmail.com',
-      pass: 'hvgcmjcadlyehdfo'
-    }
-  })
-  var mailOptions = {
-    form:'kartikgaglani7@gmail.com',
-    to:owner,
-    subject:subject,
-    text:message
+router.route("/filters")
+.get(async (req, res) => {
+  try{
+    const results = await filters.getAllproperties();
+    //console.log(results);
+    res.render("renters",{results});
+  }catch(e)
+  {
+    console.log(e);
   }
   transporter.sendMail(mailOptions,function(error,info){
     if(error){
@@ -168,6 +147,7 @@ router.route("/filters").post(async (req, res) => {
     const result = await filters.getpropertyByFilterandSort(select_sortBy,beds,baths,minimum,maximum);
     //console.log(result);
     res.render("afterSearch",{result: result, minimum : minimum, maximum : maximum });
+
   }catch(e)
   {
     return res.render('error',{title:'Error',error:'Error'})
@@ -175,13 +155,111 @@ router.route("/filters").post(async (req, res) => {
   
 });
 
+router.route("/favourites").get(async (req, res) => {
+  const user = req.session.user;
+  if (!user) {
+    res.render("userLogin", { title: "Login Page" });
+  }
+  else{
+    let emailId = req.session.user;
+    let user_fav = await usersData.getUserByEmail(user);
+    let fav = user_fav.favourites;
+    results = []
+    if(fav === 0){
+      res.render("favourites",{error : "No properties added yet!"});
+    }
+    fav.forEach(async (propId) => {
+      // console.log(propId);
+      property = await propertiesData.getPropertyById(propId);
+      // console.log(property);
+      results.push(property);
+    });
+    console.log(results)
+    results = JSON.parse(JSON.stringify(results))
+  try{
+    
+    res.render("favourites",{results : results});
+  }
 
-router.route("/propertydetails/:id")
-.get(async (req, res) => {
-  if(isNaN(req.params.id)){
-    return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
+  catch(e){
+    console.log(e);
+  }
+  }
+});
+
+  router.route("/favourites").post(async (req, res) => {
+    
+    if (req.session.user) {
+      // console.log(req.session);
+      let emailId = req.session.user;
+      let userInfo = await usersData.getUserByEmail(emailId);
+      let userID = userInfo._id.toString();
+      // console.log(userID);
+      let favid = req.body.propertyId;
+      favid = favid.toString();
+      // console.log(favid);
+      try {
+        let addFavorite = await propertiesData.addToFavourite(userID, favid);
+        if (addFavorite) {
+          req.session.message = "Added to favourite successfully!";
+          res.redirect("/filters");
+        }
+      } catch (e) {
+        //console.log(e);
+        req.session.error =
+          "You have already added this property to your favourites!";
+          res.redirect("/filters");
+      }
+    } else {
+      
+      req.session.message = "Please login first!";
+      res.redirect("/user/userLogin");
   }
   
+  });
+
+
+
+router.route("/ownedProperties")
+.get(async (req, res) => {
+  //code here for GET
+  //let prop_det = req.body.
+  try {
+    let prop = await propertiesData.getPropOwnerbyId(req.params.id);
+    res.render('allProperties', {title:'Properties owned by you',OwnerName: req.params.id, result: prop})
+  } catch (error) {
+    return res.render('error', {error: error})
+  }
+});
+
+
+
+
+
+// router.route("/propertydetails/:id").get(async (req, res) => {
+//   if(isNaN(req.params.id)){
+//     return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
+//   }
+
+
+//   const prop = await propertiesData.getPropertyByID(req.params.id)
+//   if(prop === null || prop === undefined){
+//     return res.status(404).render('../views/error', {title: 'Not found', Error: "No ID exist"})
+//   }
+//   res.render("../views/propertyDetails", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
+//   //add the rest 
+
+
+router.route('/removelisting').delete(async (req, res) => {
+  //code here for post
+  id = req.params.id;
+  id = helper.chekId(id);
+  try {
+    await propertiesData.removeListing(id);
+    res.redirect('/manageProperties')
+  } catch (error) {
+    return res.render('error', {error: error})
+  }
 });
 
 router.route('/searchProperties').post(async(req,res) =>{
@@ -208,15 +286,8 @@ router.route('/searchProperties').post(async(req,res) =>{
 router.route('/propdetails/:id').get(async(req,res) =>{
 let p_id = req.params.id
 p_id = p_id.trim();
-//console.log(p_id)
 try{
-  let each_prop_detail = await propertiesData.getPropertyById(p_id)
-  //console.log(each_prop_detail)
-  if(!each_prop_detail){
-    return res.render('error',{title:'Error Page',error:'No properties!'})
-  }
-  let add = each_prop_detail.address;
-  return res.render('propertyDetails',{id:p_id,address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipCode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,amenities:each_prop_detail.ammenities})
+  let each_prop_detail = await data_people.searchPeopleByID(p_id)
 
 }catch(e){
 return res.render('error',{title:'Error Page',error:'No property!'})

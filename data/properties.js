@@ -66,16 +66,15 @@ const getownerbypropId = async(propId) =>{
 const getAllListings = async () => {
   // todo validations
   const properties_Collection = await properties();
-  const properties = await properties_Collection
+  const properties_value = await properties_Collection
     .find({ approved: true })
     .toArray();
   arr = [];
-  if (!properties) {
+  if (!properties_value) {
     return arr;
   }
-  return JSON.parse(JSON.stringify(properties));
+  return JSON.parse(JSON.stringify(properties_value));
 };
-
 
 const getPropertyById = async (id) => {
   // todo validations
@@ -85,27 +84,27 @@ const getPropertyById = async (id) => {
 // id = parseInt(id);
 
 
-// if(typeof id !== 'number'){
-//     throw "Id should be number"
+if(typeof id !== 'number'){
+    throw "Id should be number"
+}
+if(id < 1){
+    throw 'ID not proper';
+}
+// if(!containsOnlyNumbers(id)){
+//     throw "ID should not contain alphabets"
 // }
-// if(id < 1){
-//     throw 'ID not proper';
-// }
-// // if(!containsOnlyNumbers(id)){
-// //     throw "ID should not contain alphabets"
-// // }
-// if((id)%1 !==0) {
-//     throw "Decimals are not allowed"
-// }
+if((id)%1 !==0) {
+    throw "Decimals are not allowed"
+}
 // id = id.trim();
-
-const propertyCollection = await properties();
-  const prop_each = await propertyCollection.findOne({_id:ObjectId(id)})
-
-if(!prop_each) throw "no movies with that id"
-return JSON.parse(JSON.stringify(prop_each));
-
+const data_id = await getAllListings();
+if(id > data_id.length){
+    throw [404,'No data id present']
+}
+let property = data_id.find(prop => prop.id == id);
+return property;
 };
+
 
 const removeListing = async (propertyID) => {
   // todo validations
@@ -305,9 +304,29 @@ const getPropertybyOwner = async (ownerId) => {
     .find({ "UserId": ownerId /* , approved: true, available: true, */})
     .toArray();
   return props;
-}
+};
+
+const addToFavourite = async function (userId, propertyId) {
+  if (!userId) throw "You must provide an id to search for";
+  if (!propertyId) throw "You must provide an id to search for";
+  if(typeof userId !== "string" || typeof propertyId !== "string") throw "Ids should be string." 
+  const usersCollection = await users();
+  userId = ObjectId(userId.trim());
+  recipeId = ObjectId(propertyId.trim());
+
+  const updatedUserInfo = await usersCollection.updateOne(
+    { _id: userId },
+    { $addToSet: { favourites: propertyId } }
+  );
+  if (updatedUserInfo.modifiedCount === 0) throw "Can not add to the user";
+
+  const user = await users_data.getUserById(userId.toString());
+
+  return user.favourites;
+};
 
 module.exports = {
+  addToFavourite,
   getPropertyById,
   createListing,
   updateListing,
