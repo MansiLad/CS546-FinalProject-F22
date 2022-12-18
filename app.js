@@ -10,6 +10,7 @@ const multer = require("multer");
 const data = require("./data");
 const propertiesData = data.properties;
 const { ObjectId } = require("mongodb");
+const seed = require('./seed')
 
 // const prop_route = require('/routes/properties')
 // const upload = multer({ dest: "upload/" });
@@ -35,6 +36,7 @@ const upload = multer({
   limits: { fileSize: 1000000000, files: 10 },
 });
 
+seed.main();
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
