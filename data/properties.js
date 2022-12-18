@@ -10,9 +10,7 @@ const fs = require("fs");
 const multer = require('multer')
 // function to add listing validations left
 const createListing = async (
-  User,
-  // apartmentNumber,
-  // street,
+  UserId,
   address,
   city,
   state,
@@ -33,7 +31,7 @@ const createListing = async (
   let flag = { insertedProp: true };
 //console.log('error')
   let newListing = {
-    User: User,
+    UserId: UserId,
     // apartmentNumber: apartmentNumber,
     // street: street,
     propertyId: ObjectId(),
@@ -85,29 +83,29 @@ const getPropertyById = async (id) => {
   // todo validations
   if(!id){
     throw 'Error:Id not defined'
-}
-// id = parseInt(id);
+  }
+  // id = parseInt(id);
 
 
-if(typeof id !== 'number'){
-    throw "Id should be number"
-}
-if(id < 1){
-    throw 'ID not proper';
-}
-// if(!containsOnlyNumbers(id)){
-//     throw "ID should not contain alphabets"
-// }
-if((id)%1 !==0) {
-    throw "Decimals are not allowed"
-}
-// id = id.trim();
-const data_id = await getAllListings();
-if(id > data_id.length){
-    throw [404,'No data id present']
-}
-let property = data_id.find(prop => prop.id == id);
-return property;
+  if(typeof id !== 'number'){
+      throw "Id should be number"
+  }
+  if(id < 1){
+      throw 'ID not proper';
+  }
+  // if(!containsOnlyNumbers(id)){
+  //     throw "ID should not contain alphabets"
+  // }
+  if((id)%1 !==0) {
+      throw "Decimals are not allowed"
+  }
+  // id = id.trim();
+  const data_id = await getAllListings();
+  if(id > data_id.length){
+      throw [404,'No data id present']
+  }
+  let property = data_id.find(prop => prop.id == id);
+  return property;
 };
 
 
@@ -154,7 +152,6 @@ const updateListing = async (
   let date = new Date().toLocaleDateString();
   const updatedListing = {
     address: address,
-    // street: street,
     city: city,
     state: state,
     zipCode: zipCode,
@@ -175,7 +172,7 @@ const updateListing = async (
     { $set: updatedListing }
   );
   if (updatedInfo.modifiedCount === 0) {
-    throw "could not update movie successfully";
+    throw "could not update property successfully";
   }
   // await closeConnection();
   // return await getPropertyById(propertyId);
@@ -296,13 +293,6 @@ const approveAuth = async (propertyID) => {
   );
 };
 
-// const getPropOwnerbyId = async (ownerId) => {
-//   const propertyCollection = await properties();
-//   let props = await propertyCollection
-//     .find({ UserId: ownerId, approved: true})
-//     .toArray();
-//   return props;
-// }
 const getPropertybyOwner = async (ownerId) => {
   const propertyCollection = await properties();
   let props = await propertyCollection

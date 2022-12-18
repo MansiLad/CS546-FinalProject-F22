@@ -31,10 +31,6 @@
   text-align: right;
 }
 
-h1{
-  text-align: center;
-}
-
 .logo-img{
   float: left;
   position: relative;
@@ -148,7 +144,6 @@ h1{
 	font-family: Arial, Helvetica, sans-serif;
 	border-collapse: collapse;
 	width: 50%;
-	align: center
   }
 
 #property tr:nth-child(even){background-color: #f2f2f2;}
@@ -163,6 +158,6 @@ h1{
 	padding-top: 12px;
 	padding-bottom: 12px;
 	text-align: left;
-	background-color: #04AA6D;
+	background-color: #0491aa;
 	color: white;
   }

@@ -6,13 +6,8 @@ const reviewsData = data.reviews;
 const filters = data.filters;
 const path = require("path");
 const validation = require('../helpers')
-<<<<<<< HEAD
-const nodemailer = require('nodemailer')
-=======
 const nodemailer = require('nodemailer');
 const { title } = require("process");
->>>>>>> fb14544daffd6972082f4b2e1c2b293dc7ae3ff0
-// const userData = data.users;
 
 const storage = multer.memoryStorage();
 
@@ -44,9 +39,6 @@ router.route("/propertyRegistration").get(async (req, res) => {
 
 router.route("/propertyRegistration").post(async (req, res) => {
   if (!req.session.user) return res.redirect("/user/userlogin");
-  //code here for post
-  // console.log(req.body);
-  // console.log(req.file)
   console.log(req);
   let address = req.body.address;
   let city = req.body.city;
@@ -147,26 +139,6 @@ router.route('/deleteProperty/:id')
   }
 });
 
-<<<<<<< HEAD
-/* router.route("/ownedProperties")
-.get(async (req, res) => {
-  //code here for GET
-  //let prop_det = req.body.
-  try {
-    let prop = await propertiesData.getPropOwnerbyId(req.params.id);
-    res.render("allProperties", {
-      title: "Properties owned by you",
-      OwnerName: req.params.id,
-      result: prop,
-    });
-  } catch (error) {
-    return res.render("error", { error: error });
-  }
-}); */
-
-
-=======
->>>>>>> fb14544daffd6972082f4b2e1c2b293dc7ae3ff0
 router.route("/searchProperties")
 .get(async (req, res) => {
   try {
@@ -198,7 +170,6 @@ router.route("/filters")
   })
 
 router.route("/filters").post(async (req, res) => {
-
   //console.log(req.body);
   // search_location= req.body.search_location;
   select_sortBy = req.body.select_sortBy;
@@ -251,8 +222,7 @@ router.route("/favourites").get(async (req, res) => {
   }
 });
 
-  router.route("/favourites").post(async (req, res) => {
-    
+router.route("/favourites").post(async (req, res) => {
     if (req.session.user) {
       // console.log(req.session);
       let emailId = req.session.user;
@@ -296,24 +266,6 @@ router.route("/ownedProperties")
   }
 });
 
-
-
-
-
-// router.route("/propertydetails/:id").get(async (req, res) => {
-//   if(isNaN(req.params.id)){
-//     return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
-//   }
-
-
-//   const prop = await propertiesData.getPropertyByID(req.params.id)
-//   if(prop === null || prop === undefined){
-//     return res.status(404).render('../views/error', {title: 'Not found', Error: "No ID exist"})
-//   }
-//   res.render("../views/propertyDetails", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
-//   //add the rest 
-
-
 router.route('/removelisting').delete(async (req, res) => {
   //code here for post
   id = req.params.id;
@@ -347,36 +299,22 @@ router.route('/searchProperties').post(async(req,res) =>{
 });
 
 router.route('/propdetails/:id').get(async(req,res) =>{
-let p_id = req.params.id
-p_id = p_id.trim();
-try{
-  let each_prop_detail = await data_people.searchPeopleByID(p_id)
+  let p_id = req.params.id
+  p_id = p_id.trim();
+  try{
+    let each_prop_detail = await data_people.searchPeopleByID(p_id)
 
-}catch(e){
-return res.render('error',{title:'Error Page',error:'No property!'})
-}
-
+  }catch(e){
+  return res.render('error',{title:'Error Page',error:'No property!'})
+  }
 })
 
-<<<<<<< HEAD
-router.route("/filtered").get(async (req, res) => {
-  //code here for post
-  // function for filter
-  try {
-    let search = req.body.search;
-  } catch (error) {
-    return res.render("error", { error: error });
-  }
-  return res.render("Name of the template");
-});
-=======
-
 router.route('/prop/reviews/:id').get(async(req,res)=>{
-if(!req.session.user) return res.redirect('/user/userLogin');
-let p_id = req.params.id;
-p_id=p_id.trim()
-let reviews_get = await reviewsData.getAllReviews(p_id)
-return res.render('reviewsPage',{title:'Reviews of this property',result:reviews_get})
+  if(!req.session.user) return res.redirect('/user/userLogin');
+  let p_id = req.params.id;
+  p_id=p_id.trim()
+  let reviews_get = await reviewsData.getAllReviews(p_id)
+  return res.render('reviewsPage',{title:'Reviews of this property',result:reviews_get})
 })
 
 router.route('/prop/reviews/:id').post(async(req,res)=>{
@@ -386,7 +324,6 @@ router.route('/prop/reviews/:id').post(async(req,res)=>{
   let reviews_create = await reviewsData.createReview(p_id,review_post);
   response.render('partials/rev', {result:reviews_create});
 })
->>>>>>> fb14544daffd6972082f4b2e1c2b293dc7ae3ff0
 
 router.route("/removelisting").delete(async (req, res) => {
   //code here for post
@@ -440,7 +377,6 @@ router.route("/upload").post(upload.array("file"), async (req, res) => {
       { _id: ObjectId(id) },
       { $set: { images: images } }
     );
-
 
     return res.redirect("/manageRentals");
   } catch (err) {
