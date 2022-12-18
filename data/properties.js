@@ -97,7 +97,7 @@ const createListing = async (
 //console.log('error')
   let newListing = {
     UserId: UserId,
-    propertyId: ObjectId(),
+    // propertyId: ObjectId(),
     address: address,
     city: city,
     state: state,
@@ -107,8 +107,8 @@ const createListing = async (
     deposit: deposit,
     rent: rent,
     description: description,
-    ammenities: ammenities,
-    images: [],
+    amenities: amenities,
+    images: {},
     reviews: [],
     date: date,
     approved: false,

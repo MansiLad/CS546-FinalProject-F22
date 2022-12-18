@@ -24,8 +24,8 @@
 
     <a href="/prop/reviews/{{id}}">Get the property reviews!!!</a>
 
-{{#each images}}
-<img src={{@index}} alt="No Image">
+{{#each images }}
+<img src={{this}} {{@index}} {{../images.length}} alt="">
 {{/each}}
 <br><br>
 <a href="/searchProperties">Make another search</a>
