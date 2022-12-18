@@ -18,6 +18,7 @@ require("dotenv").config();
 // const express = require("express");
 // const multer = require("multer");
 const { s3Uploadv2, s3Uploadv3 } = require("./s3Service");
+const { dbConnection } = require("./config/mongoConnections");
 const uuid = require("uuid").v4;
 // const app = express();
 const storage = multer.memoryStorage();
@@ -36,7 +37,8 @@ const upload = multer({
   limits: { fileSize: 1000000000, files: 10 },
 });
 
-seed.main();
+seed.main().then(res=>console.log(res));
+
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
@@ -77,4 +79,5 @@ configRoutes(app);
 app.listen(3000, () => {
   console.log("We've now got a server!");
   console.log("Your routes will be running on http://localhost:3000");
+  const db = dbConnection().catch(err => console.log(err));
 });

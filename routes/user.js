@@ -4,9 +4,8 @@ const path = require("path");
 const data = require("../data/users");
 const app = express();
 const session = require("express-session");
-const validation = require('../helpers');
-const xss = require('xss');
-
+const validation = require("../helpers");
+const xss = require("xss");
 
 // router
 //   // .route('/')
@@ -17,35 +16,38 @@ const xss = require('xss');
 router
   .route("/userLogin")
   .get(async (req, res) => {
-    
-  // if(req.session.user){
-  //   return res.render('commonPage')
-  // }
-  // else{
-    console.log('get login')
-    return res.render('userLogin',{title:'Login Page'})
-  // }
-})
-
-.post(async (req, res) => {
-  
-  try {
-    let postData = req.body;
-    let userN = postData.emailInput;
-    let pass = postData.passwordInput;
-    let validUserName = validation.checkUsername(userN);
-    let validPassword = validation.checkPassword(pass);
-    let authenticatedUser = await data.checkUser(validUserName, validPassword);
-    if (authenticatedUser.authenticatedUser != true) {
-      return res
-        .status(404)
-        .render("userLogin", { title: "login", error: "Not authenticated" });
-    }
+    // if(req.session.user){
+    //   return res.render('commonPage')
+    // }
+    // else{
+    console.log("get login");
+    return res.render("userLogin", { title: "Login Page" });
+    // }
+  })
+  .post(async (req, res) => {
+    console.log("route entered");
+    try {
+      let postData = req.body;
+      // console.log(req.body);
+      let userN = postData.emailInput;
+      let pass = postData.passwordInput;
+      let validUserName = validation.checkUsername(userN);
+      let validPassword = validation.checkPassword(pass);
+      let authenticatedUser = await data.checkUser(
+        validUserName,
+        validPassword
+      )
+      console.log("user", { authenticatedUser });
+      if (authenticatedUser.authenticatedUser != true) {
+        return res
+          .status(404)
+          .render("userLogin", { title: "login", error: "Not authenticated" });
+      }
 
       if (authenticatedUser.type === "admin") {
         req.session.user = validUserName;
         req.session.user.type = "admin";
-        return res.redirect("/adminlist");
+        return res.redirect("/adminauth");
       }
 
       if (authenticatedUser.type === "buyer") {
@@ -57,9 +59,6 @@ router
         req.session.user = validUserName;
         req.session.user.type = "seller";
         return res.redirect("/propertyRegistration");
-      }
-      if (req.session.user) {
-        res.redirect("/protected");
       }
     } catch (e) {
       return res.status(400).render("userLogin", { title: "login", error: e });
@@ -129,30 +128,6 @@ router
         .render("userRegistration", { title: "Register", error: e });
     }
   });
-
-// router
-//   .route("/propertyRegistration")
-//   .get(async (req, res) => {
-//     try {
-//       const user = req.session.user;
-//       if (!user) {
-//         res.render("userRegisteration", { title: "Registration Page" });
-//       } else {
-//         res.render("propertyRegistration", {
-//           title: "Enter the propety details",
-//         });
-//       }
-//     } catch (e) {
-//       return res.render("userRegisteration", {
-//         title: "Registeration Page",
-//         error: e,
-//       });
-//     }
-//   })
-//   .post(async (req, res) => {
-//     try {
-//     } catch (e) {}
-//   });
 
 router
   .route("/peopleRent")

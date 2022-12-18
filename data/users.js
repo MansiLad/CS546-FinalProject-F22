@@ -182,20 +182,22 @@ const getUserById = async (userId) => {
 };
 
 const checkUser = async (email, password) => {
+  const db = await dbConnection();
   const usersindb = await users();
 
-  const checkusername = await usersindb.findOne({ email: email });
-
+    const checkusername = await usersindb.findOne({ email: email });
   if (!checkusername) throw "Either the username or password is invalid";
 
   const password_check = await bcrypt.compare(password, checkusername.password);
-
   if (!password_check) throw "Either the username or password is invalid";
   let flag = null;
+
   if (checkusername.type === "admin") {
+    console.log("admin if entered");
     flag = { authenticatedUser: true, type: "admin" };
   }
 
+  console.log(2);
   if (checkusername.type === "seller") {
     flag = { authenticatedUser: true, type: "seller" };
   }
@@ -204,6 +206,8 @@ const checkUser = async (email, password) => {
     flag = { authenticatedUser: true, type: "buyer" };
   }
 
+  console.log(3);
+  console.log(flag);
   return flag;
 };
 
@@ -211,7 +215,7 @@ const getUserByEmail = async (email) => {
   if (!email) throw "You must provide correct email id.";
   const usersCollection = await users();
   const checkUser = await usersCollection.findOne({ email: email });
-  if (checkUser === null) throw "User doesnot exist";
+  if (checkUser === null) throw "User does not exist";
   return checkUser;
 };
 
