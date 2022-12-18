@@ -18,6 +18,16 @@ const createUser = async (
   password,
   type
 ) => {
+  if (
+    !firstName ||
+    !lastName ||
+    !gender ||
+    !email ||
+    !phoneNumber ||
+    !password ||
+    !type
+  )
+    throw "Enter all the fields correctly.";
 
   if(!firstName)  throw 'You must provide a firstName'
   if (typeof firstName !== 'string')    throw 'Firstname must be a string';
@@ -153,7 +163,7 @@ const createAdmin = async (
     // city: city,
     // state: state,
     phoneNumber: phoneNumber,
-    password: password,
+    password: encryptpassword,
     type: "admin",
   };
   const insertInfo = await usersCollection.insertOne(newUser);
@@ -252,24 +262,25 @@ const checkUser = async (email, password) => {
   const usersindb = await users();
 
   const checkusername = await usersindb.findOne({ email: email });
-  // console.log(checkusername)
 
   if (!checkusername) throw "Either the username or password is invalid";
 
   const password_check = await bcrypt.compare(password, checkusername.password);
-
   if (!password_check) throw "Either the username or password is invalid";
   let flag = null;
+
   if (checkusername.type === "admin") {
-     flag = { authenticatedUser: true, type: "admin" };
+    console.log("admin if entered");
+    flag = { authenticatedUser: true, type: "admin" };
   }
 
+  console.log(2);
   if (checkusername.type === "seller") {
-     flag = { authenticatedUser: true, type: "seller" };
+    flag = { authenticatedUser: true, type: "seller" };
   }
 
   if (checkusername.type === "buyer") {
-     flag = { authenticatedUser: true, type: "buyer" };
+    flag = { authenticatedUser: true, type: "buyer" };
   }
   return flag;
 };

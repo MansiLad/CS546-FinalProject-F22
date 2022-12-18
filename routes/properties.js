@@ -290,9 +290,9 @@ router.route('/manageRentals')
     if(!prop)   throw 'No property owned by you'
     res.render('manageProperties', {title:'Properties owned by you', result: prop})
   } catch (error) {
-    return res.status(404).render('error', {error: error})
+    return res.status(404).render("error", { error: error });
   }
-}); 
+});
 
 
 //TO BE CHECK - DOESNOT SEEM TO WORK AS EXPECTED
@@ -397,9 +397,8 @@ router.route('/editProperty/:id')
       id, deposit, rent, ammenities, desc
     )
     return res.redirect("/manageRentals");
-  }catch(error){
-    console.log(error)
-    return res.render('error', {error: error})
+  } catch (error) {
+    return res.render("error", { error: error });
   }
 });
 
@@ -779,19 +778,27 @@ router.route("/removelisting").delete(async (req, res) => {
   
 });
 router.route("/adminauth").get(async (req, res) => {
-  if (req.session.user.type != "admin") return res.redirect("/user/userLogin");
+  // console.log("admin auth get");
+  // if (req.session.user.type != "admin") return res.redirect("/user/userLogin");
   //todo add handlebar
-  return res.render("unauthprops", { title: "Verify Properties" });
+  let propertyCollection = await properties();
+  let propertyList = await propertyCollection.find({approved: false}).toArray();
+  return res.render("admin", { title: "Verify Properties", result: propertyList, index: 1 });
 });
 router.route("/adminauth").post(async (req, res) => {
-  if (req.session.user.type != "admin") return res.redirect("/user/userLogin");
+  console.log("route entered");
+  // if (req.session.user.type != "admin") return res.redirect("/user/userLogin");
   // todo get all prop id in array
+  console.log(req.body);
+  let temp = await propertiesData.approveAuth(req.body.id);
+  return res.redirect("adminauth");
   // ids.forEach(id => {
-  let temp = [];
-  for (let i = 0; i < ids.length; i++) {
-    temp.push(await propertiesData.approveAuth(ids[i]));
-  }
+  // let temp = [];
+  // for (let i = 0; i < ids.length; i++) {
+  //   temp.push(await propertiesData.approveAuth(ids[i]));
+  // }
   // });
+  // return res.redirect("/adminauth")
 });
 
 router.route("/upload").post(upload.array("file"), async (req, res) => {
@@ -816,9 +823,7 @@ router.route("/upload").post(upload.array("file"), async (req, res) => {
       { _id: ObjectId(id) },
       { $set: { images: images } }
     );
-
-
-    return res.redirect("/manageRentals");
+    return res.redirect("/propdetails/" + id);
   } catch (err) {
     console.log(err);
   }

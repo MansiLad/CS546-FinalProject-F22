@@ -24,18 +24,9 @@
 
     <a href="/prop/reviews/{{id}}">Get the property reviews!!!</a>
 
-{{!-- <script>
-$(document).ready(function(){
-    $("new-review").on("submit", function(event){
-        event.preventDefault();
-        var formValues= $(this).serialize();
-        $.post("/createreview", formValues, function(data){
-            // Display the returned data in browser
-    $('#result').append(formValues)
-        });
-    });
-});
-</script> --}}
+{{#each images}}
+<img src={{@index}} alt="No Image">
+{{/each}}
 <br><br>
 <a href="/searchProperties">Make another search</a>
 <br> <br>

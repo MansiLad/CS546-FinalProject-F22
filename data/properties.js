@@ -12,6 +12,7 @@ const { validateHeaderName } = require("http");
 const validation = require('../helpers')
 
 // function to add listing validations left
+
 const createListing = async (
   UserId,
   address,
@@ -96,6 +97,7 @@ const createListing = async (
 //console.log('error')
   let newListing = {
     UserId: UserId,
+    propertyId: ObjectId(),
     address: address,
     city: city,
     state: state,
@@ -109,8 +111,7 @@ const createListing = async (
     images: [],
     reviews: [],
     date: date,
-    approved: true,
-    //available: true,
+    approved: false,
   };
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
@@ -464,9 +465,10 @@ const approveAuth = async (propertyID) => {
   // const auth_Collection = await auth();
   const properties_Collection = await properties();
   const updatedInfo = await properties_Collection.updateOne(
-    { _id: ObjectId(propertyId) },
-    { $set: { aprroved: true } }
+    { _id: ObjectId(id) },
+    { $set: { approved: true } }
   );
+  return updatedInfo
 };
 
 const getPropertybyOwner = async (ownerId) => {
@@ -503,6 +505,55 @@ const addToFavourite = async function (userId, propertyId) {
   return user.favourites;
 };
 
+
+
+const createListingSeed = async (
+  UserId,
+  // apartmentNumber,
+  // street,
+  address,
+  city,
+  state,
+  zipCode,
+  beds,
+  baths,
+  deposit,
+  rent,
+  images,
+  description,
+  amenities
+) => {
+  // todo validations
+  let propertiesCollection = await properties();
+  let userCollection = await users();
+  let date = new Date().toLocaleDateString();
+  // let image_buffer = new Buffer ()
+  let flag = { insertedProp: true };
+//console.log('error')
+  let newListing = {
+    UserId: UserId,
+   // propertyId: ObjectId(),
+    address: address,
+    city: city,
+    state: state,
+    zipCode: zipCode,
+    beds: beds,
+    baths: baths,
+    deposit: deposit,
+    rent: rent,
+    description: description,
+    amenities: amenities,
+    images: images,
+    reviews: [],
+    date: date,
+    approved: false,
+  };
+  const insertInfo = await propertiesCollection.insertOne(newListing);
+  if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
+  console.log(insertInfo);
+  return insertInfo.insertedId;
+
+};
 module.exports = {
   addToFavourite,
   getPropertyById,
@@ -519,5 +570,5 @@ module.exports = {
   getPropertybyOwner,
   getAllAuthListings,
   getownerbypropId,
-  updateproperty
+  createListingSeed
 };

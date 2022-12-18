@@ -4,9 +4,8 @@ const path = require("path");
 const data = require("../data/users");
 const app = express();
 const session = require("express-session");
-const validation = require('../helpers');
-const xss = require('xss');
-
+const validation = require("../helpers");
+const xss = require("xss");
 
 router
   .route("/userLogin")
@@ -66,7 +65,7 @@ router
       if (authenticatedUser.type === "admin") {
         req.session.user = username;
         req.session.user.type = "admin";
-        return res.redirect("/adminlist");
+        return res.redirect("/adminauth");
       }
 
       if (authenticatedUser.type === "buyer") {
@@ -78,9 +77,6 @@ router
         req.session.user = username;
         req.session.user.type = "seller";
         return res.redirect("/propertyRegistration");
-      }
-      if (req.session.user) {
-        res.redirect("/homepage.html");
       }
     } catch (e) {
       return res.status(400).render("userLogin", { title: "login", error: e });

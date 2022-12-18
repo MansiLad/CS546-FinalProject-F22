@@ -2,13 +2,15 @@
 
 <main>
     <div class="col-9 align-items-end">
-         
+         <a href="/user/logout">Log Out!!!</a> <br><br>
             <div class="row">
               {{#each result}}
+              {{#if @first}}
+              <form id="myForm">
               <div class="col-6">
                 
                 <div class="row">
-                  <div class="col-12">
+                  <div class="col-12" >
                     {{!-- how will be give the link to individual display --}}
                     <br><br>
                     <span class="h2">{{address}},{{city}}, {{state}}, {{zipCode}}</span>
@@ -17,14 +19,20 @@
                     <h4 class="h4" id="rent">Rent : {{rent}}   </h4>
                     <h4 class="h4">Deposit : {{deposit}}</h4>
                     <h4 class="h4">Description : {{description}}</h4>
+                    <input type="hidden" value="{{_id}}" id="id">
                 
-                <label for="type-approved" class="radio-inline"><input type="radio" name="type" value="approved" id="male">Aprroved</label>
-                <label for="type-notapproved" class="radio-inline"><input type="radio" name="type" value="notapproved" id="female">Aprroved</label>
+                <label for="checkbox"></label>
+                <input type="checkbox" name="checkbox" value="approved" id="checkbox">Aprroved
+                <br>
+                <br>
+                  
                   </div>
                 </div>
-                
+              </form>                
               </div>
+              {{/if}}
               {{/each}}
             </div>
         </div>
+        <script src='../public/js/admin.js'></script>
 </main>
