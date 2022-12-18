@@ -14,8 +14,8 @@ const getByCityStateZip = async (city,state,zip) => {
 };
 //console.log(allProperties)
 const getpropertyByFilterandSort = async (select_sortBy,beds,baths,minimum,maximum) => {
-  //minimum = Number(minimum);
-  //maximum = Number(maximum); 
+  minimum = Number(minimum);
+  maximum = Number(maximum); 
   const propertyCollection = await properties();
  
   if(select_sortBy ==="Default"){
@@ -23,7 +23,7 @@ const getpropertyByFilterandSort = async (select_sortBy,beds,baths,minimum,maxim
       //const property = await propertyCollection.find({rent:{$gte:minimum,$lte:maximum}}).toArray();
       let peoples = []
       prop.forEach(person => {
-        if(person.rent<maximum && person.rent>minimum){
+        if(Number(person.rent)<maximum && Number(person.rent)>minimum){
             peoples.push(person)
         }
       })
@@ -34,7 +34,7 @@ const getpropertyByFilterandSort = async (select_sortBy,beds,baths,minimum,maxim
       //baths = Number(baths)
       let peoples = []
       prop.forEach(person => {
-        if(person.baths.includes(baths) && person.rent<maximum && person.rent>minimum){
+        if(person.baths.includes(baths) && Number(person.rent)<maximum && Number(person.rent)>minimum){
             peoples.push(person)
         }
       })
@@ -45,7 +45,7 @@ const getpropertyByFilterandSort = async (select_sortBy,beds,baths,minimum,maxim
       //beds=Number(beds)
       let peoples = []
       prop.forEach(person => {
-        if(person.beds.includes(beds) && person.rent<maximum && person.rent>minimum){
+        if(person.beds.includes(beds) && Number(person.rent)<maximum && Number(person.rent)>minimum){
             peoples.push(person)
         }
       })
@@ -58,12 +58,18 @@ const getpropertyByFilterandSort = async (select_sortBy,beds,baths,minimum,maxim
       //baths = Number(baths)
       let peoples = []
       prop.forEach(person => {
-        if((person.beds).includes(beds) && (person.baths).includes(baths) && person.rent<maximum && person.rent>minimum){
-            peoples.push(person)
+        // if(person.beds.includes(beds)) console.log('a')
+        // if(person.beds.includes(beds)) console.log('b')
+        // if(!person.rent<maximum) console.log('c')
+        // if(person.rent<maximum) console.log('d')
+        if(person.beds.includes(beds) && person.baths.includes(baths) && Number(person.rent)<maximum && Number(person.rent)>minimum){
+            
+          peoples.push(person)
         }
+
     })  
       if (peoples.length===0) throw 'property not found';
-      //console.log(peoples)
+      console.log(peoples)
       return peoples;
     }
     
@@ -72,153 +78,156 @@ const getpropertyByFilterandSort = async (select_sortBy,beds,baths,minimum,maxim
   if(select_sortBy==="HightoLow"){
     if(beds==="Any" && baths==="Any"){
       //const property = await propertyCollection.find({rent:{$gte:minimum,$lte:maximum}}).toArray();
+      let sorthightolow = prop.sort(
+        (p1, p2) => (p1.rent < p2.rent) ? 1 : (p1.rent > p2.rent) ? -1 : 0);
+        
       let peoples = []
-      prop.forEach(person => {
-        if(person.rent<maximum && person.rent>minimum){
-            peoples.push(person)
-        }
-      })
+      sorthightolow.forEach(person => {
+          if(person.rent<maximum && person.rent>minimum){
+              peoples.push(person)
+          }
+        })
       if(peoples.length===0) throw 'property not found'
-      return peoples
+      return peoples;
+      // console.log(peoples)
+      // if(sorthightolow.length===0) throw 'property not found'
+      // return sorthightolow;
     }
     else if(beds==="Any"){
       //baths = Number(baths)
-      let peoples = []
-      prop.forEach(person => {
-        if(person.baths.includes(baths) && person.rent<maximum && person.rent>minimum){
-            peoples.push(person)
-        }
-      })
-      if(peoples.length===0) throw 'property not found'
-      return peoples
+      let sorthightolow = prop.sort(
+        (p1, p2) => (p1.rent < p2.rent) ? 1 : (p1.rent > p2.rent) ? -1 : 0);
+      
+        let peoples = []
+        sorthightolow.forEach(person => {
+          if(person.rent<maximum && person.rent>minimum){
+              peoples.push(person)
+          }
+        })
+        if(peoples.length===0) throw 'property not found'
+        return peoples
+    
+      // console.log(peoples)
+      // if(sorthightolow.length===0) throw 'property not found'
+      // return sorthightolow;
     }
     else if(baths==="Any"){
       //beds=Number(beds)
+      let sorthightolow = prop.sort(
+        (p1, p2) => (p1.rent < p2.rent) ? 1 : (p1.rent > p2.rent) ? -1 : 0);
+      
       let peoples = []
-      prop.forEach(person => {
-        if(person.beds.includes(beds) && person.rent<maximum && person.rent>minimum){
-            peoples.push(person)
-        }
-      })
-      if(peoples.length===0) throw 'property not found'
-      return peoples
+      sorthightolow.forEach(person => {
+            if(person.rent<maximum && person.rent>minimum){
+                peoples.push(person)
+            }
+          })
+        if(peoples.length===0) throw 'property not found'
+        return peoples;
+      // console.log(peoples)
+      // if(sorthightolow.length===0) throw 'property not found'
+      // return sorthightolow
     }
     
     else{
       //beds=Number(beds)
       //baths = Number(baths)
+      let sorthightolow = prop.sort(
+        (p1, p2) => (p1.rent < p2.rent) ? 1 : (p1.rent > p2.rent) ? -1 : 0);
+    
       let peoples = []
-      prop.forEach(person => {
-        if(person.beds.includes(beds) && person.baths.includes(baths) && person.rent<maximum && person.rent>minimum){
-            peoples.push(person)
-        }
-    })  
-      if (peoples.length===0) throw 'property not found';
-      //console.log(peoples)
-      return peoples;
+      sorthightolow.forEach(person => {
+            if(person.rent<maximum && person.rent>minimum){
+                peoples.push(person)
+            }
+          })
+        if(peoples.length===0) throw 'property not found'
+        return peoples;
+      // console.log(peoples)
+      // if(sorthightolow.length===0) throw 'property not found'
+      // return sorthightolow;
     }
     
   }
+
+
   if(select_sortBy==="LowtoHigh"){
     if(beds==="Any" && baths==="Any"){
       //const property = await propertyCollection.find({rent:{$gte:minimum,$lte:maximum}}).toArray();
+      // let peoples = []
+      let sortlowtohigh = prop.sort(
+        (p1, p2) => (p1.rent > p2.rent) ? 1 : (p1.rent < p2.rent) ? -1 : 0);
+      
       let peoples = []
-      prop.forEach(person => {
-        if(person.rent<maximum && person.rent>minimum){
-            peoples.push(person)
-        }
-      })
+      sortlowtohigh.forEach(person => {
+            if(person.rent<maximum && person.rent>minimum){
+                peoples.push(person)
+            }
+          })
       if(peoples.length===0) throw 'property not found'
-      return peoples
+      return peoples;
+    
+      // console.log(peoples)
+      // if(sortlowtohigh.length===0) throw 'property not found'
+      // return sortlowtohigh
     }
     else if(beds==="Any"){
       //baths = Number(baths)
+      // let peoples = []
+      let sortlowtohigh = prop.sort(
+        (p1, p2) => (p1.rent > p2.rent) ? 1 : (p1.rent < p2.rent) ? -1 : 0);
+    
+      // console.log(peoples)
       let peoples = []
-      prop.forEach(person => {
-        if(person.baths.includes(baths) && person.rent<maximum && person.rent>minimum){
-            peoples.push(person)
-        }
-      })
+      sortlowtohigh.forEach(person => {
+          if(person.rent<maximum && person.rent>minimum){
+              peoples.push(person)
+          }
+        })
       if(peoples.length===0) throw 'property not found'
-      return peoples
+      return peoples;
+      // if(sortlowtohigh.length===0) throw 'property not found'
+      // return sortlowtohigh
     }
     else if(baths==="Any"){
       //beds=Number(beds)
+      // let peoples = []
+      let sortlowtohigh = prop.sort(
+        (p1, p2) => (p1.rent > p2.rent) ? 1 : (p1.rent < p2.rent) ? -1 : 0);
+    
       let peoples = []
-      prop.forEach(person => {
-        if(person.beds.includes(beds) && person.rent<maximum && person.rent>minimum){
-            peoples.push(person)
-        }
-      })
-      if(peoples.length===0) throw 'property not found'
-      return peoples
+      sortlowtohigh.forEach(person => {
+            if(person.rent<maximum && person.rent>minimum){
+                peoples.push(person)
+            }
+          })
+        if(peoples.length===0) throw 'property not found'
+        return peoples;
+      // console.log(peoples)
+      // if(sortlowtohigh.length===0) throw 'property not found'
+      // return sortlowtohigh;
     }
     
     else{
       //beds=Number(beds)
       //baths = Number(baths)
+      let sortlowtohigh = prop.sort(
+        (p1, p2) => (p1.rent > p2.rent) ? 1 : (p1.rent < p2.rent) ? -1 : 0);
+    
       let peoples = []
-      prop.forEach(person => {
-        if(person.beds.includes(beds) && person.baths.includes(baths) && person.rent<maximum && person.rent>minimum){
-            peoples.push(person)
-        }
-    })  
-      if (peoples.length===0) throw 'property not found';
-      //console.log(peoples)
-      return peoples;
+      sortlowtohigh.forEach(person => {
+            if(person.rent<maximum && person.rent>minimum){
+                peoples.push(person)
+            }
+          })
+        if(peoples.length===0) throw 'property not found'
+        return peoples;
+      // console.log(peoples)
+      // if(sortlowtohigh.length===0) throw 'property not found'
+      // return sortlowtohigh
     }
     
 
-  }
-  if(select_sortBy==="Recent"){
-    if(beds==="Any" && baths==="Any"){
-      //const property = await propertyCollection.find({rent:{$gte:minimum,$lte:maximum}}).toArray();
-      let peoples = []
-      prop.forEach(person => {
-        if(person.rent<maximum && person.rent>minimum){
-            peoples.push(person)
-        }
-      })
-      if(peoples.length===0) throw 'property not found'
-      return peoples
-    }
-    else if(beds==="Any"){
-      //baths = Number(baths)
-      let peoples = []
-      prop.forEach(person => {
-        if(person.baths.includes(baths) && person.rent<maximum && person.rent>minimum){
-            peoples.push(person)
-        }
-      })
-      if(peoples.length===0) throw 'property not found'
-      return peoples
-    }
-    else if(baths==="Any"){
-      //beds=Number(beds)
-      let peoples = []
-      prop.forEach(person => {
-        if(person.beds.includes(beds) && person.rent<maximum && person.rent>minimum){
-            peoples.push(person)
-        }
-      })
-      if(peoples.length===0) throw 'property not found'
-      return peoples
-    }
-    
-    else{
-      //beds=Number(beds)
-      //baths = Number(baths)
-      let peoples = []
-      prop.forEach(person => {
-        if(person.beds.includes(beds) && person.baths.includes(baths) && person.rent<maximum && person.rent>minimum){
-            peoples.push(person)
-        }
-    })  
-      if (peoples.length===0) throw 'property not found';
-      //console.log(peoples)
-      return peoples;
-    }
-    
   }
 }
 

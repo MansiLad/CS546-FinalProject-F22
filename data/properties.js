@@ -100,7 +100,7 @@ const getPropertyById = async (id) => {
 const propertyCollection = await properties();
   const prop_each = await propertyCollection.findOne({_id:ObjectId(id)})
 
-if(!prop_each) throw "no movies with that id"
+if(!prop_each) throw "no properties with that id"
 return JSON.parse(JSON.stringify(prop_each));
 };
 

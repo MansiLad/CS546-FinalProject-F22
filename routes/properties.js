@@ -178,6 +178,47 @@ router.route("/favourites").get(async (req, res) => {
   }
 });
 
+router.route('/contact/:id').get(async(req,res)=>{
+  if(!req.session.user) return res.redirect('/user/userLogin')
+  let p_id = req.params.id
+  p_id = p_id.trim()
+  return res.render('contact',{id:p_id,title:'Contact Page',msg:'Give yor contact details so that owner van get in touch with you!'})
+
+})
+
+router.route('/sent/:id').post(async(req,res)=>{
+  if(!req.session.user) return res.redirect('/user/userLogin')
+  let sender = req.body.name;
+  let s_n = req.body.phonenumber;
+  let ids = req.params.id
+  console.log(ids)
+  let owner = await propertiesData.getownerbypropId(ids)
+  console.log(owner)
+  let subject='Schedule a house tour';
+  let message = `${sender} is very interested in the property. Here is the contact number ${s_n}. Please get in touch to schedule a house tour`
+  var transporter = nodemailer.createTransport({
+    service:'gmail',
+    auth:{
+      user:'kartikgaglani7@gmail.com',
+      pass: 'hvgcmjcadlyehdfo'
+    }
+  })
+  var mailOptions = {
+    form:'kartikgaglani7@gmail.com',
+    to:owner,
+    subject:subject,
+    text:message
+  }
+  transporter.sendMail(mailOptions,function(error,info){
+    if(error){
+      console.log(error)
+    }
+    else{
+      return res.render('email')
+    }
+  })
+  })
+
   router.route("/favourites").post(async (req, res) => {
     
     if (req.session.user) {
