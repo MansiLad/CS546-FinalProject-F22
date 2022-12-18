@@ -112,7 +112,8 @@ const createAdmin = async (
   password
 ) => {
   let usersCollection = await users();
-
+  const saltRounds = 10;
+  const encryptpassword = await bcrypt.hash(password, saltRounds);
   let newUser = {
     firstName: firstName,
     lastName: lastName,
@@ -121,7 +122,7 @@ const createAdmin = async (
     // city: city,
     // state: state,
     phoneNumber: phoneNumber,
-    password: password,
+    password: encryptpassword,
     type: "admin",
   };
   const insertInfo = await usersCollection.insertOne(newUser);

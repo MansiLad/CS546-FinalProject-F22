@@ -1,13 +1,16 @@
 const dbConnection = require('./config/mongoConnections');
 const data = require('./data/');
 const properties = data.properties;
+const users = data.users;
 
 
 const main = async () => {
   const db = await dbConnection.dbConnection();
   await db.dropDatabase();
 
- 
+  
+        const admin = await users.createAdmin('Patrick','Hill','Male','patrick@test.com','1234567890','Patrick@123')
+
     try{
     const seed1 = await properties.createListing("123 Palisade Ave","Jersey City", "New Jersey","07307","2","2", 2000, 2500, "it has nice backyard","heater, oven,water, electricity");
     console.log(typeof seed1);
@@ -109,5 +112,5 @@ const main = async () => {
   console.log('Done seeding database');
   await dbConnection.closeConnection();
 };
-
-main().catch(console.log);
+module.exports={main}
+// main().catch(console.log);
