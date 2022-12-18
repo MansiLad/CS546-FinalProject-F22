@@ -450,8 +450,7 @@ router.route("/adminauth").post(async (req, res) => {
   // todo get all prop id in array
   console.log(req.body);
   let temp = await propertiesData.approveAuth(req.body.id);
-  res.redirect(req.get('referer'));
-  // return res.redirect("/adminauth");
+  return res.redirect("adminauth");
   // ids.forEach(id => {
   // let temp = [];
   // for (let i = 0; i < ids.length; i++) {
@@ -490,5 +489,30 @@ router.route("/upload").post(upload.array("file"), async (req, res) => {
     console.log(err);
   }
 });
+
+
+// router.route("/adminauth2").get(async (req, res) => {
+//   // console.log("admin auth get");
+//   // if (req.session.user.type != "admin") return res.redirect("/user/userLogin");
+//   //todo add handlebar
+//   let propertyCollection = await properties();
+//   let propertyList = await propertyCollection.find({approved: false}).toArray();
+//   return res.render("admin", { title: "auth", result: propertyList, index: 1 });
+// });
+// router.route("/adminauth2").post(async (req, res) => {
+//   console.log("route entered");
+//   // if (req.session.user.type != "admin") return res.redirect("/user/userLogin");
+//   // todo get all prop id in array
+//   console.log(req.body);
+//   let temp = await propertiesData.approveAuth(req.body.id);
+//   return res.redirect("admin a");
+  // ids.forEach(id => {
+  // let temp = [];
+  // for (let i = 0; i < ids.length; i++) {
+  //   temp.push(await propertiesData.approveAuth(ids[i]));
+  // }
+  // });
+  // return res.redirect("/adminauth")
+// });
 
 module.exports = router;
