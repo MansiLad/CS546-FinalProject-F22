@@ -3,6 +3,9 @@
     <div class="header">
         <h3>{{title}}</h3>
     </div>
+    <button onclick="window.location.href='/manageRentals';">
+        View All Propterties
+    </button>
     <form action="/propertyRegistration" method="POST" id="form" class="form" class="text-center p-3 m-3">
         <div class="form-control">
             <label>Address</label><br><br>
@@ -60,15 +63,14 @@
         <br><br><br>
         <div class="form-control">
             <label>Description</label><br><br>
-            <textarea id="description" class="form-control" name="description" placeholder="Description of the property">
+            <textarea id="description" class="form-control" name="description" placeholder="Description of the property"></textarea>
             <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
         </div>
-        <br><br><br>
+        <br><br><br> 
         <button type="submit" class="btn btn-info">Submit</button>
         <button onclick="window.location.href='/manageRentals';">
-            View All
+            View All Propterties
         </button>
-
     
         <script src="../public/js/addpropertiesValidation.js"></script>
 

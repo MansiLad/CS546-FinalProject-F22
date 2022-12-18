@@ -11,7 +11,7 @@ loginform.addEventListener('submit', event => {
 function checkInputs() {
     if(loginform) {
         const email = docemail.value.trim()
-        const passoword = docpassword.value.trim()
+        const password = docpassword.value.trim()
 
         if(!email){
             setErrorFor(docemail, 'Email cannot be empty')
@@ -25,12 +25,10 @@ function checkInputs() {
 
         if(!password) {
             setErrorFor(docpassword, 'Password cannot be blank');
-        } else if (passoword.length === 0) {
+        } else if (password.length === 0) {
             setErrorFor(docpassword, 'Password just cannot be empty or spaces')
-        } else if (passoword.length < 6) {
+        } else if (password.length < 6) {
             setErrorFor(docpassword, 'Password should be atleast of length 6')
-        } else if(!passwordCheck(password)) {
-            setErrorFor(docpassword, 'Enter valid password')
         } else {
             setSuccessFor(docpassword)
         }
@@ -46,7 +44,6 @@ function setErrorFor(input, message) {
 
 function setSuccessFor(input) {
 	const formControl = input.parentElement;
-    console.log(formControl)
 	formControl.className = "form-control success";
 }
 
@@ -54,6 +51,8 @@ function emailCheck(email)
 {
     return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
 }
+
+
 
 
     

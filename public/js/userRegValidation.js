@@ -61,8 +61,10 @@ function checkInputs() {
             setSuccessFor(doclname)
         }
 
-        if(docgendermale.checked != true && docgenderfemale.checked != true && docgenderother.chekced != true){
+        if(docgendermale.checked == true || docgenderfemale.checked == true || docgenderother.chekced == true){
             setErrorFor(docgender, 'Select Gender')            
+        } else {
+            setSuccessFor(docgender)
         }
 
         if(!email){
@@ -116,8 +118,10 @@ function checkInputs() {
             setSuccessFor(docphone);
         }
 
-        if(doctypebuyer.checked != true && doctypeseller.checked != true){
+        if(doctypebuyer.checked == true || doctypeseller.checked == true){
             setErrorFor(doctype, 'Select type')            
+        } else {
+            setSuccessFor(doctype)
         }
 
         if(!password) {

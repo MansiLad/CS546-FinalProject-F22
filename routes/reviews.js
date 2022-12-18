@@ -8,53 +8,55 @@ const { ObjectId } = require("mongodb");
 const review_data = data.reviews;
 const userData = data.properties;
 const xss = require('xss');
+const validation = require('../helpers')
 
 router
   .route('/:propertyId')
   .get(async (req, res) => {
     //code here for GET
     
+    propertyId = req.params.propertyId
+    
     try{
-      const review = await review_data.getAllReviews(req.params.propertyId);
-      if(!req.params.propertyId){
-        return res.status(400).json({error:'Not valid propertyId'})
-      }
-      let object_id = ObjectId(req.params.propertyId)
-      if(!ObjectId.isValid(object_id)){
-        return res.status(400).json({error:'Not valid object id'})
-      }
+      const review = await review_data.getAllReviews(propertyId);
+      propertyId = validation.checkId(propertyId)
+
       if(!review){
-        return res.status(400).json({error:'No reviews'})
+        return res.status(400).render("error",{error:'No reviews'})
       }
       if(review.length < 1){
-        return res.status(400).json({error:'No reviews'})
+        return res.status(400).render("error",{error:'No reviews'})
       }
-      return res.render('propertyReviews', {title:'Reviews of the property'});
-      //res.status(200).json(review)
+      return res.render('propertyReviews', {title:'Reviews of the property', result: review});
+      //res.status(200).render("error",review)
     }catch(e){
-      res.status(404).json({error: 'No reviews found with this movieId'})
+      res.status(404).render("error",{error: 'No reviews found with this movieId'})
     }
   })
   .post(async (req, res) => {
     //code here for POST
     try {
-      if(!req.params.propertyId){
-        return res.status(400).send('No id')
-      }
-      let movie_get_id = await movieData.getMovieById(req.params.propertyId);
+      propertyId = xss(req.params.propertyId)
+      propertyId = validation.checkId(propertyId)
+      let movie_get_id = await review_Data.getAllReviews(propertyId);
+      if(!movie_get_id) throw 'No Review Data'
     } catch(e) {
-      return res.status(404).json({error:'Not found'})
+      return res.status(404).render("error",{error:'Not found'})
     }
     let rev_data = req.body;
     //let movieId = req.params.movieId;
+    reviewTitle = xss(rev_data.reviewTitle)
+    reviewerName = xss(rev_data.reviewerName)
+    review = xss(rev_data.review)
+    rating = xss(rev_data.rating)
     try{
-      if(!rev_data.reviewTitle || !rev_data.reviewerName || !rev_data.review || !rev_data.rating){
+      if(!reviewTitle || !reviewerName || !review || !rating){
        throw "bad input 1"
       }
-      if(typeof rev_data.reviewTitle!='string' || typeof rev_data.reviewerName!='string' || typeof rev_data.review!='string'){
+      if(typeof reviewTitle!='string' || typeof reviewerName!='string' || typeof review!='string'){
         throw "bad input 2"
       }
-      if(rev_data.reviewTitle.trim().length==0 || rev_data.reviewerName.trim().length==0 || rev_data.review.trim().length==0){
+      if(reviewTitle.trim().length==0 || reviewerName.trim().length==0 || review.trim().length==0){
         throw "bad input 3"
       }
       let object_id = ObjectId(req.params.propertyId)
@@ -72,9 +74,8 @@ router
       // }
       // rrate = Number(rrate)
     }catch(e){
-      return res.status(400).json({ error: e });
+      return res.status(400).render("error",{ error: e });
     }
-
     try{
         let review = await review_data.createReview( 
         req.params.propertyId, 
@@ -87,9 +88,9 @@ router
 
       // let findMovie = await movieData.getMovieById(req.params.propertyId);
       // res.redirect('error')//what to do here..
-      // //res.status(200).json(findMovie)
+      // //res.status(200).render("error",findMovie)
     }catch(e){
-      res.status(404).json({ error: 'review not found' });
+      res.status(404).render("error",{ error: 'review not found' });
     }
   });
 
@@ -111,7 +112,6 @@ router
     }catch(e){
       return res.status(400).json({error: e})
     }
-    
     
     try{
       const review = await review_data.getReview(req.params.reviewId);
