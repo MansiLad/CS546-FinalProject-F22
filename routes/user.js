@@ -96,7 +96,7 @@ router
       let pass = postData.password;
       let validUserName = validation.checkUsername(userN);
       let firstname = postData.firstName;
-      let lastname = postData.lastname;
+      let lastname = postData.lastName;
       let gender = postData.gender;
       let phonenumber = postData.phoneNumber;
       let type = postData.type;

@@ -41,7 +41,7 @@
                     <a class="nav-link" href="#">SignUp</a>
                 </li>
                 <li class="nav-item px-3 my-1">
-                    <a class="nav-link" href="#">Favorites</a>
+                    <a class="nav-link" href="/favourites">Favorites</a>
                 </li>
             </ul>
         </div>
@@ -60,12 +60,12 @@
         <div class="container-fluid border">
           <div class="row">
            
-                <div class="d-flex col-3 px-5 my-1 align-items-center">
+                {{!-- <div class="d-flex col-3 px-5 my-1 align-items-center">
                   <input class="form-control me-2 col-3 border p-2" type="search" placeholder="Search" name="search_location"  value="Search" id="search_location" aria-label="Search">
                   <button class="btn btn-outline-success" type="submit">
                     <span class="col-2 h4 rounded">Search</span>
                   </button>
-                  </div>
+                  </div> --}}
                   <div class="col-9 px-5 my-2 align-items-center">
                     <div class="d-flex col-3 filter-condition px-5 my-2 justify-contents-end align-items-center">
                         <select class="form-select form-select-lg me-2" aria-label=".form-select-lg example" name="select_sortBy" value="{{SortBy}}"id="select_sortBy">
@@ -128,17 +128,17 @@
                 <h4 class="h4">Price Range(in $)</h4>
                 <div class="form-group range_container">
                   <div class="sliders_control">
-                      <input id="fromSlider" type="range" value={{minimum}} min="0" max="10000">
-                      <input id="toSlider" type="range" value={{maximum}} min="0" max="10000">
+                      <input id="fromSlider" type="range" value="0" min="0" max="10000">
+                      <input id="toSlider" type="range" value="10000" min="0" max="10000">
                   </div>
                   <div class="form_control">
                       <div class="form_control_container">
                           <div class="form_control_container__time">Minimum</div>
-                          <input class="form_control_container__time__input" type="number" name= "minimum" id="fromInput" value={{minimum}} min="0" max="10000">
+                          <input class="form_control_container__time__input" type="number" name= "minimum" id="fromInput" value="0" min="0" max="10000">
                       </div>
                       <div class="form_control_container">
                           <div class="form_control_container__time">Maximum</div>
-                          <input class="form_control_container__time__input" type="number" name="maximum" id="toInput" value={{maximum}} min="0" max="10000">
+                          <input class="form_control_container__time__input" type="number" name="maximum" id="toInput" value="10000" min="0" max="10000">
                       </div>
                   </div>
                 </div>
@@ -171,12 +171,22 @@
                     <br><br>
                     <a href="/propdetails/{{_id}}"><span class="h2">{{address}},{{city}}, {{state}}, {{zipCode}}</span></a>
                     <br>
-                    {{id}}
                     <h4 class="h4">Beds : {{beds}}   Baths : {{baths}}</h4>
                     <h4 class="h4" id="rent">Rent : {{rent}}   </h4>
                     <h4 class="h4">Deposit : {{deposit}}</h4>
                     <h4 class="h4">Description : {{description}}</h4>
-                    <a href="#"><span class="h6">Add to favorites</span></a>
+                    {{!-- <a href="#"><span class="h6">Add to favorites</span></a> --}}
+                    <div class="favResult"> 
+                          <form class="addtofav" method="POST" action="/favourites">
+                              <input type="hidden" name="propertyId" value="{{this._id}}"> 
+                              {{!-- <a href="/favourites" class="btn btn-success pull-right" role="button">Add to Favourites</a> --}}
+                              {{!-- <input class="btn" type="submit" value="Add to favourites">  --}}
+                              <div>
+                                <button type="submit"  class="btn" id="Addtofavourites">Add to favourites</button>
+                                {{!-- <div class="error"></div> --}}
+                              </div>
+                          </form>
+                    </div>
                   </div>
                 </div>
                 

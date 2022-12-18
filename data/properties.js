@@ -30,11 +30,9 @@ const createListing = async (
   let date = new Date().toLocaleDateString();
   // let image_buffer = new Buffer ()
   let flag = { insertedProp: true };
-console.log('error')
+//console.log('error')
   let newListing = {
     UserId: UserId,
-    // apartmentNumber: apartmentNumber,
-    // street: street,
     address: address,
     city: city,
     state: state,
@@ -49,7 +47,7 @@ console.log('error')
     reviews: [],
     date: date,
     approved: true,
-    available: true,
+    //available: true,
   };
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
@@ -57,66 +55,59 @@ console.log('error')
 
 };
 
+const getownerbypropId = async(propId) =>{
+  if(!propId) throw 'Id must be provided'
+  const propertyCollection = await properties();
+  const prop_each = await propertyCollection.findOne({_id:ObjectId(propId)})
+  let email_id = prop_each.UserId
+  return email_id;
+}
+
 const getAllListings = async () => {
   // todo validations
   const properties_Collection = await properties();
-  const properties = await properties_Collection
+  const properties_value = await properties_Collection
     .find({ approved: true })
     .toArray();
   arr = [];
-  if (!properties) {
+  if (!properties_value) {
     return arr;
   }
-  return JSON.parse(JSON.stringify(properties));
+  return JSON.parse(JSON.stringify(properties_value));
 };
 
-
 const getPropertyById = async (id) => {
-
-  if (!id) throw 'Error: You must provide an id to search for';
-  if (typeof id !== 'string') throw 'Error: id must be a string';
-  id = id.trim();
-  if (id.length === 0)
-    throw 'Error: id cannot be an empty string or just spaces';
-  if (!ObjectId.isValid(id)) throw 'Error: invalid object ID';
-
-  /* // todo validations
+  // todo validations
   if(!id){
-    throw 'Error: Id not passed'
-    }
-    id = parseInt(id);
+    throw 'Error:Id not defined'
+}
+// id = parseInt(id);
 
-    if(typeof id !== 'number'){
-        throw "Id should be number"
-    }
-    if(id < 1){
-        throw 'ID not proper';
-    }
-    // if(!containsOnlyNumbers(id)){
-    //     throw "ID should not contain alphabets"
-    // }
-    if((id)%1 !==0) {
-        throw "Decimals are not allowed"
-    }
-    // id = id.trim(); */
 
-  const propertyCollection = await properties();
-  const property = await propertyCollection.findOne({_id: ObjectId(id)});
-  if (!property) throw 'No property with that id';
-  return JSON.parse(JSON.stringify(property));
-
-/* const data_id = await getAllListings();
+if(typeof id !== 'number'){
+    throw "Id should be number"
+}
+if(id < 1){
+    throw 'ID not proper';
+}
+// if(!containsOnlyNumbers(id)){
+//     throw "ID should not contain alphabets"
+// }
+if((id)%1 !==0) {
+    throw "Decimals are not allowed"
+}
+// id = id.trim();
+const data_id = await getAllListings();
 if(id > data_id.length){
     throw [404,'No data id present']
 }
 let property = data_id.find(prop => prop.id == id);
-return property; */
-
+return property;
 };
+
 
 const removeListing = async (propertyID) => {
   // todo validations
-  console.log(propertyID)
   let id = propertyID;
   if (!id || id.length === 0) throw "You must provide an id to search for";
   if (typeof id !== "string") throw "Id must be a string";
@@ -124,20 +115,15 @@ const removeListing = async (propertyID) => {
     throw "id cannot be an empty string or just spaces";
   id = id.trim();
   if (!ObjectId.isValid(id)) throw "invalid object ID";
-  console.log(propertyID)
-
   const properties_Collection = await properties();
-  console.log(propertyID)
-  
   let get_property = await getPropertyById(id);
-  console.log(get_property)
   const deletionInfo = await properties_Collection.deleteOne({
     _id: ObjectId(id),
   });
   //let movie_name = get_movie.title;
 
   if (deletionInfo.deletedCount === 0) {
-    throw `Could not delete property with id of ${id}`;
+    throw `Could not delete dog with id of ${id}`;
   }
   return "Property is succesfully deleted!";
 };
@@ -152,15 +138,18 @@ const updateListing = async (
   baths,
   deposit,
   rent,
-  //description,
+  description,
   ammenities,
   available,
 ) => {
   // todo validations
+
+  const db = await dbConnection();
   const propertyCollection = await properties();
   let date = new Date().toLocaleDateString();
   const updatedListing = {
     address: address,
+    // street: street,
     city: city,
     state: state,
     zipCode: zipCode,
@@ -168,19 +157,18 @@ const updateListing = async (
     baths: baths,
     deposit: deposit,
     rent: rent,
-    //description: description,
+    description: description,
     ammenities: ammenities,
     datePosted: date,
     available: available,
   };
-  console.log("update")
+
   let tmpListing = await getPropertyById(propertyId);
-  console.log("update")
+
   const updatedInfo = await propertyCollection.updateOne(
     { _id: ObjectId(propertyId) },
     { $set: updatedListing }
   );
-  console.log("update")
   if (updatedInfo.modifiedCount === 0) {
     throw "could not update movie successfully";
   }
@@ -220,14 +208,7 @@ const getCity = async(city) =>{
   });
 return prop_City;
 }
-// const getByCity = async (value) => {
-//   // todo validations
-//   const propertyCollection = await properties();
-//   let props = await propertyCollection
-//     .find({$text:{$search:value}})
-//     .toArray();
-//   return props;
-// };
+
 
 const getByZipcode = async (zipCode) => {
   // todo validations
@@ -310,25 +291,54 @@ const approveAuth = async (propertyID) => {
   );
 };
 
+// const getPropOwnerbyId = async (ownerId) => {
+//   const propertyCollection = await properties();
+//   let props = await propertyCollection
+//     .find({ UserId: ownerId, approved: true})
+//     .toArray();
+//   return props;
+// }
 const getPropertybyOwner = async (ownerId) => {
   const propertyCollection = await properties();
   let props = await propertyCollection
     .find({ "UserId": ownerId /* , approved: true, available: true, */})
     .toArray();
   return props;
-}
+};
+
+const addToFavourite = async function (userId, propertyId) {
+  if (!userId) throw "You must provide an id to search for";
+  if (!propertyId) throw "You must provide an id to search for";
+  if(typeof userId !== "string" || typeof propertyId !== "string") throw "Ids should be string." 
+  const usersCollection = await users();
+  userId = ObjectId(userId.trim());
+  recipeId = ObjectId(propertyId.trim());
+
+  const updatedUserInfo = await usersCollection.updateOne(
+    { _id: userId },
+    { $addToSet: { favourites: propertyId } }
+  );
+  if (updatedUserInfo.modifiedCount === 0) throw "Can not add to the user";
+
+  const user = await users_data.getUserById(userId.toString());
+
+  return user.favourites;
+};
 
 module.exports = {
+  addToFavourite,
   getPropertyById,
   createListing,
   updateListing,
   removeListing,
   getAllListings,
-  getByCity,
+ getByCity,
+ getByZipcode,
+ getCity,
   getByState,
-  getByZipcode,
   approveAuth,
   getAllListings,
   getPropertybyOwner,
-  getAllAuthListings
+  getAllAuthListings,
+  getownerbypropId
 };

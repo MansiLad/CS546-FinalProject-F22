@@ -2,13 +2,11 @@ const express = require("express");
 const router = express.Router();
 const data = require("../data");
 const propertiesData = data.properties;
+const reviewsData = data.reviews;
 const filters = data.filters;
 const path = require("path");
 const xss = require('xss');
-const { updateUser } = require("../data/users");
-const userData = data.users;
-const validation = require('../helpers');
-const { prependListener } = require("process");
+// const userData = data.users;
 
 router.route("/")
 .get(async (req, res) => {
@@ -120,15 +118,11 @@ router.route('/deleteProperty/:id')
 
 router.route("/searchProperties")
 .get(async (req, res) => {
-  //code here for GET
-  //let prop_det = req.body.
   try {
-    //let prop = await propertiesData.getAllListings();
     res.render('searchProp', {title:'Get your favourite properties!'})
   } catch (error) {
     return res.render('error', {error: error})
   }
-  //return res.render("renters");
 });
 
 router.route("/filters")
@@ -141,12 +135,12 @@ router.route("/filters")
   {
     console.log(e);
   }
- 
 });
 
-router.route("/filters")
-.post(async (req, res) => {
-  console.log(req.body);
+
+router.route("/filters").post(async (req, res) => {
+
+  //console.log(req.body);
   // search_location= req.body.search_location;
   select_sortBy = req.body.select_sortBy;
   beds = req.body.beds
@@ -158,6 +152,7 @@ router.route("/filters")
     const result = await filters.getpropertyByFilterandSort(select_sortBy,beds,baths,minimum,maximum);
     //console.log(result);
     res.render("afterSearch",{result: result, minimum : minimum, maximum : maximum });
+
   }catch(e)
   {
     return res.render('error',{title:'Error',error:'Error'})
@@ -165,12 +160,92 @@ router.route("/filters")
   
 });
 
-
-router.route("/propertydetails/:id")
-.get(async (req, res) => {
-  if(isNaN(req.params.id)){
-    return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
+router.route("/favourites").get(async (req, res) => {
+  const user = req.session.user;
+  if (!user) {
+    res.render("userLogin", { title: "Login Page" });
   }
+  else{
+    let emailId = req.session.user;
+    let user_fav = await usersData.getUserByEmail(user);
+    let fav = user_fav.favourites;
+    results = []
+    if(fav === 0){
+      res.render("favourites",{error : "No properties added yet!"});
+    }
+    fav.forEach(async (propId) => {
+      // console.log(propId);
+      property = await propertiesData.getPropertyById(propId);
+      // console.log(property);
+      results.push(property);
+    });
+    console.log(results)
+    results = JSON.parse(JSON.stringify(results))
+  try{
+    
+    res.render("favourites",{results : results});
+  }
+
+  catch(e){
+    console.log(e);
+  }
+  }
+});
+
+  router.route("/favourites").post(async (req, res) => {
+    
+    if (req.session.user) {
+      // console.log(req.session);
+      let emailId = req.session.user;
+      let userInfo = await usersData.getUserByEmail(emailId);
+      let userID = userInfo._id.toString();
+      // console.log(userID);
+      let favid = req.body.propertyId;
+      favid = favid.toString();
+      // console.log(favid);
+      try {
+        let addFavorite = await propertiesData.addToFavourite(userID, favid);
+        if (addFavorite) {
+          req.session.message = "Added to favourite successfully!";
+          res.redirect("/filters");
+        }
+      } catch (e) {
+        //console.log(e);
+        req.session.error =
+          "You have already added this property to your favourites!";
+          res.redirect("/filters");
+      }
+    } else {
+      
+      req.session.message = "Please login first!";
+      res.redirect("/user/userLogin");
+  }
+  
+  });
+
+
+
+router.route("/ownedProperties")
+.get(async (req, res) => {
+  //code here for GET
+  //let prop_det = req.body.
+  try {
+    let prop = await propertiesData.getPropOwnerbyId(req.params.id);
+    res.render('allProperties', {title:'Properties owned by you',OwnerName: req.params.id, result: prop})
+  } catch (error) {
+    return res.render('error', {error: error})
+  }
+});
+
+
+
+
+
+// router.route("/propertydetails/:id").get(async (req, res) => {
+//   if(isNaN(req.params.id)){
+//     return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
+//   }
+
 
 //   const prop = await propertiesData.getPropertyByID(req.params.id)
 //   if(prop === null || prop === undefined){
@@ -179,10 +254,20 @@ router.route("/propertydetails/:id")
 //   res.render("../views/propertyDetails", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
 //   //add the rest 
 
+
+router.route('/removelisting').delete(async (req, res) => {
+  //code here for post
+  id = req.params.id;
+  id = helper.chekId(id);
+  try {
+    await propertiesData.removeListing(id);
+    res.redirect('/manageProperties')
+  } catch (error) {
+    return res.render('error', {error: error})
+  }
 });
 
-router.route('/searchProperties')
-.post(async(req,res) =>{
+router.route('/searchProperties').post(async(req,res) =>{
   let city = req.body.city
   let zip = req.body.zip
   let state = req.body.state
@@ -191,42 +276,38 @@ router.route('/searchProperties')
     if(!city && !zip && !state){
       throw 'No empty fields allowed!'
     }
-    // let all_prop = [];
-    // let all_prop = await propertiesData.getByState(city,state,zip);
     let all_prop = await filters.getByCityStateZip(city,state,zip);
     // let propState = await propertiesData.getByState(state);
     // let propZip = await propertiesData.getByZipcode(zip);
-  //  console.log(all_prop)
-  //  console.log(all_prop._id)
+    all_prop = JSON.parse(JSON.stringify(all_prop))
 
-   all_prop.forEach(props => {
-    id.push(props._id);
-   });
-    console.log(id);
+   console.log(all_prop)
     // console.log(propState)
     // console.log(propZip)
 
     return res.render('afterSearch',{id:id,result: all_prop,title:'Houses'})
 
+
+
   }catch(e){
     return res.render('error', {error:e, title:'Error'})
   }
   
-});
+})
 
-router.route('/propdetails/:id')
-.get(async(req,res) =>{
-  let p_id = req.params.id
-  p_id = p_id.trim();
-  try{
-    let each_prop_detail = await data_people.searchPeopleByID(p_id)
-  } catch(e){
-    return res.render('error', {error:e, title:'Error'})
-  }
-});
+router.route('/propdetails/:id').get(async(req,res) =>{
+let p_id = req.params.id
+p_id = p_id.trim();
+try{
+  let each_prop_detail = await data_people.searchPeopleByID(p_id)
 
-router.route("/filtered")
-.get(async (req, res) => {
+}catch(e){
+return res.render('error',{title:'Error Page',error:'No property!'})
+}
+
+})
+
+router.route("/filtered").get(async (req, res) => {
   //code here for post
   // function for filter
   try {
@@ -236,6 +317,19 @@ router.route("/filtered")
     return res.render('error',  {error:error})
   }
   return res.render("Name of the template");
+});
+
+router.route("/removelisting").delete(async (req, res) => {
+  //code here for post
+  id = req.params.id;
+  id = helper.chekId(id);
+  try {
+    await propertiesData.removeListing(id);
+    res.redirect('/properties')
+  } catch (error) {
+    return res.render('error', {error: error})
+  }
+  
 });
 
 module.exports = router;
