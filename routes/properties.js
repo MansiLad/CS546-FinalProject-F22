@@ -13,7 +13,7 @@ const { ObjectId } = require("mongodb");
 const { properties } = require("../config/mongoCollections");
 const validation = require('../helpers')
 const nodemailer = require('nodemailer')
-// const userData = data.users;
+const usersData = data.users;
 
 const storage = multer.memoryStorage();
 
