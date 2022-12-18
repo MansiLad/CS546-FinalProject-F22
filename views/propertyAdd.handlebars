@@ -1,6 +1,4 @@
 <title>{{title}}</title>
-
-
 <div class="container">
     <div class="header">
         <h3>{{title}}</h3>
@@ -8,8 +6,8 @@
     <form action="/propertyRegistration" method="POST" id="form" class="form" class="text-center p-3 m-3">
         <div class="form-control">
             <label>Address</label><br><br>
-            <input type="text" id="address" name="address" placeholder="Address of the Property" >
-            <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+            <input type="text" id="address" name="address" placeholder="Address of the Property" ><br><br>&ensp;
+            <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i> <br><br>  <small>Error message</small>
         </div>
         <br><br><br>
         <div class="form-control">
@@ -32,13 +30,13 @@
         <br><br><br>
         <div class="form-control">
             <label>Beds</label><br><br>
-            <input type="number" id="beds" class="form-control" name="beds" placeholder="1, 1.5 , .." >
+            <input type="text" id="beds" class="form-control" name="beds" placeholder="1, 1.5 , .." >
             <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
         </div>
         <br><br><br>
         <div class="form-control">
             <label>Baths</label><br><br>
-            <input type="number" id="baths" class="form-control" name="baths" placeholder="1, 1.5, ..." >
+            <input type="text" id="baths" class="form-control" name="baths" placeholder="1, 1.5, ..." >
             <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
         </div>
         <br><br><br>
@@ -66,7 +64,7 @@
         </button>
 
     
-    <script src="../public/js/propertiesValidation.js"></script>
+        <script src="../public/js/addpropertiesValidation.js"></script>
 
     </form>
 </div>

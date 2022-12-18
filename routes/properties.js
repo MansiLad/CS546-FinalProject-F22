@@ -13,6 +13,7 @@ const { ObjectId } = require("mongodb");
 const { properties } = require("../config/mongoCollections");
 const validation = require('../helpers')
 const nodemailer = require('nodemailer')
+const xss = require('xss')
 
 const storage = multer.memoryStorage();
 
@@ -48,7 +49,7 @@ router.route("/propertyRegistration").post(async (req, res) => {
   let address = req.body.address;
   let city = req.body.city;
   let state = req.body.state;
-  let zip = req.body.zip;
+  let zip = req.body.zipcode;
   let bed = req.body.beds;
   let bath = req.body.baths;
   let deposit = req.body.deposit;
@@ -90,11 +91,9 @@ router.route("/imageupload/:id").get(async (req, res) => {
 
 router.route('/manageRentals')
 .get(async(req,res)=>{
-  
   if(!req.session.user) return res.redirect('/user/userlogin')
   try {
     let prop = await propertiesData.getPropertybyOwner(req.session.user);
-    console.log(prop)
     res.render('manageProperties', {title:'Properties owned by you', OwnerName: req.session.user, result: prop})
   } catch (error) {
     return res.status(404).render('error', {error: error})
@@ -105,10 +104,9 @@ router.route('/editProperty/:id')
 .get(async (req, res) => {
   if(!req.session.user) return res.redirect('/user/userlogin')
   try{
-    id = validation.checkId(req.params.id)
-
+    let id = xss(req.params.id)
+    validation.checkId(id)
     const prop = await propertiesData.getPropertyById(id)
-
     return res.render('propertyEdit', {title: "Edit Property", property: prop})
   }catch(error){
     return res.status(404).render('error', {error: error})
@@ -117,14 +115,12 @@ router.route('/editProperty/:id')
 .post(async (req, res) => {
   if(!req.session.user) return res.redirect('/user/userlogin')
   try {
-    console.log(req.params.id)
-    id = validation.checkId(req.params.id)
-    let updatedData = req.body
+    let id = xss(req.params.id)
+    validation.checkId(id)
+    let updatedData = xss(req.body)
     console.log(updatedData)
     const updatedProp = await propertiesData.updateListing(
-      id, updatedData.address, updatedData.city,
-      updatedData.state, updatedData.zipcode, updatedData.beds, updatedData.baths,
-      updatedData.deposit, updatedData.rent, updatedData.ammenities, updatedData.available
+      id, updatedData.deposit, updatedData.rent, updatedData.ammenities, updatedData.available
     )
     return res.redirect("/manageRentals");
   }catch(error){
@@ -137,7 +133,8 @@ router.route('/deleteProperty/:id')
 .get(async (req, res) => {
   if(!req.session.user) return res.redirect('/user/userlogin')
   try{
-    let deleted = await propertiesData.removeListing(req.params.id)
+    let id = xss(req.params.id)
+    let deleted = await propertiesData.removeListing(id)
     return res.redirect("/manageRentals")
   } catch(error) {
     return res.render('error', {error: error})
@@ -225,7 +222,8 @@ router.route("/propertydetails/:id")
 
 router.route('/searchProperties').post(async(req,res) =>{
   let city = req.body.city
-  let zip = req.body.zip
+
+  let zip = req.body.zipcode
   let state = req.body.state
   let id = [];
   try{
@@ -260,7 +258,7 @@ try{
     return res.render('error',{title:'Error Page',error:'No properties!'})
   }
   let add = each_prop_detail.address;
-  return res.render('propertyDetails',{id:p_id,address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipCode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,amenities:each_prop_detail.ammenities})
+  return res.render('propertyDetails',{id:p_id,address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipcode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,amenities:each_prop_detail.ammenities})
 
 }catch(e){
 return res.render('error',{title:'Error Page',error:'No property!'})
@@ -277,18 +275,6 @@ router.route("/filtered").get(async (req, res) => {
     return res.render("error", { error: error });
   }
   return res.render("Name of the template");
-});
-
-router.route("/removelisting").delete(async (req, res) => {
-  //code here for post
-  id = req.params.id;
-  id = helper.chekId(id);
-  try {
-    await propertiesData.removeListing(id);
-    res.redirect("/properties");
-  } catch (error) {
-    return res.render("error", { error: error });
-  }
 });
 
 router.route("/adminauth").get(async (req, res) => {

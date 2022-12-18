@@ -8,27 +8,14 @@ const validation = require('../helpers');
 const xss = require('xss');
 
 
-// router
-//   // .route('/')
-//   // .get(async (req, res) =>{
-//   //   res.sendFile(path.resolve("static/homepage.html"))
-//   // })
-
 router
   .route("/userLogin")
   .get(async (req, res) => {
-    
-  // if(req.session.user){
-  //   return res.render('commonPage')
-  // }
-  // else{
     console.log('get login')
     return res.render('userLogin',{title:'Login Page'})
-  // }
-})
-
-.post(async (req, res) => {
   
+})
+.post(async (req, res) => {
   try {
     let postData = req.body;
     let userN = postData.emailInput;
@@ -41,7 +28,6 @@ router
         .status(404)
         .render("userLogin", { title: "login", error: "Not authenticated" });
     }
-
       if (authenticatedUser.type === "admin") {
         req.session.user = validUserName;
         req.session.user.type = "admin";
@@ -59,7 +45,7 @@ router
         return res.redirect("/propertyRegistration");
       }
       if (req.session.user) {
-        res.redirect("/protected");
+        res.redirect("/homepage.html");
       }
     } catch (e) {
       return res.status(400).render("userLogin", { title: "login", error: e });
@@ -85,7 +71,6 @@ router
     }
   })
   .post(async (req, res) => {
-    // console.log('post reg')
     if (req.session.user) {
       return res.redirect("/protected");
     }
@@ -129,30 +114,6 @@ router
         .render("userRegistration", { title: "Register", error: e });
     }
   });
-
-// router
-//   .route("/propertyRegistration")
-//   .get(async (req, res) => {
-//     try {
-//       const user = req.session.user;
-//       if (!user) {
-//         res.render("userRegisteration", { title: "Registration Page" });
-//       } else {
-//         res.render("propertyRegistration", {
-//           title: "Enter the propety details",
-//         });
-//       }
-//     } catch (e) {
-//       return res.render("userRegisteration", {
-//         title: "Registeration Page",
-//         error: e,
-//       });
-//     }
-//   })
-//   .post(async (req, res) => {
-//     try {
-//     } catch (e) {}
-//   });
 
 router
   .route("/peopleRent")

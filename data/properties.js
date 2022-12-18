@@ -14,13 +14,13 @@ const createListing = async (
   address,
   city,
   state,
-  zipCode,
+  zipcode,
   beds,
   baths,
   deposit,
   rent,
   description,
-  amenities
+  ammenities
   //images,
 ) => {
   // todo validations
@@ -38,13 +38,13 @@ const createListing = async (
     address: address,
     city: city,
     state: state,
-    zipCode: zipCode,
+    zipcode: zipcode,
     beds: beds,
     baths: baths,
     deposit: deposit,
     rent: rent,
     description: description,
-    amenities: amenities,
+    ammenities: ammenities,
     images: [],
     reviews: [],
     date: date,
@@ -80,33 +80,19 @@ const getAllListings = async () => {
 };
 
 const getPropertyById = async (id) => {
-  // todo validations
-  if(!id){
-    throw 'Error:Id not defined'
-  }
-  // id = parseInt(id);
+  if (!id || id.length === 0) throw "You must provide an id to search for";
+  if (typeof id !== "string") throw "Id must be a string";
+  if (id.trim().length === 0)
+    throw "id cannot be an empty string or just spaces";
+  id = id.trim();
+  if (!ObjectId.isValid(id)) throw "invalid object ID";
 
+  const propertyCollection = await properties();
+  const prop_each = await propertyCollection.findOne({_id:ObjectId(id)})
 
-  if(typeof id !== 'number'){
-      throw "Id should be number"
-  }
-  if(id < 1){
-      throw 'ID not proper';
-  }
-  // if(!containsOnlyNumbers(id)){
-  //     throw "ID should not contain alphabets"
-  // }
-  if((id)%1 !==0) {
-      throw "Decimals are not allowed"
-  }
-  // id = id.trim();
-  const data_id = await getAllListings();
-  if(id > data_id.length){
-      throw [404,'No data id present']
-  }
-  let property = data_id.find(prop => prop.id == id);
-  return property;
-};
+  if(!prop_each) throw "no properties with that id"
+  return JSON.parse(JSON.stringify(prop_each));
+  };
 
 
 const removeListing = async (propertyID) => {
@@ -123,10 +109,9 @@ const removeListing = async (propertyID) => {
   const deletionInfo = await properties_Collection.deleteOne({
     _id: ObjectId(id),
   });
-  //let movie_name = get_movie.title;
 
   if (deletionInfo.deletedCount === 0) {
-    throw `Could not delete dog with id of ${id}`;
+    throw `Could not delete property with id of ${id}`;
   }
   return "Property is succesfully deleted!";
 };
@@ -136,7 +121,7 @@ const updateListing = async (
   address,
   city,
   state,
-  zipCode,
+  zipcode,
   beds,
   baths,
   deposit,
@@ -146,15 +131,13 @@ const updateListing = async (
   available,
 ) => {
   // todo validations
-
-  const db = await dbConnection();
   const propertyCollection = await properties();
   let date = new Date().toLocaleDateString();
   const updatedListing = {
     address: address,
     city: city,
     state: state,
-    zipCode: zipCode,
+    zipcode: zipcode,
     beds: beds,
     baths: baths,
     deposit: deposit,
@@ -177,6 +160,46 @@ const updateListing = async (
   // await closeConnection();
   // return await getPropertyById(propertyId);
 };
+
+const updateproperty = async (
+  propertyId,
+  deposit,
+  rent,
+  ammenities,
+  available,
+) => {
+  // todo validations
+
+  const propertyCollection = await properties();
+  let tempprop = await getPropertyById(propertyId)
+  console.log(tempprop)
+
+  let date = new Date().toLocaleDateString();
+  const updatedListing = {
+    address: tempprop.address,
+    city:  tempprop.city,
+    state:  tempprop.state,
+    zipcode:  tempprop.zipcode,
+    beds:  tempprop.beds,
+    baths:  tempprop.baths,
+    deposit: deposit,
+    rent: rent,
+    ammenities: ammenities,
+    datePosted: date,
+    available: available,
+  };
+
+  const updatedInfo = await propertyCollection.updateOne(
+    { _id: ObjectId(propertyId) },
+    { $set: updatedListing }
+  );
+  if (updatedInfo.modifiedCount === 0) {
+    throw "could not update property";
+  }
+  // await closeConnection();
+  // return await getPropertyById(propertyId);
+};
+
 
 const getByState = async (state) => {
   // todo validations
@@ -212,11 +235,11 @@ return prop_City;
 }
 
 
-const getByZipcode = async (zipCode) => {
+const getByZipcode = async (zipcode) => {
   // todo validations
   const propertyCollection = await properties();
   let props = await propertyCollection
-    .find({ "zipCode": zipCode })
+    .find({ "zipcode": zipcode })
     .toArray();
   return props;
 };
@@ -335,5 +358,6 @@ module.exports = {
   getAllListings,
   getPropertybyOwner,
   getAllAuthListings,
-  getownerbypropId
+  getownerbypropId,
+  updateproperty
 };

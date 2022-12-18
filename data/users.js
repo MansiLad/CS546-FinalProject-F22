@@ -196,7 +196,13 @@ const checkUser = async (email, password) => {
   return flag;
 };
 
-
+const userExist = async(email) =>{
+  if(!email) throw "You must provide email id"
+  const usersCollection = await users();
+  const checkUser = await usersCollection.findOne({ email: email });
+  if (checkUser) return true;
+  return false;
+};
 
 const getUserByEmail = async(email) =>{
   if(!email) throw "You must provide correct email id."
@@ -214,4 +220,5 @@ module.exports = {
   removeUser,
   createAdmin,
   checkUser,
+  userExist
 };
