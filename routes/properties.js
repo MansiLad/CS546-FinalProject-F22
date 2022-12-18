@@ -5,6 +5,7 @@ const propertiesData = data.properties;
 const reviewsData = data.reviews;
 const filters = data.filters;
 const path = require("path");
+const multer = require("multer");
 require("dotenv").config();
 const app = express();
 const { s3Uploadv2 } = require("../s3Service");
@@ -36,7 +37,7 @@ router.route("/").get(async (req, res) => {
 
 router.route("/propertyRegistration").get(async (req, res) => {
   if (!req.session.user) return res.redirect("/user/userlogin");
-  return res.render("propertyRegistration", {
+  return res.render("propertyAdd", {
     title: "Resgister your property here!",
   });
 });
