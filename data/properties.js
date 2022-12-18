@@ -287,7 +287,7 @@ const approveAuth = async (propertyID) => {
   const properties_Collection = await properties();
   const updatedInfo = await properties_Collection.updateOne(
     { _id: ObjectId(id) },
-    { $set: { aprroved: true } }
+    { $set: { approved: true } }
   );
   return updatedInfo
 };

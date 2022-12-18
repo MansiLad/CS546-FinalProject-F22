@@ -2,9 +2,10 @@
 
 <main>
     <div class="col-9 align-items-end">
-         
+         <a href="/user/logout">Log Out!!!</a> <br><br>
             <div class="row">
               {{#each result}}
+              {{#if @first}}
               <form id="myForm">
               <div class="col-6">
                 
@@ -21,18 +22,17 @@
                     <input type="hidden" value="{{_id}}" id="id">
                 
                 <label for="checkbox"></label>
-                  <input type="checkbox" name="checkbox" value="approved" id="checkbox">Aprroved
+                <input type="checkbox" name="checkbox" value="approved" id="checkbox">Aprroved
+                <br>
+                <br>
                   
-               
                   </div>
                 </div>
               </form>                
               </div>
+              {{/if}}
               {{/each}}
-
-              
             </div>
-             <button type="submit" id="btn">Submit</button>
         </div>
         <script src='../public/js/admin.js'></script>
 </main>
