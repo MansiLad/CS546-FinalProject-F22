@@ -2,9 +2,11 @@ const express = require("express");
 const router = express.Router();
 const data = require("../data");
 const propertiesData = data.properties;
+const usersData = data.users;
 const filters = data.filters;
 const path = require("path");
 const xss = require('xss');
+const { users } = require("../data");
 // const userData = data.users;
 
 router.route("/").get(async (req, res) => {
@@ -68,6 +70,17 @@ router.route("/searchProperties")
   //return res.render("renters");
 });
 
+router.route("/filters").get(async (req, res) => {
+  try{
+    const results = await propertiesData.getAllListings();
+    console.log(results);
+    res.render("afterSearch",{result: results});
+  }catch(e)
+  {
+    console.log(e);
+  }
+  //res.render("filters/filter",{});
+});
 
 router.route("/filters").post(async (req, res) => {
 
@@ -83,12 +96,77 @@ router.route("/filters").post(async (req, res) => {
     const result = await filters.getpropertyByFilterandSort(select_sortBy,beds,baths,minimum,maximum);
     //console.log(result);
     res.render("afterSearch",{result: result, minimum : minimum, maximum : maximum });
+
   }catch(e)
   {
     return res.render('error',{title:'Error',error:'Error'})
   }
   
 });
+
+router.route("/favourites").get(async (req, res) => {
+  const user = req.session.user;
+  if (!user) {
+    res.render("userLogin", { title: "Login Page" });
+  }
+  else{
+    let emailId = req.session.user;
+    let user_fav = await usersData.getUserByEmail(user);
+    let fav = user_fav.favourites;
+    results = []
+    if(fav === 0){
+      res.render("favourites",{error : "No properties added yet!"});
+    }
+    fav.forEach(async (propId) => {
+      // console.log(propId);
+      property = await propertiesData.getPropertyById(propId);
+      // console.log(property);
+      results.push(property);
+    });
+    console.log(results)
+    results = JSON.parse(JSON.stringify(results))
+  try{
+    
+    res.render("favourites",{results : results});
+  }
+
+  catch(e){
+    console.log(e);
+  }
+  }
+});
+
+  router.route("/favourites").post(async (req, res) => {
+    
+    if (req.session.user) {
+      // console.log(req.session);
+      let emailId = req.session.user;
+      let userInfo = await usersData.getUserByEmail(emailId);
+      let userID = userInfo._id.toString();
+      // console.log(userID);
+      let favid = req.body.propertyId;
+      favid = favid.toString();
+      // console.log(favid);
+      try {
+        let addFavorite = await propertiesData.addToFavourite(userID, favid);
+        if (addFavorite) {
+          req.session.message = "Added to favourite successfully!";
+          res.redirect("/filters");
+        }
+      } catch (e) {
+        //console.log(e);
+        req.session.error =
+          "You have already added this property to your favourites!";
+          res.redirect("/filters");
+      }
+    } else {
+      
+      req.session.message = "Please login first!";
+      res.redirect("/user/userLogin");
+  }
+  
+  });
+
 
 
 router.route("/ownedProperties")
@@ -137,7 +215,7 @@ router.route('/searchProperties')
     // let propZip = await propertiesData.getByZipcode(zip);
     all_prop = JSON.parse(JSON.stringify(all_prop))
 
-   console.log(all_prop)
+//  console.log(all_prop)
     // console.log(propState)
     // console.log(propZip)
 

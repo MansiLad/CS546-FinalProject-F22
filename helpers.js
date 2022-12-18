@@ -50,7 +50,7 @@ const checkNumber = (phoneNumber) => {
 const checkUsername = (username) => {
   if (typeof username !== "string") throw "Username must be string";
   if (username.trim().length === 0) {
-    throw "Onlhy spaces not allowed";
+    throw "Only spaces not allowed";
   }
   if (username.length < 4) throw " Length should be greater than 4";
   var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;

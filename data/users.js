@@ -17,6 +17,23 @@ const createUser = async (
   password,
   type
 ) => {
+
+  if(!firstName || !lastName || !gender || !email || !phoneNumber || !password || !type) throw "Enter all the fields correctly."
+
+  if(typeof(firstName) !== 'string' || typeof(lastName) !== 'string' ) throw "Enter valid name"
+
+  if(phoneNumber.length !== 10) throw "Enter valid phone number"
+
+  
+
+  if(typeof(email) !== 'string' ) throw "Enter valid email"
+  
+  if(typeof(password) !== 'string') throw "Enter valid password"
+
+  if(!(/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$/.test(password))) throw "Error: Password should contain atleast one Uppercase, one Number and one Special Character. "
+
+
+  
   let usersCollection = await users();
 
   const saltRounds = 16;
@@ -179,7 +196,18 @@ const checkUser = async (email, password) => {
   return flag;
 };
 
+
+
+const getUserByEmail = async(email) =>{
+  if(!email) throw "You must provide correct email id."
+  const usersCollection = await users();
+  const checkUser = await usersCollection.findOne({ email: email });
+  if (checkUser === null) throw "User doesnot exist";
+  return checkUser;
+};
+
 module.exports = {
+  getUserByEmail,
   getUserById,
   createUser,
   updateUser,
