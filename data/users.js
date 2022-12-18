@@ -31,11 +31,11 @@ const createUser = async (
   lastName = lastName.trim()
   if(lastName.length < 4)               throw 'Lastname must of atleast 4 characters'
 
-  if(!phonenumber){ throw "Phone Number not provided"  }
-  if(phonenumber.trim().length === 0){throw "Phone number can not be empty or just spaces" }
-  phonenumber = phonenumber.trim()
-  if(phonenumber.length < 10){throw 'Phone number should be of 10 digits'}
-  if(!/^[0-9]+$/.test(phonenumber)) {throw 'Phone number should only contain numbers'}
+  if(!phoneNumber){ throw "Phone Number not provided"  }
+  if(phoneNumber.trim().length === 0){throw "Phone number can not be empty or just spaces" }
+  phoneNumber = phoneNumber.trim()
+  if(phoneNumber.length < 10){throw 'Phone number should be of 10 digits'}
+  if(!/^[0-9]+$/.test(phoneNumber)) {throw 'Phone number should only contain numbers'}
 
   if(!email) throw 'Enter email'
   if (email.trim().length === 0) throw "enter email id";
@@ -128,11 +128,11 @@ const createAdmin = async (
 
   if(!gender) throw 'Select gender'
 
-  if(!phonenumber){ throw "Phone Number not provided"  }
-  if(phonenumber.trim().length === 0){throw "Phone number can not be empty or just spaces" }
-  phonenumber = phonenumber.trim()
-  if(phonenumber.length < 10){throw 'Phone number should be of 10 digits'}
-  if(!/^[0-9]+$/.test(phonenumber)) {throw 'Phone number should only contain numbers'}
+  if(!phoneNumber){ throw "Phone Number not provided"  }
+  if(phoneNumber.trim().length === 0){throw "Phone number can not be empty or just spaces" }
+  phoneNumber = phoneNumber.trim()
+  if(phoneNumber.length < 10){throw 'Phone number should be of 10 digits'}
+  if(!/^[0-9]+$/.test(phoneNumber)) {throw 'Phone number should only contain numbers'}
 
   if(!email) throw 'Enter email'
   if (email.trim().length === 0) throw "enter email id";
@@ -183,11 +183,11 @@ const updateUser = async (
 
   if(!gender) throw 'Select gender'
 
-  if(!phonenumber){ throw "Phone Number not provided"  }
-  if(phonenumber.trim().length === 0){throw "Phone number can not be empty or just spaces" }
-  phonenumber = phonenumber.trim()
-  if(phonenumber.length < 10){throw 'Phone number should be of 10 digits'}
-  if(!/^[0-9]+$/.test(phonenumber)) {throw 'Phone number should only contain numbers'}
+  if(!phoneNumber){ throw "Phone Number not provided"  }
+  if(phoneNumber.trim().length === 0){throw "Phone number can not be empty or just spaces" }
+  phoneNumber = phoneNumber.trim()
+  if(phoneNumber.length < 10){throw 'Phone number should be of 10 digits'}
+  if(!/^[0-9]+$/.test(phoneNumber)) {throw 'Phone number should only contain numbers'}
 
   if(!email) throw 'Enter email'
   if (email.trim().length === 0) throw "enter email id";

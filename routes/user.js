@@ -222,7 +222,7 @@ router
         password,
         type
       );
-      console.log(insertedUser);
+      // console.log(insertedUser);
 
       if (insertedUser) {
         console.log("if entered");
