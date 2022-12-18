@@ -5,46 +5,85 @@ const propertiesData = data.properties;
 const reviewsData = data.reviews;
 const filters = data.filters;
 const path = require("path");
-const xss = require('xss');
+const validation = require('../helpers')
+const nodemailer = require('nodemailer')
 // const userData = data.users;
 
-router.route("/")
-.get(async (req, res) => {
+const storage = multer.memoryStorage();
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.split("/")[0] === "image") {
+    cb(null, true);
+  } else {
+    cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE"), false);
+  }
+};
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 1000000000, files: 10 },
+});
+
+router.route("/").get(async (req, res) => {
   //code here for GET
   res.sendFile(path.resolve("static/homepage.html"));
 });
 
-router.route('/propertyRegistration')
-.get(async(req,res) =>{
-  if(!req.session.user) return res.redirect('/user/userlogin')
-  return res.render('propertyAdd',{title:'Register your property here!'})
-})
-.post(async (req, res) => {
-  if(!req.session.user) return res.redirect('/user/userlogin')
+router.route("/propertyRegistration").get(async (req, res) => {
+  if (!req.session.user) return res.redirect("/user/userlogin");
+  return res.render("propertyRegistration", {
+    title: "Resgister your property here!",
+  });
+});
+
+router.route("/propertyRegistration").post(async (req, res) => {
+  if (!req.session.user) return res.redirect("/user/userlogin");
   //code here for post
-  //check this once
-  let userId = req.session.user;
+  // console.log(req.body);
+  // console.log(req.file)
+  console.log(req);
   let address = req.body.address;
   let city = req.body.city;
   let state = req.body.state;
-  let zip = req.body.zipcode
-  let bed = req.body.beds
-  let bath = req.body.baths
-  let deposit = req.body.deposit
-  let rent = req.body.rent
-  let ammenities  = req.body.ammenities
-  // let desc = req.body.description
+  let zip = req.body.zip;
+  let bed = req.body.beds;
+  let bath = req.body.baths;
+  let deposit = req.body.deposit;
+  let rent = req.body.rent;
+  let amenities = req.body.amenities;
+  let desc = req.body.description;
+  let user = req.session.user
+  console.log("route entered");
+  // let images = req.body.images;
 
-  try{
-    let {insertedProp} = await propertiesData.createListing(
-      userId,address,city,state,zip, bed,bath,deposit,rent,ammenities
-    )
-    if(insertedProp){
-      return res.redirect('/manageRentals')
+  try {
+    let insertedProp = await propertiesData.createListing(
+      user,
+      address,
+      city,
+      state,
+      zip,
+      bed,
+      bath,
+      deposit,
+      rent,
+      desc,
+      amenities,
+    );
+    if (insertedProp) {
+      return res.redirect("/imageupload/" + ObjectId(insertedProp));
     }
-  }catch(e){
-    return res.render('error',{title:'Error',error:'Search Again!'})
+  } catch (e) {
+    console.log(e);
+    return res.render("error", { title: "Error", error: "Enter Again!" });
   }
+});
+
+router.route("/imageupload/:id").get(async (req, res) => {
+  console.log(req.params.id);
+  return res.render("imageupload", { title: "Upload", id: req.params.id });
+  // return res.sendFile(path.resolve("static/upload.html"));
 });
 
 router.route('/manageRentals')
@@ -109,9 +148,13 @@ router.route('/deleteProperty/:id')
   //let prop_det = req.body.
   try {
     let prop = await propertiesData.getPropOwnerbyId(req.params.id);
-    res.render('allProperties', {title:'Properties owned by you',OwnerName: req.params.id, result: prop})
+    res.render("allProperties", {
+      title: "Properties owned by you",
+      OwnerName: req.params.id,
+      result: prop,
+    });
   } catch (error) {
-    return res.render('error', {error: error})
+    return res.render("error", { error: error });
   }
 }); */
 
@@ -292,8 +335,7 @@ router.route('/searchProperties').post(async(req,res) =>{
   }catch(e){
     return res.render('error', {error:e, title:'Error'})
   }
-  
-})
+});
 
 router.route('/propdetails/:id').get(async(req,res) =>{
 let p_id = req.params.id
@@ -311,10 +353,9 @@ router.route("/filtered").get(async (req, res) => {
   //code here for post
   // function for filter
   try {
-    let search = req.body.search
-
+    let search = req.body.search;
   } catch (error) {
-    return res.render('error',  {error:error})
+    return res.render("error", { error: error });
   }
   return res.render("Name of the template");
 });
@@ -325,11 +366,58 @@ router.route("/removelisting").delete(async (req, res) => {
   id = helper.chekId(id);
   try {
     await propertiesData.removeListing(id);
-    res.redirect('/properties')
+    res.redirect("/properties");
   } catch (error) {
-    return res.render('error', {error: error})
+    return res.render("error", { error: error });
   }
-  
+});
+
+router.route("/adminauth").get(async (req, res) => {
+  if (req.session.user.type != "admin") return res.redirect("/user/userLogin");
+  //todo add handlebar
+  return res.render("unauthprops", { title: "Verify Properties" });
+});
+router.route("/adminauth").post(async (req, res) => {
+  if (req.session.user.type != "admin") return res.redirect("/user/userLogin");
+  // todo get all prop id in array
+  // ids.forEach(id => {
+  let temp = [];
+  for (let i = 0; i < ids.length; i++) {
+    temp.push(await propertiesData.approveAuth(ids[i]));
+  }
+  // });
+});
+
+router.route("/upload").post(upload.array("file"), async (req, res) => {
+  // console.log(req.params.id)
+  // console.log(req.id);
+  // console.log(req);
+  let id = req.body.id[0];
+  let images = [];
+
+  // let prop = propertiesData.getPropertyById(ObjectId(id));
+
+  try {
+    if (req.files.length < 3) throw `Atleast 3 images`;
+    const results = await s3Uploadv2(req.files);
+    console.log(results);
+    results.forEach((f) => {
+      images.push(f.Location);
+    });
+    // console.log(req.body.id);
+    // console.log(images);
+    // console.log(req.body.id[0]);
+    const propertyCollection = await properties();
+    const updatedInfo = await propertyCollection.updateOne(
+      { _id: ObjectId(id) },
+      { $set: { images: images } }
+    );
+
+
+    return res.redirect("/manageRentals");
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 module.exports = router;
