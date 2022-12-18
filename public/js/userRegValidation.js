@@ -35,7 +35,7 @@ function checkInputs() {
         const type = doctype.value
         const buyer = doctypebuyer.value.trim()
         const seller = doctypeseller.value.trim()
-        const passoword = docpassword.value.trim()
+        const password = docpassword.value.trim()
 
         if(!fname) {
             setErrorFor(docfname, 'First name cannot be empty');
@@ -61,7 +61,7 @@ function checkInputs() {
             setSuccessFor(doclname)
         }
 
-        if(docgendermale.checked == true || docgenderfemale.checked == true || docgenderother.chekced == true){
+        if(docgendermale.checked != true || docgenderfemale.checked != true || docgenderother.chekced != true){
             setErrorFor(docgender, 'Select Gender')            
         } else {
             setSuccessFor(docgender)
@@ -118,7 +118,7 @@ function checkInputs() {
             setSuccessFor(docphone);
         }
 
-        if(doctypebuyer.checked == true || doctypeseller.checked == true){
+        if(doctypebuyer.checked != true || doctypeseller.checked != true){
             setErrorFor(doctype, 'Select type')            
         } else {
             setSuccessFor(doctype)
@@ -126,9 +126,9 @@ function checkInputs() {
 
         if(!password) {
             setErrorFor(docpassword, 'Password cannot be blank');
-        } else if (passoword.length === 0) {
+        } else if (password.length === 0) {
             setErrorFor(docpassword, 'Password just cannot be empty or spaces')
-        } else if (passoword.length < 6) {
+        } else if (password.length < 6) {
             setErrorFor(docpassword, 'Password should be atleast of length 6')
         } else if(!passwordCheck(password)) {
             setErrorFor(docpassword, 'Enter valid password')

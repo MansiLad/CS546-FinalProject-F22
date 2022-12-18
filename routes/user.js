@@ -105,7 +105,9 @@ router
     if (req.session.user) {
       return res.redirect("/protected");
     }
+    
     console.log(req.body);
+    console.log("the body")
     try {
       let postData = req.body;
       let username = xss(postData.email);
@@ -120,7 +122,7 @@ router
         throw "Enter username and not just spaces";
       } 
       username = username.trim()
-      if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
+      if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(username)){
         res.status(400).render("error",{error: "Enter valid email id"})
         throw "Enter valid email id";
       }
@@ -153,8 +155,6 @@ router
         res.status(400).render("error",{error: 'Firstname should be atleast 4 characters long'})
         throw 'Firstname should be of length 4 or more'
       }
-    
-
 
       let lastname = xss(postData.lastName);
       if(!lastname) {
@@ -183,21 +183,21 @@ router
       }
 
 
-      let phonenumber = xss(postData.phoneNumber);
-      if(!phonenumber){
+      let phoneNumber = xss(postData.phoneNumber);
+      if(!phoneNumber){
         res.status(400).render("error",{error: "provide Phone Number"})
         throw "Phone Number not provided"
       }
-      if(phonenumber.trim().length === 0){
+      if(phoneNumber.trim().length === 0){
         res.status(400).render("error",{error: "Phone number cannot be empty or just spaces"})
         throw "Phone number can not be empty or just spaces"
       }
-      phonenumber = phonenumber.trim()
-      if(phonenumber.length < 10){
+      phoneNumber = phoneNumber.trim()
+      if(phoneNumber.length < 10){
         res.status(400).render("error",{error: "Phone NUmber should be of 10 digits"})
         throw 'Phone number should be of 10 digits'
       }
-      if(!/^[0-9]+$/.test(phonenumber)) {
+      if(!/^[0-9]+$/.test(phoneNumber)) {
         res.status(400).render("error",{error: "Phone number should only contain numbers"})
         throw 'Phone number should only contain numbers'
       }
@@ -208,17 +208,18 @@ router
         res.status(400).render("error",{error: 'Type not provided'})
         throw 'Type not provided'
       }
-
+      console.log("reached here")
       let { insertedUser } = await data.createUser(
         firstname,
         lastname,
         gender,
         username,
-        phonenumber,
+        phoneNumber,
         password,
         type
       );
-      // console.log(insertedUser);
+      console.log(insertedUser);
+      console.log("User Inserted")
 
       if (insertedUser) {
         console.log("if entered");

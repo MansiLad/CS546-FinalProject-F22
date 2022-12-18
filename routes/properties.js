@@ -643,6 +643,7 @@ router.route('/sent/:id').post(async(req,res)=>{
 }); */
 
 router.route('/searchProperties').post(async(req,res) =>{
+
   let city = xss(req.body.city)
   if(!city) {
     res.status(400).render("error",{error: "Provide city of property"})
@@ -668,7 +669,7 @@ router.route('/searchProperties').post(async(req,res) =>{
 
 
 
-  let zip = xss(req.body.zipcode)
+  let zip = xss(req.body.zip)
   if(!zip) {
     res.status(400).render("error",{error: "Provide zip code of property"})
     throw "Zip Code not provided"

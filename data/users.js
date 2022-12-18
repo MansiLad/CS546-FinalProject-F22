@@ -12,8 +12,6 @@ const createUser = async (
   lastName,
   gender,
   email,
-  // city,
-  // state,
   phoneNumber,
   password,
   type
@@ -123,6 +121,8 @@ const createAdmin = async (
   password
 ) => {
   let usersCollection = await users();
+  const saltRounds = 10;
+  const encryptpassword = await bcrypt.hash(password, saltRounds);
 
   if(!firstName)  throw 'You must provide a firstName'
   if (typeof firstName !== 'string')    throw 'Firstname must be a string';

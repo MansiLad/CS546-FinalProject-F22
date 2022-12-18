@@ -77,8 +77,4 @@ app.listen(3000, () => {
   console.log("We've now got a server!");
   console.log("Your routes will be running on http://localhost:3000");
   const db = dbConnection().catch(err => console.log(err));
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> 45f6738d6f4f455bbd381a4f911c9c29c992e9ed
