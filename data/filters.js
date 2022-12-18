@@ -9,6 +9,7 @@ const getByCityStateZip = async (city,state,zip) => {
   //   .find({ city: city,state:state,zipCode:zip});
     prop = await propertyCollection
     .find({ city: city,state:state,zipCode:zip}).toArray();
+    //console.log(prop)
    // allProperties.push(JSON.parse(JSON.stringify(props)))
     return JSON.parse(JSON.stringify(prop));
 };
