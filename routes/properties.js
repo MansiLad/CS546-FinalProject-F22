@@ -28,7 +28,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 1000000000, files: 10 },
+  limits: { fileSize: 100000000000, files: 10 },
 });
 
 router.route("/").get(async (req, res) => {
@@ -476,8 +476,11 @@ router.route("/upload").post(upload.array("file"), async (req, res) => {
     results.forEach((f) => {
       images.push(f.Location);
     });
+    // for(let i = 0; i< results.length; i++){
+    //   images.i = results[0].location
+    // }
     // console.log(req.body.id);
-    // console.log(images);
+    console.log(images);
     // console.log(req.body.id[0]);
     const propertyCollection = await properties();
     const updatedInfo = await propertyCollection.updateOne(

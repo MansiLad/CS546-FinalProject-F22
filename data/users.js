@@ -11,8 +11,6 @@ const createUser = async (
   lastName,
   gender,
   email,
-  // city,
-  // state,
   phoneNumber,
   password,
   type
@@ -56,8 +54,6 @@ const createUser = async (
     lastName: lastName,
     gender: gender,
     email: email,
-    // city: city,
-    // state: state,
     phoneNumber: phoneNumber,
     password: encryptpassword,
     type: type,
