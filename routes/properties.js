@@ -78,10 +78,12 @@ router.route('/editProperty/:id')
 .post(async (req, res) => {
   if(!req.session.user) return res.redirect('/user/userlogin')
   try {
+    console.log(req.params.id)
     id = validation.checkId(req.params.id)
     let updatedData = req.body
+    console.log(updatedData)
     const updatedProp = await propertiesData.updateListing(
-      updatedData.propertyId, updatedData.address, updatedData.city,
+      id, updatedData.address, updatedData.city,
       updatedData.state, updatedData.zipcode, updatedData.beds, updatedData.baths,
       updatedData.deposit, updatedData.rent, updatedData.ammenities, updatedData.available
     )
