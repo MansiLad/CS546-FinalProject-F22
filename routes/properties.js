@@ -8,7 +8,7 @@ const path = require("path");
 const validation = require('../helpers')
 const nodemailer = require('nodemailer');
 const { title } = require("process");
-// const userData = data.users;
+const usersData = data.users;
 
 router.route("/")
 .get(async (req, res) => {
@@ -117,20 +117,11 @@ router.route("/filters")
   try{
     const results = await filters.getAllproperties();
     //console.log(results);
-    res.render("renters",{results});
+    res.render("afterSearch",{result:results});
   }catch(e)
   {
-    console.log(e);
+    return res.render('error',{title:'Error'})
   }
-  transporter.sendMail(mailOptions,function(error,info){
-    if(error){
-      //return res.render('error',{title:'Error page',})
-      return res.redirect('contact',{title:'Contact Page',msg:'Email not sent provide details again'})
-    }
-    else{
-      return res.render('email')
-    }
-  })
   })
 
 router.route("/filters").post(async (req, res) => {
@@ -174,7 +165,7 @@ router.route("/favourites").get(async (req, res) => {
       // console.log(property);
       results.push(property);
     });
-    console.log(results)
+   // console.log(results)
     results = JSON.parse(JSON.stringify(results))
   try{
     
@@ -287,7 +278,15 @@ router.route('/propdetails/:id').get(async(req,res) =>{
 let p_id = req.params.id
 p_id = p_id.trim();
 try{
-  let each_prop_detail = await data_people.searchPeopleByID(p_id)
+  let each_prop_detail = await propertiesData.getPropertyById(p_id)
+  //console.log(each_prop_detail)
+  if(!each_prop_detail){
+    return res.render('error',{title:'Error Page',error:'No properties!'})
+  }
+  let add = each_prop_detail.address;
+  return res.render('propertyDetails',{id:p_id,address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipCode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,amenities:each_prop_detail.ammenities})
+
+
 
 }catch(e){
 return res.render('error',{title:'Error Page',error:'No property!'})

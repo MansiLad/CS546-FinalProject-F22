@@ -58,7 +58,7 @@ const getpropertyByFilterandSort = async (select_sortBy,beds,baths,minimum,maxim
       //baths = Number(baths)
       let peoples = []
       prop.forEach(person => {
-        if(person.beds.includes(beds) && person.baths.includes(baths) && person.rent<maximum && person.rent>minimum){
+        if((person.beds).includes(beds) && (person.baths).includes(baths) && person.rent<maximum && person.rent>minimum){
             peoples.push(person)
         }
     })  
