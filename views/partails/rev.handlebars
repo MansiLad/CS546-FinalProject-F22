@@ -1,6 +1,14 @@
 <div class="row" class="rev-item">
     <div class="col-sm-12 col-md-8">
         {{!-- <h3>{{ title }}</h3> --}}
-        <p>{{ task }}</p>
+        <ul id="rev_ul">
+
+        
+        {{#each result}}
+             <li>{{review}}</li>
+        {{/each}}
+
+        </ul>
+        {{!-- <p>{{ task }}</p> --}}
     </div>
 </div>

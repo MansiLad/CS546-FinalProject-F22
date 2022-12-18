@@ -6,7 +6,12 @@ const reviewsData = data.reviews;
 const filters = data.filters;
 const path = require("path");
 const validation = require('../helpers')
+<<<<<<< HEAD
 const nodemailer = require('nodemailer')
+=======
+const nodemailer = require('nodemailer');
+const { title } = require("process");
+>>>>>>> fb14544daffd6972082f4b2e1c2b293dc7ae3ff0
 // const userData = data.users;
 
 const storage = multer.memoryStorage();
@@ -142,6 +147,7 @@ router.route('/deleteProperty/:id')
   }
 });
 
+<<<<<<< HEAD
 /* router.route("/ownedProperties")
 .get(async (req, res) => {
   //code here for GET
@@ -159,6 +165,8 @@ router.route('/deleteProperty/:id')
 }); */
 
 
+=======
+>>>>>>> fb14544daffd6972082f4b2e1c2b293dc7ae3ff0
 router.route("/searchProperties")
 .get(async (req, res) => {
   try {
@@ -178,8 +186,16 @@ router.route("/filters")
   {
     console.log(e);
   }
-});
-
+  transporter.sendMail(mailOptions,function(error,info){
+    if(error){
+      //return res.render('error',{title:'Error page',})
+      return res.redirect('contact',{title:'Contact Page',msg:'Email not sent provide details again'})
+    }
+    else{
+      return res.render('email')
+    }
+  })
+  })
 
 router.route("/filters").post(async (req, res) => {
 
@@ -319,19 +335,12 @@ router.route('/searchProperties').post(async(req,res) =>{
     if(!city && !zip && !state){
       throw 'No empty fields allowed!'
     }
-    let all_prop = await filters.getByCityStateZip(city,state,zip);
-    // let propState = await propertiesData.getByState(state);
-    // let propZip = await propertiesData.getByZipcode(zip);
-    all_prop = JSON.parse(JSON.stringify(all_prop))
-
-   console.log(all_prop)
-    // console.log(propState)
-    // console.log(propZip)
-
-    return res.render('afterSearch',{id:id,result: all_prop,title:'Houses'})
-
-
-
+    let all_prop = await filters.getByCityStateZip(city,state,zip);//[{},{}]
+    //console.log(all_prop)
+   all_prop.forEach(props => {
+    id.push(props._id);
+   });
+      return res.render('afterSearch',{id:id,result: all_prop,title:'Houses'})
   }catch(e){
     return res.render('error', {error:e, title:'Error'})
   }
@@ -349,6 +358,7 @@ return res.render('error',{title:'Error Page',error:'No property!'})
 
 })
 
+<<<<<<< HEAD
 router.route("/filtered").get(async (req, res) => {
   //code here for post
   // function for filter
@@ -359,6 +369,24 @@ router.route("/filtered").get(async (req, res) => {
   }
   return res.render("Name of the template");
 });
+=======
+
+router.route('/prop/reviews/:id').get(async(req,res)=>{
+if(!req.session.user) return res.redirect('/user/userLogin');
+let p_id = req.params.id;
+p_id=p_id.trim()
+let reviews_get = await reviewsData.getAllReviews(p_id)
+return res.render('reviewsPage',{title:'Reviews of this property',result:reviews_get})
+})
+
+router.route('/prop/reviews/:id').post(async(req,res)=>{
+  let review_post = req.body.review;
+  let p_id = req.params.id;
+  p_id = p_id.trim()
+  let reviews_create = await reviewsData.createReview(p_id,review_post);
+  response.render('partials/rev', {result:reviews_create});
+})
+>>>>>>> fb14544daffd6972082f4b2e1c2b293dc7ae3ff0
 
 router.route("/removelisting").delete(async (req, res) => {
   //code here for post
