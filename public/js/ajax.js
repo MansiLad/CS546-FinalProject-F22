@@ -45,8 +45,9 @@
 
 (function($){
     var myNewTaskForm = $('#new-item-form'),
-    newDecriptionArea = $('#new-task-review'),
+    newDecriptionArea = $('#review'),
     todoArea = $('#todo-area');
+    ulArea= $('#rev_ul');
     myNewTaskForm.submit(function(event){
         event.preventDefault();
     var newDescription = newDecriptionArea.val();
