@@ -17,28 +17,30 @@ router
 })
 .post(async (req, res) => {
   try {
-    console.log(req.body)
+    // console.log(req.body)
 
     let postData = req.body;
+    // console.log(postData)
     
     if(!postData) {
       res.status(400).render("error",{error: "Provide user data to login"})
       throw "Data not provided to login"
     }
 
-    let userN = xss(postData.emailInput); 
+    let username = xss(postData.emailInput); 
     let pass = xss(postData.passwordInput);
+    // console.log(username)
 
-    if(!userN){
+    if(!username){
       res.status(400).render("error",{error: "Enter username"})
       throw 'Enter username'
     } 
-    if (userN.trim().length === 0){
+    if (username.trim().length === 0){
       res.status(400).render("error",{error: "Enter username and not just spaces"})
       throw "Enter username and not just spaces";
     } 
-    userN = userN.trim()
-    if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
+    username = username.trim()
+    if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(username)){
       res.status(400).render("error",{error: "Enter valid email id"})
       throw "Enter valid email id";
     }
@@ -54,25 +56,26 @@ router
     pass = pass.trim()
 
 
-    let authenticatedUser = await data.checkUser(validUserName, validPassword);
+    let authenticatedUser = await data.checkUser(username, pass);
+    // console.log(authenticatedUser)
     if (authenticatedUser.authenticatedUser != true) {
       return res
         .status(404)
         .render("userLogin", { title: "login", error: "Not authenticated" });
     }
       if (authenticatedUser.type === "admin") {
-        req.session.user = validUserName;
+        req.session.user = username;
         req.session.user.type = "admin";
         return res.redirect("/adminlist");
       }
 
       if (authenticatedUser.type === "buyer") {
-        req.session.user = validUserName;
+        req.session.user = username;
         req.session.user.type = "buyer";
         return res.redirect("/searchProperties");
       }
       if (authenticatedUser.type === "seller") {
-        req.session.user = validUserName;
+        req.session.user = username;
         req.session.user.type = "seller";
         return res.redirect("/propertyRegistration");
       }
