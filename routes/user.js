@@ -17,7 +17,7 @@ router
 })
 .post(async (req, res) => {
   try {
-    let postData = req.body;
+    let postData = xss(req.body);
     let userN = postData.emailInput;
     let pass = postData.passwordInput;
     let validUserName = validation.checkUsername(userN);

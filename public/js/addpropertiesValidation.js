@@ -8,6 +8,7 @@ const docbaths = document.getElementById('baths')
 const docdeposits = document.getElementById('deposits')
 const docrent = document.getElementById('rent')
 const docammenities = document.getElementById('ammenities')
+const docdescription = document.getElementById('description')
 
 form.addEventListener('submit', event => {
 	event.preventDefault();
@@ -26,6 +27,7 @@ function checkInputs() {
         const deposits = docdeposits.value.trim()
         const rent = docrent.value.trim()
         const ammenities = docammenities.value.trim()
+        const description = docdescription.value.trim()
 
         //address
         if(!address) {
@@ -134,6 +136,18 @@ function checkInputs() {
             setErrorFor(docammenities, 'ammenities should only contain characters')
         } else {
             setSuccessFor(docammenities);
+        }
+
+        if(!description) {
+            setErrorFor(docdescription, 'Description cannot be blank');
+        } else if(typeof description !== 'string') {
+            setErrorFor(docdescription, 'Description must be a string');
+        } else if(description.length === 0) {
+            setErrorFor(docdescription, 'Description just cannot be empty or spaces')
+        } else if(description.length < 4) {
+            setErrorFor(docdescription, 'Description should be atleast 4 characters long')
+        } else {
+            setSuccessFor(docdescription);
         }
     }
 }

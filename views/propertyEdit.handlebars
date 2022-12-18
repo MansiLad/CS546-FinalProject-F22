@@ -58,10 +58,16 @@
         <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
     </div>
     <br><br><br>
-    <button type="submit" class="btn btn-info" value="update" >Update</button>
+    <div class="form-control">
+        <label>Description</label><br><br>
+        <textarea id="description" class="form-control" name="description" value="{{property.description}}">
+        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+    </div>
+    <br><br><br>
+    <button type="submit" class="btn btn-info" value="update">Update</button>
     <button onclick="window.location.href='/manageRentals';">
-            View All
-        </button>
+        View All
+    </button>
 
     <script src="../public/js/editpropertiesValidation.js"></script>
 

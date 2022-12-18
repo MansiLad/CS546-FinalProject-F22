@@ -110,7 +110,7 @@ function checkInputs() {
             setErrorFor(docphone, 'Phone Number just cannot be empty or spaces')
         } else if (!isNumeric(phone)) {
             setErrorFor(docphone, 'Phone Number should be numeric');
-        } else if (phone.length > 10){
+        } else if (phone.length < 10){
             setErrorFor(docphone, 'Phone number should be of 10 digits');
         } else {
             setSuccessFor(docphone);
