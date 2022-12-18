@@ -1,0 +1,30 @@
+<title>{{title}}</title>
+<main>
+    <h1>{{title}}</h1>
+    <form action="/propertyRegistration" method="POST" id="myForm">
+        <label for="address">Address: </label>
+        <input type="text" id="address" name="address" placeholder="Enter Apartment Number"> <br>
+        {{!-- <label for="Street">Street: </label>
+        <input type="text" id="Street" name="Street" placeholder="Enter the Street"> <br> --}}
+        <label for="City">City: </label>
+        <input type="text" id="city" name="city" placeholder="Enter the City"> <br>
+        <label for="state">State: </label>
+        <input type="text" id="state" name="state" placeholder="Enter the State"> <br>
+        <label for="zip">Zip Code: </label>
+        <input type="text" id="zip" name="zip" placeholder="Enter the Zip Code"> <br>
+        <label for="beds">Number of Beds: </label>
+        <input type="text" id="beds" name="beds" placeholder="Enter the Beds"> <br>
+        <label for="baths">Number of Baths </label>
+        <input type="text" id="baths" name="baths" placeholder="Enter the Baths"> <br>
+        <label for="deposit">Deposit </label>
+        <input type="text" id="deposit" name="deposit" placeholder="Enter the Deposit"> <br>
+        <label for="rent">Rent </label>
+        <input type="text" id="rent" name="rent" placeholder="Enter the Rent"> <br>
+        <label for="description">Decription of the Property </label>
+        <input type="text" id="description" name="description" placeholder="Enter the description"> <br>
+        <label for="amenities"> Amenities </label>
+        <input type="text" id="amenities" name="amenities" placeholder="Enter the amenities"> <br>
+        {{!-- <input type="file" id="file" name="file" placeholder="Upload images of the property" multiple> <br> --}}
+        <button type="submit" id="btn">Submit</button>
+    </form>
+</main>
