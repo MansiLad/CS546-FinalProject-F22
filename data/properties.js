@@ -7,11 +7,12 @@ const auth = mongoCollections.unauthprop;
 const reviews = require("./reviews");
 const users_data = require("./users");
 const fs = require("fs");
-const console = require("console");
-
+const multer = require('multer')
 // function to add listing validations left
 const createListing = async (
-  UserId,
+  User,
+  // apartmentNumber,
+  // street,
   address,
   city,
   state,
@@ -20,8 +21,8 @@ const createListing = async (
   baths,
   deposit,
   rent,
-  //description,
-  ammenities
+  description,
+  amenities
   //images,
 ) => {
   // todo validations
@@ -32,7 +33,10 @@ const createListing = async (
   let flag = { insertedProp: true };
 //console.log('error')
   let newListing = {
-    UserId: UserId,
+    User: User,
+    // apartmentNumber: apartmentNumber,
+    // street: street,
+    propertyId: ObjectId(),
     address: address,
     city: city,
     state: state,
@@ -41,8 +45,8 @@ const createListing = async (
     baths: baths,
     deposit: deposit,
     rent: rent,
-    //description: description,
-    ammenities: ammenities,
+    description: description,
+    amenities: amenities,
     images: [],
     reviews: [],
     date: date,
@@ -51,7 +55,8 @@ const createListing = async (
   };
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
-  return flag;
+  console.log(insertInfo);
+  return insertInfo.insertedId;
 
 };
 
@@ -283,7 +288,7 @@ const approveAuth = async (propertyID) => {
     throw "Id cannot be an empty string or just spaces";
   id = id.trim();
   if (!ObjectId.isValid(id)) throw "invalid object ID";
-  const auth_Collection = await auth();
+  // const auth_Collection = await auth();
   const properties_Collection = await properties();
   const updatedInfo = await properties_Collection.updateOne(
     { _id: ObjectId(propertyId) },
@@ -332,9 +337,9 @@ module.exports = {
   updateListing,
   removeListing,
   getAllListings,
- getByCity,
- getByZipcode,
- getCity,
+  getByCity,
+  getByZipcode,
+  getCity,
   getByState,
   approveAuth,
   getAllListings,
