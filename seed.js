@@ -110,7 +110,6 @@ const main = async () => {
  
   
   console.log('Done seeding database');
-  await dbConnection.closeConnection();
 };
 module.exports={main}
 // main().catch(console.log);

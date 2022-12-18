@@ -17,23 +17,33 @@ const createUser = async (
   password,
   type
 ) => {
+  if (
+    !firstName ||
+    !lastName ||
+    !gender ||
+    !email ||
+    !phoneNumber ||
+    !password ||
+    !type
+  )
+    throw "Enter all the fields correctly.";
 
-  if(!firstName || !lastName || !gender || !email || !phoneNumber || !password || !type) throw "Enter all the fields correctly."
+  if (typeof firstName !== "string" || typeof lastName !== "string")
+    throw "Enter valid name";
 
-  if(typeof(firstName) !== 'string' || typeof(lastName) !== 'string' ) throw "Enter valid name"
+  if (phoneNumber.length !== 10) throw "Enter valid phone number";
 
-  if(phoneNumber.length !== 10) throw "Enter valid phone number"
+  if (typeof email !== "string") throw "Enter valid email";
 
-  
+  if (typeof password !== "string") throw "Enter valid password";
 
-  if(typeof(email) !== 'string' ) throw "Enter valid email"
-  
-  if(typeof(password) !== 'string') throw "Enter valid password"
+  if (
+    !/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$/.test(
+      password
+    )
+  )
+    throw "Error: Password should contain atleast one Uppercase, one Number and one Special Character. ";
 
-  if(!(/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$/.test(password))) throw "Error: Password should contain atleast one Uppercase, one Number and one Special Character. "
-
-
-  
   let usersCollection = await users();
 
   const saltRounds = 10;
@@ -172,38 +182,40 @@ const getUserById = async (userId) => {
 };
 
 const checkUser = async (email, password) => {
+  const db = await dbConnection();
   const usersindb = await users();
 
-  const checkusername = await usersindb.findOne({ email: email });
-
+    const checkusername = await usersindb.findOne({ email: email });
   if (!checkusername) throw "Either the username or password is invalid";
 
   const password_check = await bcrypt.compare(password, checkusername.password);
-
   if (!password_check) throw "Either the username or password is invalid";
   let flag = null;
+
   if (checkusername.type === "admin") {
-     flag = { authenticatedUser: true, type: "admin" };
+    console.log("admin if entered");
+    flag = { authenticatedUser: true, type: "admin" };
   }
 
+  console.log(2);
   if (checkusername.type === "seller") {
-     flag = { authenticatedUser: true, type: "seller" };
+    flag = { authenticatedUser: true, type: "seller" };
   }
 
   if (checkusername.type === "buyer") {
-     flag = { authenticatedUser: true, type: "buyer" };
+    flag = { authenticatedUser: true, type: "buyer" };
   }
 
+  console.log(3);
+  console.log(flag);
   return flag;
 };
 
-
-
-const getUserByEmail = async(email) =>{
-  if(!email) throw "You must provide correct email id."
+const getUserByEmail = async (email) => {
+  if (!email) throw "You must provide correct email id.";
   const usersCollection = await users();
   const checkUser = await usersCollection.findOne({ email: email });
-  if (checkUser === null) throw "User doesnot exist";
+  if (checkUser === null) throw "User does not exist";
   return checkUser;
 };
 

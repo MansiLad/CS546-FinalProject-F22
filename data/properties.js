@@ -47,7 +47,7 @@ const createListing = async (
     images: [],
     reviews: [],
     date: date,
-    approved: true,
+    approved: false,
   };
   const insertInfo = await propertiesCollection.insertOne(newListing);
   if (insertInfo.insertedCount === 0) throw "Could not create Lisiting";
@@ -286,9 +286,10 @@ const approveAuth = async (propertyID) => {
   // const auth_Collection = await auth();
   const properties_Collection = await properties();
   const updatedInfo = await properties_Collection.updateOne(
-    { _id: ObjectId(propertyId) },
+    { _id: ObjectId(id) },
     { $set: { aprroved: true } }
   );
+  return updatedInfo
 };
 
 // const getPropOwnerbyId = async (ownerId) => {
