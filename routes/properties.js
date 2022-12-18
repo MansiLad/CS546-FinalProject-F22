@@ -123,7 +123,6 @@ router.route("/searchProperties")
   }
 });
 
-<<<<<<<<< Temporary merge branch 1
 router.route("/filters")
 .get(async (req, res) => {
   try{
@@ -134,10 +133,8 @@ router.route("/filters")
   {
     console.log(e);
   }
-})
-.post(async (req, res) => {
-  console.log(req.body);
-=========
+});
+
 
 router.route("/filters").post(async (req, res) => {
 
@@ -239,13 +236,6 @@ router.route("/ownedProperties")
 });
 
 
-<<<<<<<<< Temporary merge branch 1
-router.route("/propertydetails/:id")
-.get(async (req, res) => {
-  if(isNaN(req.params.id)){
-    return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
-  }
-=========
 
 
 
@@ -253,7 +243,7 @@ router.route("/propertydetails/:id")
 //   if(isNaN(req.params.id)){
 //     return res.status(404).render('../views/error', {title: 'Invalid ID', Error: "Id should be a number"})
 //   }
->>>>>>>>> Temporary merge branch 2
+
 
 //   const prop = await propertiesData.getPropertyByID(req.params.id)
 //   if(prop === null || prop === undefined){
@@ -262,9 +252,8 @@ router.route("/propertydetails/:id")
 //   res.render("../views/propertyDetails", {title:'Property', id:prop.id, address: prop.address, city: prop.city, state: prop.state, zipCode: prop.zipCode})
 //   //add the rest 
 
-<<<<<<<<< Temporary merge branch 1
-})
-.delete(async (req, res) => {
+
+router.route('/removelisting').delete(async (req, res) => {
   //code here for post
   id = req.params.id;
   id = helper.chekId(id);
