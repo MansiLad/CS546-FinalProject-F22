@@ -417,6 +417,7 @@ router.route("/propdetails/:id").get(async (req, res) => {
       bed: each_prop_detail.beds,
       bath: each_prop_detail.baths,
       amenities: each_prop_detail.ammenities,
+      images:each_prop_detail.images
     });
   } catch (e) {
     return res.render("error", { title: "Error Page", error: "No property!" });
@@ -449,7 +450,8 @@ router.route("/adminauth").post(async (req, res) => {
   // todo get all prop id in array
   console.log(req.body);
   let temp = await propertiesData.approveAuth(req.body.id);
-  return res.redirect("approveauth");
+  res.redirect(req.get('referer'));
+  // return res.redirect("/adminauth");
   // ids.forEach(id => {
   // let temp = [];
   // for (let i = 0; i < ids.length; i++) {
