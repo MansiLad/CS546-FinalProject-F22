@@ -1,0 +1,35 @@
+<main>
+    <h1>Property Details</h1>
+    <dl>
+        <dt>Address</dt>
+        <dd>{{address}}</dd>
+        <dt>City</dt>
+        <dd>{{city}}</dd>
+        <dt>State</dt>
+        <dd>{{state}}</dd>
+        <dt>Zip Code</dt>
+        <dd>{{zipcode}}</dd>
+        <dt>Rent</dt>
+        <dd>{{rent}}</dd>
+        <dt>Deposit</dt>
+        <dd>{{depsoit}}</dd>
+        <dt>Bathrooms</dt>
+        <dd>{{bath}}</dd>
+        <dt>Bedrooms</dt>
+        <dd>{{amenities}}</dd>
+        <dt>Amenities</dt>
+        <dd>{{bed}}</dd>
+    </dl>
+
+    <a href="/prop/reviews/{{id}}">Get the property reviews!!!</a>
+
+{{#each images }}
+<img src={{this}} {{@index}} {{../images.length}} alt="">
+{{/each}}
+<br><br>
+<a href="/searchProperties">Make another search</a>
+<br> <br>
+<a href="/user/logout">Logout</a>
+<br> <br>
+<a href="/contact/{{id}}">Schedule a meet with the owner</a>
+</main>

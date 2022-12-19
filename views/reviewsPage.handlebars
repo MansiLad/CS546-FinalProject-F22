@@ -1,0 +1,30 @@
+<main class="main_element_reviews_page">
+    <h3>Reviews of the product</h3>
+    <div class="reviews_page row">
+        <div class="col-sm-12 col-md-4">
+            <div class="row" class="rev-item">
+                <div class="col-sm-12 col-md-8">
+                    <ul id="rev_ul">
+                        {{#each result}}
+                        <div class="inside_ul">
+                            <li>{{review}}</li>
+                            <br>
+                        </div>
+                            
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+            <br>
+            <br>
+            <form id="new-item-form">
+                {{!-- <label>Task Name <input id="new-task-name" type="text" /></label> --}}
+                <label for="rev">Reviews</label>
+                <input type="text" id="review" name="review" placeholder="Enter your review">
+                <input class="submit_in_review" type="submit" value="add new review"/>
+            </form>
+        </div>
+    </div>
+    <br><br>
+    <button onclick="window.location.href='/searchProperties';">Go back to search!</button>
+</main>

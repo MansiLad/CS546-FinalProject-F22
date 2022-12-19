@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<!-- <link rel='stylesheet' href='style.css' /> -->
+
+</head>
+
+<body>
+	<p>This is a DOM example</p>
+	<div id="error" class="error" hidden>I'm an error</div>
+	<br>
+
+	<form method="POST" id="myForm" 
+  enctype='multipart/form-data'>
+  
+		<label id="formLabel">
+			Images:
+			<input type="file" id="file" name = "images[]" multiple/>
+			<button type="submit" id="btn">Add Item</button>
+		</label>
+	</form>
+	<script src='../public/js/upload.js'></script>
+</body>
+
+</html>

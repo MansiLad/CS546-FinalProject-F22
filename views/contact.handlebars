@@ -1,0 +1,13 @@
+<main>
+    {{!-- <h1>{{msg}}</h1> --}}
+    {{#if msg}}
+    <h1>{{msg}}</h1>
+    {{/if}}
+    <form action="/sent/{{id}}" method="post">
+        <label for="email">Email/Username</label>
+        <input type="email" id="email" name="email" placeholder="Enter Email or Username">
+        <label for="phonenumber">Phone Number</label>
+        <input type="tel" id="phonenumber" name="phonenumber" placeholder="Enter your mobile number">
+        <button type="submit">Submit</button>
+    </form>
+</main>
