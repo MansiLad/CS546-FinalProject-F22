@@ -238,7 +238,7 @@ const getpropertyByFilterandSort = async (select_sortBy,beds,baths,minimum,maxim
 module.exports = {
   getAllproperties :  async () => {
     const propertyCollection = await properties();
-    const propertyList = await propertyCollection.find({}).toArray();
+    const propertyList = await propertyCollection.find({approved: true}).toArray();
     if(!propertyList) throw 'No Properties available'
     return propertyList;
   },

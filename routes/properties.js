@@ -15,6 +15,7 @@ const validation = require('../helpers')
 const nodemailer = require('nodemailer')
 const xss = require('xss');
 const { users } = require("../data");
+const usersData = data.users
 
 const storage = multer.memoryStorage();
 
@@ -520,37 +521,68 @@ router.route("/filters")
     
   });
 
-router.route("/favourites").get(async (req, res) => {
-  const user = req.session.user;
-  if (!user) {
-    res.render("userLogin", { title: "Login Page" });
-  }
-  else{
-    let emailId = req.session.user;
-    let user_fav = await usersData.getUserByEmail(user);
-    let fav = user_fav.favourites;
-    results = []
-    if(fav === 0){
-      res.render("favourites",{error : "No properties added yet!"});
+  router.route("/favourites").get(async (req, res) => {
+    const user = req.session.user;
+    if (!user) {
+      res.render("userLogin", { title: "Login Page" });
     }
-    fav.forEach(async (propId) => {
-      // console.log(propId);
-      property = await propertiesData.getPropertyById(propId);
-      // console.log(property);
-      results.push(property);
-    });
-   // console.log(results)
-    results = JSON.parse(JSON.stringify(results))
-  try{
+    else{
     
-    res.render("favourites",{results : results});
+      let user_fav = await usersData.getUserByEmail(user);
+      let fav = user_fav.favourites;
+      console.log(fav)
+      results = []
+      if(fav === 0){
+        res.render("favourites",{error : "No properties added yet!"});
+      }
+      fav.forEach(async (propId) => {
+        // console.log(propId);
+        property = await propertiesData.getPropertyById(propId);
+        // console.log(property);
+        results.push(property);
+      });
+     // console.log(results)
+      results = JSON.parse(JSON.stringify(results))
+    try{
+      
+      res.render("favourites",{results : results});
+    }
+  
+    catch(e){
+      console.log(e);
+    }
+    }
+  });
+  router.route("/favourites").post(async (req, res) => {
+    
+    if (req.session.user) {
+      // console.log(req.session);
+      let emailId = req.session.user;
+      let userInfo = await usersData.getUserByEmail(emailId);
+      let userID = ObjectId(userInfo._id);
+      // console.log(userID);
+      let favid = req.body.propertyId;
+      favid = favid.toString();
+      // console.log(favid);
+      try {
+        let addFavorite = await propertiesData.addToFavourite(userID, favid);
+        if (addFavorite) {
+          req.session.message = "Added to favourite successfully!";
+          res.redirect("/filters");
+        }
+      } catch (e) {
+        //console.log(e);
+        req.session.error =
+          "You have already added this property to your favourites!";
+          res.redirect("/filters");
+      }
+    } else {
+      
+      req.session.message = "Please login first!";
+      res.redirect("/user/userLogin");
   }
-
-  catch(e){
-    console.log(e);
-  }
-  }
-});
+  
+  });
 
 router.route('/contact/:id').get(async(req,res)=>{
   if(!req.session.user) return res.redirect('/user/userLogin')
@@ -562,14 +594,15 @@ router.route('/contact/:id').get(async(req,res)=>{
 
 router.route('/sent/:id').post(async(req,res)=>{
   if(!req.session.user) return res.redirect('/user/userLogin')
-  let sender = xss(req.body.name);
+  let sender = xss(req.body.email);
   if(!sender){
     res.status(400).render("error",{error: "Provide sender name"})
     throw "Provide sender name"
   }
-  if(sender !== 'string'){
-    res.status(400).render("error",{error: "Sender name should be a string"})
-    throw "Sender name should be a string"
+  //if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) throw 'Enter valid email id'
+  if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(sender)){
+    res.status(400).render("error",{error: "Sender email should be valid"})
+    throw "Sender emial should be valid"
   }
   if(sender.trim().length === 0){
     res.status(400).render("error",{error: "Sender name cannot be empty ot just spaces"})
@@ -733,8 +766,8 @@ router.route('/searchProperties').post(async(req,res) =>{
   }
 });
 
-router.route('/propdetails/:id').get(async(req,res) =>{
-let p_id = xss(req.params.id)
+/* router.route('/propdetails/:id').get(async(req,res) =>{
+let p_id = req.params.id
 validation.checkId(p_id)
 p_id = p_id.trim();
 
@@ -745,12 +778,42 @@ try{
     return res.render('error',{title:'Error Page',error:'No properties!'})
   }
   let add = each_prop_detail.address;
-  return res.render('propertyDetails',{id:p_id,address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipcode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,amenities:each_prop_detail.ammenities})
+  return res.render('propertyDetails',{id:p_id,address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipcode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,amenities:each_prop_detail.ammenities, })
 
 }catch(e){
 return res.render('error',{title:'Error Page',error:'No property!'})
 }
 
+}); */
+router.route("/propdetails/:id").get(async (req, res) => {
+  let p_id = req.params.id;
+  p_id = p_id.trim();
+  try {
+    let each_prop_detail = await propertiesData.getPropertyById(p_id);
+    //console.log(each_prop_detail)
+    if (!each_prop_detail) {
+      return res.render("error", {
+        title: "Error Page",
+        error: "No properties!",
+      });
+    }
+    let add = each_prop_detail.address;
+    return res.render("propertyDetails", {
+      id: p_id,
+      address: add,
+      city: each_prop_detail.city,
+      state: each_prop_detail.state,
+      zipcode: each_prop_detail.zipCode,
+      rent: each_prop_detail.rent,
+      deposit: each_prop_detail.deposit,
+      bed: each_prop_detail.beds,
+      bath: each_prop_detail.baths,
+      amenities: each_prop_detail.ammenities,
+      images:each_prop_detail.images
+    });
+  } catch (e) {
+    return res.render("error", { title: "Error Page", error: "No property!" });
+  }
 });
 
 
@@ -761,8 +824,9 @@ router.route('/prop/reviews/:id').get(async(req,res)=>{
   })
   
   router.route('/prop/reviews/:id').post(async(req,res)=>{
+    desc = xss(req.body.description)
     if(!req.session.user) return res.render('/user/userLogin');
-    let createRev = await reviewsData.createReview(req.params.id,req.body.description)
+    let createRev = await reviewsData.createReview(req.params.id, desc)
     return res.render('partails/rev',{layout:null,...createRev})
   })
 
@@ -832,4 +896,16 @@ router.route("/upload").post(upload.array("file"), async (req, res) => {
     console.log(err);
   }
 });
+
+
+router.route("/adminauthno").post(async (req, res) => {
+  console.log("route entered");
+  // if (req.session.user.type != "admin") return res.redirect("/user/userLogin");
+  // todo get all prop id in array
+  console.log(req.body);
+  let temp = await propertiesData.removeListing(req.body.id);
+  console.log(temp);
+  return res.redirect("adminauth");
+});
+
 module.exports = router;

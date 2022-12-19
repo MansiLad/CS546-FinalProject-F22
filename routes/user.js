@@ -182,7 +182,6 @@ router
         throw 'Gender not provided'
       }
 
-
       let phoneNumber = xss(postData.phoneNumber);
       if(!phoneNumber){
         res.status(400).render("error",{error: "provide Phone Number"})

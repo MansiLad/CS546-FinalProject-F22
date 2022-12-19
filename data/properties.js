@@ -485,26 +485,27 @@ const getPropertybyOwner = async (ownerId) => {
 };
 
 const addToFavourite = async function (userId, propertyId) {
+  console.log("Fav")
+  
+  userId = userId.toString();
+
   if (!userId) throw "You must provide an id to search for";
   if (!propertyId) throw "You must provide an id to search for";
   if(typeof userId !== "string" || typeof propertyId !== "string") throw "Ids should be string." 
   const usersCollection = await users();
-  userId = validation.checkId(userId)
-  recipeId = validation.checkId(recipeId)
-  userId = ObjectId(userId.trim());
-  recipeId = ObjectId(propertyId.trim());
+
 
   const updatedUserInfo = await usersCollection.updateOne(
-    { _id: userId },
+    { _id: ObjectId(userId) },
     { $addToSet: { favourites: propertyId } }
   );
+
   if (updatedUserInfo.modifiedCount === 0) throw "Can not add to the user";
 
-  const user = await users_data.getUserById(userId.toString());
+  const user = await users_data.getUserById(userId);
 
   return user.favourites;
 };
-
 
 
 const createListingSeed = async (

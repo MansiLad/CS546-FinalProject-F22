@@ -16,7 +16,7 @@ const createUser = async (
   password,
   type
 ) => {
-  if (
+/*   if (
     !firstName ||
     !lastName ||
     !gender ||
@@ -25,9 +25,9 @@ const createUser = async (
     !password ||
     !type
   )
-    throw "Enter all the fields correctly.";
-
-  if(!firstName)  throw 'You must provide a firstName'
+    throw "Enter all the fields correctly."; */
+  console.log("hi")
+  /* if(!firstName)  throw 'You must provide a firstName'
   if (typeof firstName !== 'string')    throw 'Firstname must be a string';
   if (firstName.trim().length === 0)    throw 'Firstname cannot be an empty string or just spaces';
   firstName = firstName.trim()
@@ -54,7 +54,8 @@ const createUser = async (
   if (password.trim().length === 0) throw "enter password";
   password = password.trim()
   if(!(/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$/.test(password))) throw "Error: Password should contain atleast one Uppercase, one Number and one Special Character. "
-  
+   */
+  console.log("data user reahced")
   let usersCollection = await users();
 
   const saltRounds = 10;
@@ -303,7 +304,7 @@ const getUserByEmail = async(email) =>{
   const checkUser = await usersCollection.findOne({ email: email });
   console.log(checkUser)
   if (checkUser === null) throw "User doesnot exist";
-  return checkUser._id;
+  return checkUser;
 };
 
 module.exports = {

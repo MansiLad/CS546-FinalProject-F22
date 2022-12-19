@@ -2,7 +2,7 @@
 
 <main>
     <div class="col-9 align-items-end">
-      <button onclick="window.location.href='/user/logout';">Log out</button>
+         <a href="/user/logout">Log Out!!!</a> <br><br>
             <div class="row">
               {{#each result}}
               {{#if @first}}
@@ -22,7 +22,8 @@
                     <input type="hidden" value="{{_id}}" id="id">
                 
                 <label for="checkbox"></label>
-                <input type="checkbox" name="checkbox" value="approved" id="checkbox">Aprroved
+                <input type="checkbox" name="checkbox" value="approved" id="checkbox">Aprrove
+                <input type="checkbox" name="checkbox2" value="disapproved" id="checkbox2">Dissapprove
                 <br>
                 <br>
                   
