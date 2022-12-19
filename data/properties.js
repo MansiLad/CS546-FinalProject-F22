@@ -107,8 +107,8 @@ const createListing = async (
     deposit: deposit,
     rent: rent,
     description: description,
-    amenities: amenities,
-    images: {},
+    ammenities: ammenities,
+    images: [],
     reviews: [],
     date: date,
     approved: false,
@@ -131,7 +131,7 @@ const getownerbypropId = async(propId) =>{
 const getAllListings = async () => {
   const properties_Collection = await properties();
   const properties_value = await properties_Collection
-    .find({ approved: true })
+    .find({})
     .toArray();
   arr = [];
   if (!properties_value) {
@@ -522,7 +522,7 @@ const createListingSeed = async (
   rent,
   images,
   description,
-  amenities
+  ammenities
 ) => {
   // todo validations
   let propertiesCollection = await properties();
@@ -543,7 +543,7 @@ const createListingSeed = async (
     deposit: deposit,
     rent: rent,
     description: description,
-    amenities: amenities,
+    ammenities: ammenities,
     images: images,
     reviews: [],
     date: date,
@@ -555,6 +555,9 @@ const createListingSeed = async (
   return insertInfo.insertedId;
 
 };
+
+
+
 module.exports = {
   addToFavourite,
   getPropertyById,
@@ -571,5 +574,6 @@ module.exports = {
   getPropertybyOwner,
   getAllAuthListings,
   getownerbypropId,
-  createListingSeed
+  createListingSeed,
+  updateproperty
 };

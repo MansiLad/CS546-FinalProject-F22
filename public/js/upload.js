@@ -28,7 +28,8 @@ if (myForm) {
         method: "POST",
         body: formdata,
       })
-        .then((res) => console.log(res))
+      .then((res) => {console.log(res)
+        window.location.href = "http://localhost:3000/manageRentals"})
         .catch((err) => console.log({ err }));
     } else {
       formdata.append("file", fileInput);
@@ -36,25 +37,4 @@ if (myForm) {
 
     // console.log(files.length);
   });
-}
-// if (textInput.value.trim()) {
-//   console.log('has a value of....');
-//   textInput.classList.remove('inputClass');
-//   errorDiv.hidden = true;
-//   frmLabel.classList.remove('error');
-//   let li = document.createElement('li');
-
-//   li.innerHTML = textInput.value;
-//   myUl.appendChild(li);
-//   myForm.reset();
-//   textInput.focus();
-// } else {
-//   textInput.value = '';
-//   errorDiv.hidden = false;
-//   errorDiv.innerHTML = 'You must enter a value';
-//   frmLabel.className = 'error';
-//   textInput.focus();
-//   textInput.className = 'inputClass';
-// }
-//   });
-// }
+};

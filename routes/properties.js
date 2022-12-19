@@ -266,8 +266,9 @@ router.route("/propertyRegistration")
       ammenities,
       desc,
     );
+    console.log(insertedProp)
     if (insertedProp) {
-      return res.redirect("/imageupload/" + ObjectId(insertedProp));
+      return res.redirect("/imageupload/" + ObjectId(insertedProp._id));
     }
   } catch (e) {
     console.log(e);
@@ -679,7 +680,7 @@ router.route('/sent/:id').post(async(req,res)=>{
 router.route('/searchProperties').post(async(req,res) =>{
 
   let city = xss(req.body.city)
-  city = city.toLowerCase()
+
   if(!city) {
     res.status(400).render("error",{error: "Provide city of property"})
     throw "City not provided"
@@ -729,7 +730,7 @@ router.route('/searchProperties').post(async(req,res) =>{
 
 
   let state = xss(req.body.state)
-  state = state.toLowerCase()
+
   if(!state) {
     res.status(400).render("error",{error: "Provide state of property"})
     throw "State not provided"
@@ -781,7 +782,7 @@ try{
     return res.render('error',{title:'Error Page',error:'No properties!'})
   }
   let add = each_prop_detail.address;
-  return res.render('propertyDetails',{id:p_id,address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipcode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,amenities:each_prop_detail.ammenities, })
+  return res.render('propertyDetails',{id:p_id,address:add,city:each_prop_detail.city,state:each_prop_detail.state,zipcode:each_prop_detail.zipcode,rent:each_prop_detail.rent,deposit:each_prop_detail.deposit,bed:each_prop_detail.beds,bath:each_prop_detail.baths,ammenities:each_prop_detail.ammenities, })
 
 }catch(e){
 return res.render('error',{title:'Error Page',error:'No property!'})
@@ -811,7 +812,7 @@ router.route("/propdetails/:id").get(async (req, res) => {
       deposit: each_prop_detail.deposit,
       bed: each_prop_detail.beds,
       bath: each_prop_detail.baths,
-      amenities: each_prop_detail.ammenities,
+      ammenities: each_prop_detail.ammenities,
       images:each_prop_detail.images
     });
   } catch (e) {
@@ -895,7 +896,7 @@ router.route("/upload").post(upload.array("file"), async (req, res) => {
       { _id: ObjectId(id) },
       { $set: { images: images } }
     );
-    return res.redirect("/propdetails/" + id);
+    return res.redirect("/manageRentals");
   } catch (err) {
     console.log(err);
   }
