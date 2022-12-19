@@ -1,6 +1,21 @@
 <title>{{title}}</title>
 
 <main>
+  <header>
+        <div class="logo">
+			<img src="../public/assets/logo.jpg">
+		</div>
+		<nav>
+			<ul>
+                <li><button onclick="window.location.href='/';">HOME</button></li> 
+                <li><button onclick="window.location.href='/user/logout';">Logout</button></li>
+                {{!-- <li><button onclick="window.location.href='/user/userRegistration';">USER SIGN UP</button></li> --}}
+                {{!-- <li><button onclick="window.location.href='/manageRentals';">Manage Rentals</button></li> --}}
+                {{!-- <li><button onclick="window.location.href='/favourites';">favourites</button></li> --}}
+            </ul>
+		</nav>
+    </header>
+    <br>
     <div class="col-9 align-items-end">
          <a href="/user/logout">Log Out!!!</a> <br><br>
             <div class="row">
