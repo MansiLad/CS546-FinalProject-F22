@@ -1,3 +1,5 @@
+
+
 (function($){
   var myNewTaskForm = $('#new-item-form'),
   newDecriptionArea = $('#review'),
@@ -28,3 +30,4 @@
   })
  
 })(window.jQuery);
+

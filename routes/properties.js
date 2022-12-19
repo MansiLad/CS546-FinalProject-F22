@@ -824,11 +824,11 @@ router.route('/prop/reviews/:id').get(async(req,res)=>{
   })
   
   router.route('/prop/reviews/:id').post(async(req,res)=>{
-    desc = xss(req.body.description)
     if(!req.session.user) return res.render('/user/userLogin');
-    let createRev = await reviewsData.createReview(req.params.id, desc)
+    let createRev = await reviewsData.createReview(req.params.id,req.body.description)
     return res.render('partails/rev',{layout:null,...createRev})
   })
+
 
 router.route("/removelisting").delete(async (req, res) => {
   //code here for post
