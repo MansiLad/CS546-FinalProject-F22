@@ -39,6 +39,7 @@ router
       throw "Enter username and not just spaces";
     } 
     username = username.trim()
+    username = username.toLowerCase()
     if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(username)){
       res.status(400).render("error",{error: "Enter valid email id"})
       throw "Enter valid email id";
@@ -111,6 +112,7 @@ router
     try {
       let postData = req.body;
       let username = xss(postData.email);
+      username = username.toLowerCase()
       let password = xss(postData.password);
 
       if(!username){

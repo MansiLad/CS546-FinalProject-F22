@@ -51,6 +51,7 @@ const createUser = async (
   if(!email) throw 'Enter email'
   if (email.trim().length === 0) throw "enter email id";
   email = email.trim()
+  email = email.toLowerCase()
   if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) throw 'Enter valid email id'
   
 
@@ -153,6 +154,7 @@ const createAdmin = async (
   if(!email) throw 'Enter email'
   if (email.trim().length === 0) throw "enter email id";
   email = email.trim()
+  email = email.toLowerCase()
   if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))'Enter valid email id'
   
   if(!password) throw ' enter password'
@@ -208,6 +210,7 @@ const updateUser = async (
   if(!email) throw 'Enter email'
   if (email.trim().length === 0) throw "enter email id";
   email = email.trim()
+  email = email.toLowerCase()
   if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))'Enter valid email id'
 
   const db = await dbConnection();
@@ -258,6 +261,7 @@ const checkUser = async (email, password) => {
   if(!email) throw 'Enter email'
   if (email.trim().length === 0) throw "enter email id";
   email = email.trim()
+  email = email.toLowerCase()
   if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) throw 'Enter valid email id'
   
   if(!password) throw ' enter password'
@@ -303,6 +307,7 @@ const getUserByEmail = async(email) =>{
   if(!email) throw "You must provide email id."
   if (email.trim().length === 0) throw "enter email id";
   email = email.trim()
+  email = email.toLowerCase()
   if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))'Enter valid email id'
 
   const usersCollection = await users();

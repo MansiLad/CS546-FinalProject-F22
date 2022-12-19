@@ -600,6 +600,7 @@ router.route('/sent/:id').post(async(req,res)=>{
     throw "Provide sender name"
   }
   //if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) throw 'Enter valid email id'
+  sender = sender.toLowerCase()
   if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(sender)){
     res.status(400).render("error",{error: "Sender email should be valid"})
     throw "Sender emial should be valid"
@@ -678,6 +679,7 @@ router.route('/sent/:id').post(async(req,res)=>{
 router.route('/searchProperties').post(async(req,res) =>{
 
   let city = xss(req.body.city)
+  city = city.toLowerCase()
   if(!city) {
     res.status(400).render("error",{error: "Provide city of property"})
     throw "City not provided"
@@ -727,6 +729,7 @@ router.route('/searchProperties').post(async(req,res) =>{
 
 
   let state = xss(req.body.state)
+  state = state.toLowerCase()
   if(!state) {
     res.status(400).render("error",{error: "Provide state of property"})
     throw "State not provided"
