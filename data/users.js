@@ -16,7 +16,7 @@ const createUser = async (
   password,
   type
 ) => {
-/*   if (
+  if (
     !firstName ||
     !lastName ||
     !gender ||
@@ -25,19 +25,21 @@ const createUser = async (
     !password ||
     !type
   )
-    throw "Enter all the fields correctly."; */
-  console.log("hi")
-  /* if(!firstName)  throw 'You must provide a firstName'
+    throw "Enter all the fields correctly.";
+
+   if(!firstName)  throw 'You must provide a firstName'
   if (typeof firstName !== 'string')    throw 'Firstname must be a string';
   if (firstName.trim().length === 0)    throw 'Firstname cannot be an empty string or just spaces';
   firstName = firstName.trim()
   if(firstName.length < 4)               throw 'Firstname must of atleast 4 characters'
+
 
   if(!lastName)  throw 'You must provide a lastName'
   if (typeof lastName !== 'string')    throw 'Lastname must be a string';
   if (lastName.trim().length === 0)    throw 'Lastname cannot be an empty string or just spaces';
   lastName = lastName.trim()
   if(lastName.length < 4)               throw 'Lastname must of atleast 4 characters'
+ 
 
   if(!phoneNumber){ throw "Phone Number not provided"  }
   if(phoneNumber.trim().length === 0){throw "Phone number can not be empty or just spaces" }
@@ -45,17 +47,20 @@ const createUser = async (
   if(phoneNumber.length < 10){throw 'Phone number should be of 10 digits'}
   if(!/^[0-9]+$/.test(phoneNumber)) {throw 'Phone number should only contain numbers'}
 
+
   if(!email) throw 'Enter email'
   if (email.trim().length === 0) throw "enter email id";
   email = email.trim()
   if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) throw 'Enter valid email id'
   
+
   if(!password) throw ' enter password'
   if (password.trim().length === 0) throw "enter password";
   password = password.trim()
   if(!(/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$/.test(password))) throw "Error: Password should contain atleast one Uppercase, one Number and one Special Character. "
-   */
-  console.log("data user reahced")
+  //  console.log('hi hello world')
+  
+  //console.log("data user reahced")
   let usersCollection = await users();
 
   const saltRounds = 10;
