@@ -1,7 +1,7 @@
 # House Rentals
-this is a project for CS 546 Web programming Fall-2022
+This is a project for CS 546 Web programming Fall-2022
 
-#Introduction:
+# Introduction:
 As students, we greatly benefit when are able to find the desired apartments within our budget. Thereafter, it becomes convenient for us to find the desired homes just
 on the site and request a home tour at our convenience. 
 The project is done using NodeJS, we are using MongoDB to store our data and also used a S3 bucket to save the images.
