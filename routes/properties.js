@@ -417,7 +417,7 @@ router.route("/propdetails/:id").get(async (req, res) => {
       bed: each_prop_detail.beds,
       bath: each_prop_detail.baths,
       amenities: each_prop_detail.ammenities,
-      images:each_prop_detail.images
+      images: each_prop_detail.images,
     });
   } catch (e) {
     return res.render("error", { title: "Error Page", error: "No property!" });
@@ -441,8 +441,14 @@ router.route("/adminauth").get(async (req, res) => {
   // if (req.session.user.type != "admin") return res.redirect("/user/userLogin");
   //todo add handlebar
   let propertyCollection = await properties();
-  let propertyList = await propertyCollection.find({approved: false}).toArray();
-  return res.render("admin", { title: "Verify Properties", result: propertyList, index: 1 });
+  let propertyList = await propertyCollection
+    .find({ approved: false })
+    .toArray();
+  return res.render("admin", {
+    title: "Verify Properties",
+    result: propertyList,
+    index: 1,
+  });
 });
 router.route("/adminauth").post(async (req, res) => {
   console.log("route entered");
@@ -501,15 +507,7 @@ router.route("/adminauthno").post(async (req, res) => {
   let temp = await propertiesData.removeListing(req.body.id);
   console.log(temp);
   return res.redirect("adminauth");
-  // ids.forEach(id => {
-  // let temp = [];
-  // for (let i = 0; i < ids.length; i++) {
-  //   temp.push(await propertiesData.approveAuth(ids[i]));
-  // }
-  // });
-  // return res.redirect("/adminauth")
 });
-
 
 // router.route("/adminauth2").get(async (req, res) => {
 //   // console.log("admin auth get");
@@ -526,13 +524,13 @@ router.route("/adminauthno").post(async (req, res) => {
 //   console.log(req.body);
 //   let temp = await propertiesData.approveAuth(req.body.id);
 //   return res.redirect("admin a");
-  // ids.forEach(id => {
-  // let temp = [];
-  // for (let i = 0; i < ids.length; i++) {
-  //   temp.push(await propertiesData.approveAuth(ids[i]));
-  // }
-  // });
-  // return res.redirect("/adminauth")
+// ids.forEach(id => {
+// let temp = [];
+// for (let i = 0; i < ids.length; i++) {
+//   temp.push(await propertiesData.approveAuth(ids[i]));
+// }
+// });
+// return res.redirect("/adminauth")
 // });
 
 module.exports = router;
