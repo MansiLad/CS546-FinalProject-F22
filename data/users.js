@@ -4,6 +4,7 @@ const users = mongoCollections.users;
 const { ObjectId } = require("mongodb");
 const { dbConnection, closeConnection } = require("../config/mongoConnections");
 const bcrypt = require("bcryptjs");
+const validation = require('../helpers')
 
 // function for creating a user validations are left
 const createUser = async (
@@ -15,7 +16,7 @@ const createUser = async (
   password,
   type
 ) => {
-  if (
+/*   if (
     !firstName ||
     !lastName ||
     !gender ||
@@ -24,24 +25,37 @@ const createUser = async (
     !password ||
     !type
   )
-    throw "Enter all the fields correctly.";
+    throw "Enter all the fields correctly."; */
+  console.log("hi")
+  /* if(!firstName)  throw 'You must provide a firstName'
+  if (typeof firstName !== 'string')    throw 'Firstname must be a string';
+  if (firstName.trim().length === 0)    throw 'Firstname cannot be an empty string or just spaces';
+  firstName = firstName.trim()
+  if(firstName.length < 4)               throw 'Firstname must of atleast 4 characters'
 
-  if (typeof firstName !== "string" || typeof lastName !== "string")
-    throw "Enter valid name";
+  if(!lastName)  throw 'You must provide a lastName'
+  if (typeof lastName !== 'string')    throw 'Lastname must be a string';
+  if (lastName.trim().length === 0)    throw 'Lastname cannot be an empty string or just spaces';
+  lastName = lastName.trim()
+  if(lastName.length < 4)               throw 'Lastname must of atleast 4 characters'
 
-  if (phoneNumber.length !== 10) throw "Enter valid phone number";
+  if(!phoneNumber){ throw "Phone Number not provided"  }
+  if(phoneNumber.trim().length === 0){throw "Phone number can not be empty or just spaces" }
+  phoneNumber = phoneNumber.trim()
+  if(phoneNumber.length < 10){throw 'Phone number should be of 10 digits'}
+  if(!/^[0-9]+$/.test(phoneNumber)) {throw 'Phone number should only contain numbers'}
 
-  if (typeof email !== "string") throw "Enter valid email";
-
-  if (typeof password !== "string") throw "Enter valid password";
-
-  if (
-    !/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$/.test(
-      password
-    )
-  )
-    throw "Error: Password should contain atleast one Uppercase, one Number and one Special Character. ";
-
+  if(!email) throw 'Enter email'
+  if (email.trim().length === 0) throw "enter email id";
+  email = email.trim()
+  if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) throw 'Enter valid email id'
+  
+  if(!password) throw ' enter password'
+  if (password.trim().length === 0) throw "enter password";
+  password = password.trim()
+  if(!(/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$/.test(password))) throw "Error: Password should contain atleast one Uppercase, one Number and one Special Character. "
+   */
+  console.log("data user reahced")
   let usersCollection = await users();
 
   const saltRounds = 10;
@@ -110,6 +124,38 @@ const createAdmin = async (
   let usersCollection = await users();
   const saltRounds = 10;
   const encryptpassword = await bcrypt.hash(password, saltRounds);
+
+  if(!firstName)  throw 'You must provide a firstName'
+  if (typeof firstName !== 'string')    throw 'Firstname must be a string';
+  if (firstName.trim().length === 0)    throw 'Firstname cannot be an empty string or just spaces';
+  firstName = firstName.trim()
+  if(firstName.length < 4)               throw 'Firstname must of atleast 4 characters'
+
+  if(!lastName)  throw 'You must provide a lastName'
+  if (typeof lastName !== 'string')    throw 'Lastname must be a string';
+  if (lastName.trim().length === 0)    throw 'Lastname cannot be an empty string or just spaces';
+  lastName = lastName.trim()
+  if(lastName.length < 4)               throw 'Lastname must of atleast 4 characters'
+
+  if(!gender) throw 'Select gender'
+
+  if(!phoneNumber){ throw "Phone Number not provided"  }
+  if(phoneNumber.trim().length === 0){throw "Phone number can not be empty or just spaces" }
+  phoneNumber = phoneNumber.trim()
+  if(phoneNumber.length < 10){throw 'Phone number should be of 10 digits'}
+  if(!/^[0-9]+$/.test(phoneNumber)) {throw 'Phone number should only contain numbers'}
+
+  if(!email) throw 'Enter email'
+  if (email.trim().length === 0) throw "enter email id";
+  email = email.trim()
+  if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))'Enter valid email id'
+  
+  if(!password) throw ' enter password'
+  if (password.trim().length === 0) throw "enter password";
+  password = password.trim()
+  if(!(/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$/.test(password))) throw "Error: Password should contain atleast one Uppercase, one Number and one Special Character. "
+  
+
   let newUser = {
     firstName: firstName,
     lastName: lastName,
@@ -134,6 +180,31 @@ const updateUser = async (
   // state,
   phoneNumber
 ) => {
+  if(!firstName)  throw 'You must provide a firstName'
+  if (typeof firstName !== 'string')    throw 'Firstname must be a string';
+  if (firstName.trim().length === 0)    throw 'Firstname cannot be an empty string or just spaces';
+  firstName = firstName.trim()
+  if(firstName.length < 4)               throw 'Firstname must of atleast 4 characters'
+
+  if(!lastName)  throw 'You must provide a lastName'
+  if (typeof lastName !== 'string')    throw 'Lastname must be a string';
+  if (lastName.trim().length === 0)    throw 'Lastname cannot be an empty string or just spaces';
+  lastName = lastName.trim()
+  if(lastName.length < 4)               throw 'Lastname must of atleast 4 characters'
+
+  if(!gender) throw 'Select gender'
+
+  if(!phoneNumber){ throw "Phone Number not provided"  }
+  if(phoneNumber.trim().length === 0){throw "Phone number can not be empty or just spaces" }
+  phoneNumber = phoneNumber.trim()
+  if(phoneNumber.length < 10){throw 'Phone number should be of 10 digits'}
+  if(!/^[0-9]+$/.test(phoneNumber)) {throw 'Phone number should only contain numbers'}
+
+  if(!email) throw 'Enter email'
+  if (email.trim().length === 0) throw "enter email id";
+  email = email.trim()
+  if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))'Enter valid email id'
+
   const db = await dbConnection();
   const userCollection = await users();
 
@@ -167,6 +238,7 @@ const updateUser = async (
 
 // get user by id validations are left
 const getUserById = async (userId) => {
+  userId = validation.checkId(userId)
   const db = await dbConnection();
   const userCollection = await users();
   const user = await userCollection.findOne({ _id: ObjectId(userId) });
@@ -178,10 +250,20 @@ const getUserById = async (userId) => {
 };
 
 const checkUser = async (email, password) => {
-  const db = await dbConnection();
+  if(!email) throw 'Enter email'
+  if (email.trim().length === 0) throw "enter email id";
+  email = email.trim()
+  if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) throw 'Enter valid email id'
+  
+  if(!password) throw ' enter password'
+  if (password.trim().length === 0) throw "enter password";
+  password = password.trim()
+  if(!(/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$/.test(password))) throw "Error: Password should contain atleast one Uppercase, one Number and one Special Character. "
+  
   const usersindb = await users();
 
-    const checkusername = await usersindb.findOne({ email: email });
+  const checkusername = await usersindb.findOne({ email: email });
+
   if (!checkusername) throw "Either the username or password is invalid";
 
   const password_check = await bcrypt.compare(password, checkusername.password);
@@ -201,17 +283,27 @@ const checkUser = async (email, password) => {
   if (checkusername.type === "buyer") {
     flag = { authenticatedUser: true, type: "buyer" };
   }
-
-  console.log(3);
-  console.log(flag);
   return flag;
 };
 
-const getUserByEmail = async (email) => {
-  if (!email) throw "You must provide correct email id.";
+const userExist = async(email) =>{
+  if(!email) throw "You must provide email id"
   const usersCollection = await users();
   const checkUser = await usersCollection.findOne({ email: email });
-  if (checkUser === null) throw "User does not exist";
+  if (checkUser) return true;
+  return false;
+};
+
+const getUserByEmail = async(email) =>{
+  if(!email) throw "You must provide email id."
+  if (email.trim().length === 0) throw "enter email id";
+  email = email.trim()
+  if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))'Enter valid email id'
+
+  const usersCollection = await users();
+  const checkUser = await usersCollection.findOne({ email: email });
+  console.log(checkUser)
+  if (checkUser === null) throw "User doesnot exist";
   return checkUser;
 };
 
@@ -223,4 +315,5 @@ module.exports = {
   removeUser,
   createAdmin,
   checkUser,
+  userExist
 };

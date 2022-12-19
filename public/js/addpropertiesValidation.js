@@ -8,10 +8,12 @@ const docbaths = document.getElementById('baths')
 const docdeposits = document.getElementById('deposits')
 const docrent = document.getElementById('rent')
 const docammenities = document.getElementById('ammenities')
+const docdescription = document.getElementById('description')
 
-form.addEventListener('submit', e => {
-	e.preventDefault();
+form.addEventListener('submit', event => {
+	event.preventDefault();
 	checkInputs();
+    form.submit()
 });
 
 function checkInputs() {
@@ -25,10 +27,10 @@ function checkInputs() {
         const deposits = docdeposits.value.trim()
         const rent = docrent.value.trim()
         const ammenities = docammenities.value.trim()
+        const description = docdescription.value.trim()
 
         //address
         if(!address) {
-            console.log(address);
             setErrorFor(docaddress, 'Address cannot be blank');
         } else if(typeof address !== 'string') {
             setErrorFor(docaddress, 'Address must be a string');
@@ -49,7 +51,7 @@ function checkInputs() {
             setErrorFor(doccity, 'city just cannot be empty or spaces')
         } else if(city.length < 3) {
             setErrorFor(doccity, 'City should be atleast 3 characters long')
-        } else if(!/^[A-Za-z\s.,-]+$/.test(city)) {
+        } else if(!checkString(city)) {
             setErrorFor(doccity, 'City should only contain characters')
         } else {
             setSuccessFor(doccity);
@@ -64,7 +66,7 @@ function checkInputs() {
             setErrorFor(docstate, 'State just cannot be empty or spaces')
         } else if(state.length < 3) {
             setErrorFor(docstate, 'State should be atleast 3 characters long')
-        } else if(!/^[A-Za-z\s.,-]+$/.test(state)) {
+        } else if(!checkString(state)) {
             setErrorFor(docstate, 'State should only contain characters')
         } else {
             setSuccessFor(docstate);
@@ -97,7 +99,7 @@ function checkInputs() {
         } else if(baths.length === 0) {
             setErrorFor(docbaths, 'Baths just cannot be empty or spaces')
         } else if (!isNumeric(baths)) {
-            setErrorFor(docbaths, 'aths should be numeric');
+            setErrorFor(docbaths, 'Baths should be numeric');
         } else {
             setSuccessFor(docbaths);
         }
@@ -135,6 +137,18 @@ function checkInputs() {
         } else {
             setSuccessFor(docammenities);
         }
+
+        if(!description) {
+            setErrorFor(docdescription, 'Description cannot be blank');
+        } else if(typeof description !== 'string') {
+            setErrorFor(docdescription, 'Description must be a string');
+        } else if(description.length === 0) {
+            setErrorFor(docdescription, 'Description just cannot be empty or spaces')
+        } else if(description.length < 4) {
+            setErrorFor(docdescription, 'Description should be atleast 4 characters long')
+        } else {
+            setSuccessFor(docdescription);
+        }
     }
 }
 
@@ -159,5 +173,9 @@ function isUSAZipCode(str)
 function isNumeric(num)
 {
     return /^[0-9]+$/.test(num)
+}
+
+function checkString(str) {
+    return /^[A-Za-z\s.,-]+$/.test(str)
 }
 

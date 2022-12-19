@@ -2,41 +2,27 @@ const { ObjectId } = require("mongodb");
 const mongoCollections = require("../config/mongoCollections");
 const properties = mongoCollections.properties;
 const property_data = require("./properties");
+const validation = require('../helpers')
 
 const createReview = async (
   propertyId,
   review
 ) => {
-  // if (!propertyId || !review) {
-  //   throw "No Input";
-  // }
-  // if (
-  //   typeof propertyId != "string" ||
-  //   typeof review != "string"
-  // ) {
-  //   throw "Parameters are not string";
-  // }
 
-  // if (
-  //   propertyId.trim().length == 0 ||
-  //   review.trim().length == 0
-  // ) {
-  //   throw "Length should not be zero";
-  // }
+  propertyId = validation.checkId(propertyId)
 
-  // if (!ObjectId.isValid(propertyId)) {
-  //   throw "Not a valid object id";
-  // }
+  if(!review)  throw 'You must provide a review'
+  if (typeof review !== 'string')    throw 'Review must be a string';
+  if (review.trim().length === 0)    throw 'Review cannot be an empty string or just spaces';
+  review = review.trim()
+  if(review.length < 4)               throw 'Review must of atleast 4 characters'
 
-  // let data = await property_data.getPropertyById(propertyId);
-  // if (!data) {
-  //   throw "No movie woth this id";
-  // }
+
   const property_collection = await properties();
   const property = await property_collection.findOne({
     _id: ObjectId(propertyId)
   });
-  if (!property) throw "Could not find movie";
+  if (!property) throw "Could not find property";
 
   const new_Review = {
     _id: ObjectId(),
@@ -61,6 +47,8 @@ const createReview = async (
 
 const getAllReviews = async (propertyId) => {
   //const movie = await get_movie(userId);
+  propertyId = validation.checkId(propertyId) 
+  
   if(!propertyId){
     throw 'No id';
   }

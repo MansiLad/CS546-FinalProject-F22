@@ -67,9 +67,6 @@ app.use(function (req, res, next) {
 });
 
 
-
-
-
 // app.get("/iamgeupload/:id", async (req, res) => {
 //   console.log(req.params.id);
 // });

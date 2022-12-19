@@ -7,56 +7,74 @@ const session = require("express-session");
 const validation = require("../helpers");
 const xss = require("xss");
 
-// router
-//   // .route('/')
-//   // .get(async (req, res) =>{
-//   //   res.sendFile(path.resolve("static/homepage.html"))
-//   // })
-
 router
   .route("/userLogin")
   .get(async (req, res) => {
-    // if(req.session.user){
-    //   return res.render('commonPage')
-    // }
-    // else{
-    console.log("get login");
-    return res.render("userLogin", { title: "Login Page" });
-    // }
-  })
-  .post(async (req, res) => {
-    console.log("route entered");
-    try {
-      let postData = req.body;
-      // console.log(req.body);
-      let userN = postData.emailInput;
-      let pass = postData.passwordInput;
-      let validUserName = validation.checkUsername(userN);
-      let validPassword = validation.checkPassword(pass);
-      let authenticatedUser = await data.checkUser(
-        validUserName,
-        validPassword
-      )
-      console.log("user", { authenticatedUser });
-      if (authenticatedUser.authenticatedUser != true) {
-        return res
-          .status(404)
-          .render("userLogin", { title: "login", error: "Not authenticated" });
-      }
+    console.log('get login')
+    return res.render('userLogin',{title:'Login Page'})
+  
+})
+.post(async (req, res) => {
+  try {
+    // console.log(req.body)
 
+    let postData = req.body;
+    // console.log(postData)
+    
+    if(!postData) {
+      res.status(400).render("error",{error: "Provide user data to login"})
+      throw "Data not provided to login"
+    }
+
+    let username = xss(postData.emailInput); 
+    let pass = xss(postData.passwordInput);
+    // console.log(username)
+
+    if(!username){
+      res.status(400).render("error",{error: "Enter username"})
+      throw 'Enter username'
+    } 
+    if (username.trim().length === 0){
+      res.status(400).render("error",{error: "Enter username and not just spaces"})
+      throw "Enter username and not just spaces";
+    } 
+    username = username.trim()
+    if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(username)){
+      res.status(400).render("error",{error: "Enter valid email id"})
+      throw "Enter valid email id";
+    }
+
+    if(!pass){
+      res.status(400).render("error",{error: "Enter password"})
+      throw 'Enter password'
+    } 
+    if (pass.trim().length === 0){
+      res.status(400).render("error",{error: "Enter password and not just spaces"})
+      throw "Enter password and not just spaces";
+    } 
+    pass = pass.trim()
+
+
+    let authenticatedUser = await data.checkUser(username, pass);
+    // console.log(authenticatedUser)
+    if (authenticatedUser.authenticatedUser != true) {
+      return res
+        .status(404)
+        .render("userLogin", { title: "login", error: "Not authenticated" });
+    }
       if (authenticatedUser.type === "admin") {
-        req.session.user = validUserName;
+        req.session.user = username;
         req.session.user.type = "admin";
         return res.redirect("/adminauth");
       }
 
       if (authenticatedUser.type === "buyer") {
-        req.session.user = validUserName;
+        req.session.user = username;
         req.session.user.type = "buyer";
         return res.redirect("/searchProperties");
       }
       if (authenticatedUser.type === "seller") {
-        req.session.user = validUserName;
+        req.session.user = username;
         req.session.user.type = "seller";
         return res.redirect("/propertyRegistration");
       }
@@ -84,39 +102,123 @@ router
     }
   })
   .post(async (req, res) => {
-    // console.log('post reg')
     if (req.session.user) {
       return res.redirect("/protected");
     }
+    
     console.log(req.body);
+    console.log("the body")
     try {
       let postData = req.body;
-      let userN = postData.email;
-      let pass = postData.password;
-      let validUserName = validation.checkUsername(userN);
-      let firstname = postData.firstName;
-      let lastname = postData.lastName;
-      let gender = postData.gender;
-      let phonenumber = postData.phoneNumber;
-      let type = postData.type;
+      let username = xss(postData.email);
+      let password = xss(postData.password);
 
-      // todo favoitites which will be done by sanika..
+      if(!username){
+        res.status(400).render("error",{error: "Enter username"})
+        throw 'Enter username'
+      } 
+      if (username.trim().length === 0){
+        res.status(400).render("error",{error: "Enter username and not just spaces"})
+        throw "Enter username and not just spaces";
+      } 
+      username = username.trim()
+      if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(username)){
+        res.status(400).render("error",{error: "Enter valid email id"})
+        throw "Enter valid email id";
+      }
+  
+      if(!password){
+        res.status(400).render("error",{error: "Enter password"})
+        throw 'Enter password'
+      } 
+      if (password.trim().length === 0){
+        res.status(400).render("error",{error: "Enter password and not just spaces"})
+        throw "Enter password and not just spaces";
+      } 
+      password = password.trim()
 
-      //validUserName = validUserName.toLowerCase();
-      let validPassowerd = validation.checkPassword(pass);
+      let firstname = xss(postData.firstName);
+      if(!firstname) {
+        res.status(400).render("error",{error: "Provide firstname of user"})
+        throw "Firstname not provided"
+      }
+      if(typeof firstname != 'string'){
+        res.status(400).render("error",{error: 'Firstname should be a string'})
+        throw 'Firstname should be a string'
+      }
+      if(firstname.trim().length === 0){
+        res.status(400).render("error",{error: 'Provide firstname of user'})
+        throw 'Firstname cannot be empty string or spaces'
+      }
+      firstname = firstname.trim()
+      if(firstname.length < 4){
+        res.status(400).render("error",{error: 'Firstname should be atleast 4 characters long'})
+        throw 'Firstname should be of length 4 or more'
+      }
+
+      let lastname = xss(postData.lastName);
+      if(!lastname) {
+        res.status(400).render("error",{error: "Provide lastname of user"})
+        throw "Lastname not provided"
+      }
+      if(typeof lastname != 'string'){
+        res.status(400).render("error",{error: 'Lastname should be a string'})
+        throw 'Lastname should be a string'
+      }
+      if(lastname.trim().length === 0){
+        res.status(400).render("error",{error: 'Provide lastname of user'})
+        throw 'Lastname cannot be empty string or spaces'
+      }
+      lastname = lastname.trim()
+      if(lastname.length < 4){
+        res.status(400).render("error",{error: 'Lastname should be atleast 4 characters long'})
+        throw 'Lastname should be of length 4 or more'
+      }
+
+
+      let gender = xss(postData.gender);
+      if(!gender){
+        res.status(400).render("error",{error: 'Gender not provided'})
+        throw 'Gender not provided'
+      }
+
+      let phoneNumber = xss(postData.phoneNumber);
+      if(!phoneNumber){
+        res.status(400).render("error",{error: "provide Phone Number"})
+        throw "Phone Number not provided"
+      }
+      if(phoneNumber.trim().length === 0){
+        res.status(400).render("error",{error: "Phone number cannot be empty or just spaces"})
+        throw "Phone number can not be empty or just spaces"
+      }
+      phoneNumber = phoneNumber.trim()
+      if(phoneNumber.length < 10){
+        res.status(400).render("error",{error: "Phone NUmber should be of 10 digits"})
+        throw 'Phone number should be of 10 digits'
+      }
+      if(!/^[0-9]+$/.test(phoneNumber)) {
+        res.status(400).render("error",{error: "Phone number should only contain numbers"})
+        throw 'Phone number should only contain numbers'
+      }
+
+
+      let type = xss(postData.type);
+      if(!type){
+        res.status(400).render("error",{error: 'Type not provided'})
+        throw 'Type not provided'
+      }
+      console.log("reached here")
       let { insertedUser } = await data.createUser(
         firstname,
         lastname,
         gender,
-        validUserName,
-        // city,
-        // state,
-        phonenumber,
-        validPassowerd,
+        username,
+        phoneNumber,
+        password,
         type
-        //favourates// i think favourites ka alag data banana  padega (get all favorites by userid)
       );
       console.log(insertedUser);
+      console.log("User Inserted")
 
       if (insertedUser) {
         console.log("if entered");

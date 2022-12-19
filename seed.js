@@ -23,7 +23,7 @@ const users = data.users;
 
 const main = async () => {
   const db = await dbConnection.dbConnection();
-  await db.dropDatabase();
+    await db.dropDatabase();
 
   
         const admin = await users.createAdmin('Patrick','Hill','Male','patrick@test.com','1234567890','Patrick@123')

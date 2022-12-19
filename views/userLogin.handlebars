@@ -2,20 +2,19 @@
     <div class="container" >
         <form action="/user/userLogin" method="POST" id="userlogin" class="text-center p-3 m-3">
             <div class="form-control">
-                <label for="emailInput" id="emailInputLabel">Email: </label>
+                <label for="emailInput" id="emailInputLabel">Email: </label><br><br>
                 <input type="text" name="emailInput" id="emailInput">
-            </div><br>
+            </div><br><br><br>
             <div class="form-control">
-                <label for="passwordInput" id="passwordInputLabel">Password: </label>
+                <label for="passwordInput" id="passwordInputLabel">Password: </label><br><br>
                 <input type="password" name="passwordInput" id="passwordInput">
             </div>
-{{!--             <div class="form-group hidden" id="error" >
-                <div class="alert alert-danger text-goes-here"></div>
-            </div> --}}
+            <br><br><br>
             <div>
                 <button type="submit" class="btn btn-default" id="login-button">Log In</button>
             </div>
         </form>
+        <button onclick="window.location.href='/user/userRegistration';">Coming for the first time? Register Here!</button>
         <br>
-        <a href="/user/userRegistration">Coming for the first time? Register Here!</a>
+        <script src="../public/js/userLoginValidation.js"></script>
     </div>

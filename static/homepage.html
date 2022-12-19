@@ -15,28 +15,29 @@
     </head>
     <body>
         <header>
-            <div class="nav">
-                
-                <img class="logo-img" src="../public/assets/logo.jpg">
-                <ul>
-                    <li><a href="/">HOME</a></li> 
-                    <li><a href="/user/userLogin">USER-LOGIN</a></li>
-                    <li><a href="/user/userRegistration">USER-SIGN-UP</a></li>
+            <div class="logo">
+				<img src="../public/assets/logo.jpg">
+			</div>
+			<nav>
+				<ul>
+                    <li><button onclick="window.location.href='/';">HOME</button></li> 
+                    <li><button onclick="window.location.href='/user/userLogin';">USER LOGIN</button></li>
+                    <li><button onclick="window.location.href='/user/userRegistration';">USER SIGN UP</button></li>
                 </ul>
-            </div>
+			</nav>
         </header>
         <br>
         <br><br><br><br>
         <h1> House Hunt </h1>
-        <p>
+        <h5>
             Find Houses according to your needs
-        </p>
+        </h5>
 
-      <!--   <a href="/userLogin" class="button">Login to see Properties</a> -->
+      
         <button onclick="window.location.href='/user/userLogin';">
             Login to see properties
         </button>
-        <!-- <script src="../public/js/main.js"></script> -->
+        
 
     </body>
 </html>
