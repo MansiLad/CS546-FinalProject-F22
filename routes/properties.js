@@ -493,6 +493,23 @@ router.route("/upload").post(upload.array("file"), async (req, res) => {
   }
 });
 
+router.route("/adminauthno").post(async (req, res) => {
+  console.log("route entered");
+  // if (req.session.user.type != "admin") return res.redirect("/user/userLogin");
+  // todo get all prop id in array
+  console.log(req.body);
+  let temp = await propertiesData.removeListing(req.body.id);
+  console.log(temp);
+  return res.redirect("adminauth");
+  // ids.forEach(id => {
+  // let temp = [];
+  // for (let i = 0; i < ids.length; i++) {
+  //   temp.push(await propertiesData.approveAuth(ids[i]));
+  // }
+  // });
+  // return res.redirect("/adminauth")
+});
+
 
 // router.route("/adminauth2").get(async (req, res) => {
 //   // console.log("admin auth get");
