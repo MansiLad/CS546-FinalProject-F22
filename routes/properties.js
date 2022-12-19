@@ -825,6 +825,7 @@ router.route('/prop/reviews/:id').get(async(req,res)=>{
   
   router.route('/prop/reviews/:id').post(async(req,res)=>{
     if(!req.session.user) return res.render('/user/userLogin');
+   // if(!req.body.description) return res.render('error',{title:'Error',error:'No comment entered'})
     let createRev = await reviewsData.createReview(req.params.id,req.body.description)
     return res.render('partails/rev',{layout:null,...createRev})
   })
