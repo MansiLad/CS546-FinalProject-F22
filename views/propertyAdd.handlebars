@@ -1,81 +1,89 @@
 <title>{{title}}</title>
-<div class="container">
-    <div class="header">
-        <h3>{{title}}</h3>
-    </div>
-    <button onclick="window.location.href='/manageRentals';">
-        View All Propterties
-    </button>
-    <form action="/propertyRegistration" method="POST" id="form" class="form" class="text-center p-3 m-3">
-        <div class="form-control">
-            <label>Address</label><br><br>
-            <input type="text" id="address" name="address" placeholder="Address of the Property" ><br><br>&ensp;
-            <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i> <br><br>  <small>Error message</small>
-        </div>
-        <br><br><br>
-        <div class="form-control">
-            <label>City</label><br><br>
-            <input type="text" id="city" class="form-control" name="city" placeholder="City" >
-            <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
-        </div>
-        <br><br><br>
-        <div class="form-control">
-            <label>State</label><br><br>
-            <input type="text" id="state" class="form-control" name="state" placeholder="State" >
-            <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
-        </div>
-        <br><br><br>
-        <div class="form-control">
-            <label>Zip Code</label><br><br>
-            <input type="text" id="zipcode" class="form-control" name="zipcode" placeholder="Zip Code" >
-            <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
-        </div>
-        <br><br><br>
-        <div class="form-control">
-            <label>Beds</label><br><br>
-            <input type="text" id="beds" class="form-control" name="beds" placeholder="1, 1.5 , .." >
-            <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
-        </div>
-        <br><br><br>
-        <div class="form-control">
-            <label>Baths</label><br><br>
-            <input type="text" id="baths" class="form-control" name="baths" placeholder="1, 1.5, ..." >
-            <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
-        </div>
-        <br><br><br>
-        <div class="form-control">
-            <label>Deposit</label><br><br>
-            <input type="number" id="deposits" class="form-control" name="deposit" placeholder="00.00" >
-            <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
-        </div>
-        <br><br><br>
-        <div class="form-control">
-            <label>Rent</label><br><br>
-            <input type="number" id="rent" class="form-control" name="rent" placeholder="00.00" >
-            <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
-        </div>
-        <br><br><br>
-        <div class="form-control">
-            <label>Ammenities</label><br><br>
-            <input type="text" id="ammenities" class="form-control" name="ammenities" placeholder="like electricity, water, etc.">
-            <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
-        </div>
-        <br><br><br>
-        <div class="form-control">
-            <label>Description</label><br><br>
-            <textarea id="description" class="form-control" name="description" placeholder="Description of the property"></textarea>
-            <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
-        </div>
-        <br><br><br> 
-        <button type="submit" class="btn btn-info">Submit</button>
-        <button onclick="window.location.href='/manageRentals';">
-            View All Propterties
-        </button>
-    
-        <script src="../public/js/addpropertiesValidation.js"></script>
 
-    </form>
-</div>
+ <main>
+    <div class="row">
+        <div class="col-md-6 offset-md-3" style="background-color: #fff;margin-top: 25px;padding:20px;">
+            <div class="container">
+                <div class="header">
+                    <h3>{{title}}</h3>
+                </div>
+                <button onclick="window.location.href='/manageRentals';">
+                    View All Propterties
+                </button>
+                <form action="/propertyRegistration" method="POST" id="form" class="form" class="text-center p-3 m-3">
+                    <div class="form-control">
+                        <label>Address</label><br><br>
+                        <input type="text" id="address" name="address" placeholder="Address of the Property" ><br><br>&ensp;
+                        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i> <br><br>  <small>Error message</small>
+                    </div>
+                    <br><br><br>
+                    <div class="form-control">
+                        <label>City</label><br><br>
+                        <input type="text" id="city" class="form-control" name="city" placeholder="City" >
+                        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+                    </div>
+                    <br><br><br>
+                    <div class="form-control">
+                        <label>State</label><br><br>
+                        <input type="text" id="state" class="form-control" name="state" placeholder="State" >
+                        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+                    </div>
+                    <br><br><br>
+                    <div class="form-control">
+                        <label>Zip Code</label><br><br>
+                        <input type="text" id="zipcode" class="form-control" name="zipcode" placeholder="Zip Code" >
+                        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+                    </div>
+                    <br><br><br>
+                    <div class="form-control">
+                        <label>Beds</label><br><br>
+                        <input type="text" id="beds" class="form-control" name="beds" placeholder="1, 1.5 , .." >
+                        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+                    </div>
+                    <br><br><br>
+                    <div class="form-control">
+                        <label>Baths</label><br><br>
+                        <input type="text" id="baths" class="form-control" name="baths" placeholder="1, 1.5, ..." >
+                        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+                    </div>
+                    <br><br><br>
+                    <div class="form-control">
+                        <label>Deposit</label><br><br>
+                        <input type="number" id="deposits" class="form-control" name="deposit" placeholder="00.00" >
+                        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+                    </div>
+                    <br><br><br>
+                    <div class="form-control">
+                        <label>Rent</label><br><br>
+                        <input type="number" id="rent" class="form-control" name="rent" placeholder="00.00" >
+                        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+                    </div>
+                    <br><br><br>
+                    <div class="form-control">
+                        <label>Ammenities</label><br><br>
+                        <input type="text" id="ammenities" class="form-control" name="ammenities" placeholder="like electricity, water, etc.">
+                        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+                    </div>
+                    <br><br><br>
+                    <div class="form-control">
+                        <label>Description</label><br><br>
+                        <textarea id="description" class="form-control" name="description" placeholder="Description of the property"></textarea>
+                        <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>   <small>Error message</small>
+                    </div>
+                    <br><br><br> 
+                    <button type="submit" class="btn btn-info">Submit</button>
+                    <button onclick="window.location.href='/manageRentals';">
+                        View All Propterties
+                    </button>
+                
+                    <script src="../public/js/addpropertiesValidation.js"></script>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</main>
 
 
 

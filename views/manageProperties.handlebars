@@ -1,43 +1,50 @@
 <title>Properties</title>
-<h3>Your Listings</h3>
-<h5><a class="btn btn-secondary" href="/propertyRegistration"><i class="fa fa-plus"></i> Create </a></h5>
-<table id="property">
-    <thread>
-        <tr>
-            <th>ADDRESS</th>
-            <th>CITY</th>
-            <th>STATE</th>
-            <th>ZIP CODE</th>
-            <th>NO. OF BEDS</th>
-            <th>NO. OF BATHS</th>
-            <th>DEPOSIT</th>
-            <th>RENT</th>
-            
-            <th>ACTIONS</th>
-        </tr>
-    </thread>
-    <tbody>
-        {{#each result}}
-            <tr>
-                <td>{{this.address}}</td>
-                <td>{{this.city}}</td>
-                <td>{{this.state}}</td>
-                <td>{{this.zipcode}}</td>
-                <td>{{this.beds}}</td>
-                <td>{{this.baths}}</td>
-                <td>{{this.deposit}}</td>
-                <td>{{this.rent}}</td>
-                <td>
-                    <a href="/editProperty/{{this._id}}">{{!-- <i class="fas fa-pencil fa-lg" aria-hidden="true"> --}} Edit</i></a> <br>
-                    <a href="/deleteProperty/{{this._id}}">{{!-- <i class="fas fa-trash fa-lg" aria-hidden="true"> --}}</i>Delete</a>
-                </td>
-            </tr>
-        {{/each}}
-    </tbody>
-    <br> <br>
+<main>
+    <div class="row">
+        <div class="col-md-6 offset-md-3" style="background-color: #fff;margin-top: 25px;padding:20px;">
+            <h3>Your Listings</h3>
+            <h5><a class="btn btn-secondary" href="/propertyRegistration"><i class="fa fa-plus"></i> Create </a></h5>
+            <table id="property">
+                <thread>
+                    <tr>
+                        <th>ADDRESS</th>
+                        <th>CITY</th>
+                        <th>STATE</th>
+                        <th>ZIP CODE</th>
+                        <th>NO. OF BEDS</th>
+                        <th>NO. OF BATHS</th>
+                        <th>DEPOSIT</th>
+                        <th>RENT</th>
+                        
+                        <th>ACTIONS</th>
+                    </tr>
+                </thread>
+                <tbody>
+                    {{#each result}}
+                        <tr>
+                            <td>{{this.address}}</td>
+                            <td>{{this.city}}</td>
+                            <td>{{this.state}}</td>
+                            <td>{{this.zipcode}}</td>
+                            <td>{{this.beds}}</td>
+                            <td>{{this.baths}}</td>
+                            <td>{{this.deposit}}</td>
+                            <td>{{this.rent}}</td>
+                            <td>
+                                <a href="/editProperty/{{this._id}}">{{!-- <i class="fas fa-pencil fa-lg" aria-hidden="true"> --}} Edit</i></a> <br>
+                                <a href="/deleteProperty/{{this._id}}">{{!-- <i class="fas fa-trash fa-lg" aria-hidden="true"> --}}</i>Delete</a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+                <br> <br>
 
-    <button onclick="window.location.href='/user/logout';">
-        Logout
-    </button>
-    <br> <br>
-</table>
+                <button onclick="window.location.href='/user/logout';">
+                    Logout
+                </button>
+                <br> <br>
+            </table>
+        </div>
+    </div>
+</main>
+
